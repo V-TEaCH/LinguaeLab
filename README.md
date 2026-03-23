@@ -1,6 +1,6 @@
 # ATRIUM-Français
 
-Application web statique d’apprentissage spiralaire de la langue française au collège.
+Application web statique d’apprentissage spiralaire du français au collège.
 
 ATRIUM-Français transpose l’architecture pédagogique d’ATRIUM à l’étude du français : grammaire, orthographe grammaticale, conjugaison, syntaxe, cohésion textuelle, reformulation et réécriture.
 
@@ -18,40 +18,17 @@ L’objectif n’est pas seulement de “faire des exercices”, mais d’instal
 
 ## Contrat pédagogique cible
 
-- 6e : 4 modules × 15 leçons × 12 exercices
-- 5e : 4 modules × 15 leçons × 12 exercices
-- 4e : 4 modules × 15 leçons × 12 exercices
-- 3e : 5 modules × 15 leçons × 12 exercices
+- 6e : 4 modules × 15 leçons × 12 exercices-cadres
+- 5e : 4 modules × 15 leçons × 12 exercices-cadres
+- 4e : 4 modules × 15 leçons × 12 exercices-cadres
+- 3e : 5 modules × 15 leçons × 12 exercices-cadres
 
 Total prévu sur le collège :
 - 17 modules
 - 255 leçons
 - 3060 emplacements d’exercices
 
-## Axes
-
-- Axe 1 : construire la phrase
-- Axe 2 : accorder et orthographier
-- Axe 3 : conjuguer et choisir
-- Axe 4 : reformuler et styliser
-- 3e seulement : module 5 “Révisions DNB”
-
-## Structure canonique d’une leçon
-
-1. rappel flash
-2. repérage 1
-3. repérage 2
-4. manipulation 1
-5. manipulation 2
-6. discrimination fine
-7. correction d’erreur
-8. justification courte
-9. vigilance orthographique / ponctuation
-10. réécriture
-11. transfert contextualisé
-12. reprise spiralaire d’une notion antérieure
-
-## Structure du repository
+## Structure actuelle du dépôt
 
 ```text
 ATRIUM-francais/
@@ -69,72 +46,42 @@ ATRIUM-francais/
     js/
       app.js
       router.js
-      storage.js
-      scoring.js
-      normalize.js
-      answerChecker.js
-      trainingEngine.js
-      productionEngine.js
       lessonRegistry.js
-      ui.js
       data/
-        curriculumBlueprint.json
+        curriculumBlueprint.js
+        blueprintFactory.js
         refs/
-          eduscol6e.js
-          eduscolCycle4.js
-          dnb2026.js
+          officialRefs.js
         6e/
-          blueprint.json
-          module1.js
-          module2.js
-          module3.js
-          module4.js
+          blueprint.js
         5e/
-          blueprint.json
-          module1.js
-          module2.js
-          module3.js
-          module4.js
+          blueprint.js
         4e/
-          blueprint.json
-          module1.js
-          module2.js
-          module3.js
-          module4.js
+          blueprint.js
         3e/
-          blueprint.json
-          module1.js
-          module2.js
-          module3.js
-          module4.js
-          module5.js
-      components/
-        moduleCard.js
-        lessonCard.js
-        progressBar.js
-        feedbackBox.js
-        headerTabs.js
+          blueprint.js
       views/
         dashboardView.js
+        levelView.js
         moduleView.js
         lessonView.js
-        resultsView.js
-        settingsView.js
   docs/
     architecture.md
-    roadmap.md
+    lesson-registry.md
   tests/
+    routerSmoke.test.mjs
     validateBlueprints.test.mjs
 ```
 
-## État de ce scaffold
+## État du scaffold
 
-Ce dépôt est un squelette de production étendu à tout le collège :
-- l’architecture multi-niveaux est posée ;
-- les blueprints 6e / 5e / 4e / 3e sont présents ;
-- le module DNB de 3e est prévu ;
-- le shell applicatif gère désormais les niveaux ;
-- les contenus réels d’exercices restent à rédiger module par module.
+Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège :
+
+- l’arborescence multi-niveaux est présente ;
+- le registre central indexe 4 niveaux, 17 modules et 255 leçons ;
+- chaque leçon expose 12 `exerciseSlots` servant de cadre éditorial ;
+- les routes hash-based restent compatibles avec GitHub Pages ;
+- les contenus réels des exercices restent à rédiger module par module, en commençant par la 6e.
 
 ## Démarrage rapide
 
