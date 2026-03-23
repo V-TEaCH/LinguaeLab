@@ -1,0 +1,60 @@
+# Architecture du scaffold ATRIUM-Français
+
+## Objectif
+
+Ce dépôt fournit un scaffold statique multi-niveaux prêt pour GitHub Pages. Il sépare trois couches simples :
+
+- `assets/js/data/` : blueprints et références officielles ;
+- `assets/js/lessonRegistry.js` : registre central indexé ;
+- `assets/js/views/` + `assets/js/router.js` : rendu et navigation hash-based.
+
+## Principes retenus
+
+- pas de framework ;
+- ES modules uniquement ;
+- routes via `location.hash` pour rester compatibles avec un hébergement statique ;
+- génération de placeholders pédagogiques pour éviter de rédiger prématurément les 3060 exercices ;
+- `officialRefs` conservées au niveau des niveaux, modules et leçons.
+
+## Arborescence utile
+
+```text
+assets/
+  css/styles.css
+  js/
+    app.js
+    router.js
+    lessonRegistry.js
+    data/
+      curriculumBlueprint.js
+      blueprintFactory.js
+      refs/officialRefs.js
+      6e/blueprint.js
+      5e/blueprint.js
+      4e/blueprint.js
+      3e/blueprint.js
+    views/
+      dashboardView.js
+      levelView.js
+      moduleView.js
+      lessonView.js
+```
+
+## Contrat de données
+
+- 4 niveaux (`6e`, `5e`, `4e`, `3e`) ;
+- 17 modules au total ;
+- 15 leçons par module ;
+- 12 `exerciseSlots` par leçon ;
+- 3e module 5 réservé aux révisions DNB.
+
+## Tests de cohérence
+
+Les tests Node contrôlent :
+
+- les imports des blueprints ;
+- l’unicité des IDs de niveaux, modules et leçons ;
+- les cardinalités attendues ;
+- la présence des `officialRefs` ;
+- la cohérence du registre ;
+- la résolution minimale des routes hash-based.
