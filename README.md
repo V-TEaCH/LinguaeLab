@@ -81,7 +81,10 @@ Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège :
 - le registre central indexe 4 niveaux, 17 modules et 255 leçons ;
 - chaque leçon expose 12 `exerciseSlots` servant de cadre éditorial ;
 - les routes hash-based restent compatibles avec GitHub Pages ;
-- les contenus réels des exercices restent à rédiger module par module, en commençant par la 6e.
+- les contenus authored restent partiels : le dépôt fournit surtout un cadre stable,
+  avec rédaction progressive module par module ;
+- l’expérience complète d’exercices interactifs n’est pas encore généralisée
+  à l’ensemble du collège.
 
 ## Démarrage rapide
 

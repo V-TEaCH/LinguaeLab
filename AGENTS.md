@@ -2,7 +2,9 @@
 
 ## Mission
 
-Construire LinguaeLab comme une application web statique, sans framework lourd, dans l’héritage ergonomique et logique d’ATRIUM, mais centrée sur l’apprentissage spiralaire du français au collège.
+Construire LinguaeLab comme une application web statique, sans framework lourd,
+dans l’héritage ergonomique et logique historique d’ATRIUM,
+mais centrée sur l’apprentissage spiralaire du français au collège.
 
 ## Périmètre du dépôt
 
@@ -41,6 +43,7 @@ Chaque leçon doit viser 12 exercices.
 Pour toute génération ou modification des contenus 6e, utiliser en priorité :
 - docs/specs/6e-blueprint-complet.md
 - docs/specs/6e-rules.md
+- docs/specs/rulebook.md
 
 Ne pas inventer de structure alternative.
 Ne pas changer le nombre de modules, de leçons ou d’exercices.

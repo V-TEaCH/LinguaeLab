@@ -9,7 +9,7 @@ Il sépare trois couches simples :
 - `assets/js/lessonRegistry.js` : registre central indexé ;
 - `assets/js/views/` + `assets/js/router.js` : rendu et navigation hash-based.
 
-LinguaeLab conserve l’héritage structurel d’ATRIUM,
+LinguaeLab conserve un héritage structurel historique d’ATRIUM,
 mais l’identité produit et le scaffold courant restent alignés sur LinguaeLab.
 
 ## Principes retenus
