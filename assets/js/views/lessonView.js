@@ -12,11 +12,16 @@ export function renderLessonView(levelId, moduleId, lessonId) {
       (exercise) => `
         <li>
           <strong>${exercise.slotId}</strong>
-          <span>${exercise.slot}</span>
+          <span>${exercise.type}</span>
+          <p>${exercise.instruction}</p>
           <em>${exercise.status}</em>
         </li>`
     )
     .join('');
+
+  const spiralReview = Array.isArray(lesson.spiralReview) && lesson.spiralReview.length
+    ? `<p><strong>Réactivation :</strong> ${lesson.spiralReview.join(' · ')}</p>`
+    : '';
 
   return `
     <section class="page">
@@ -24,7 +29,8 @@ export function renderLessonView(levelId, moduleId, lessonId) {
       <header class="hero">
         <p class="eyebrow">${lesson.levelTitle}</p>
         <h1>${lesson.title}</h1>
-        <p>${lesson.notion}</p>
+        <p>${lesson.objective ?? lesson.notion}</p>
+        ${spiralReview}
       </header>
       <ul class="exercise-list">${exerciseSlots}</ul>
     </section>`;

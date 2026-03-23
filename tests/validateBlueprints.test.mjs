@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { curriculumBlueprint } from '../assets/js/data/curriculumBlueprint.js';
+import { module1LessonBlueprints } from '../assets/js/data/6e/module1.js';
 import {
   getCurriculumStats,
   getLesson,
@@ -34,6 +35,10 @@ test('curriculum blueprint matches expected college scaffold', () => {
         assert.ok(lesson.officialRefs.length >= 1);
         assert.ok(!lessonIds.has(lesson.id));
         lessonIds.add(lesson.id);
+
+        lesson.exerciseSlots.forEach((exercise) => {
+          assert.match(exercise.instruction, /\S/);
+        });
       });
     });
   });
@@ -42,11 +47,34 @@ test('curriculum blueprint matches expected college scaffold', () => {
   assert.equal(lessonIds.size, 255);
 });
 
+test('6e module 1 is fully authored from the blueprint with 15 lessons and 12 exercises each', () => {
+  assert.equal(module1LessonBlueprints.length, 15);
+
+  const lessonTitles = new Set();
+
+  module1LessonBlueprints.forEach((lessonBlueprint) => {
+    assert.ok(!lessonTitles.has(lessonBlueprint.title));
+    lessonTitles.add(lessonBlueprint.title);
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.match(exercise.instruction, /\S/);
+    });
+
+    assert.match(lessonBlueprint.exercises[9].type, /réécriture/i);
+    assert.match(lessonBlueprint.exercises[10].type, /transfert/i);
+    assert.match(lessonBlueprint.exercises[11].type, /spirale/i);
+  });
+});
+
 test('lesson registry exposes consistent cross-level indexes', () => {
   assert.equal(getLevels().length, 4);
   assert.equal(getModulesByLevel('3e').length, 5);
-  assert.equal(getModule('6e-m1')?.title, 'Construire la phrase simple');
+  assert.equal(getModule('6e-m1')?.title, 'Construire la phrase');
   assert.equal(getLesson('3e-m5-l15')?.moduleId, '3e-m5');
+  assert.equal(getLesson('6e-m1-l15')?.title, 'Bilan de syntaxe : analyser une phrase puis un court texte');
 
   const stats = getCurriculumStats();
   assert.deepEqual(stats, { levelCount: 4, moduleCount: 17, lessonCount: 255 });
