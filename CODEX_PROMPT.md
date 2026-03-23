@@ -5,7 +5,7 @@ Copier-coller ce prompt dans Codex à la racine du dépôt.
 ```text
 Lis d’abord AGENTS.md, README.md, docs/architecture.md et le registre des leçons.
 
-Je veux que tu travailles dans ce dépôt ATRIUM-Français comme sur une base de production statique, sans framework lourd et sans casser l’architecture existante.
+Je veux que tu travailles dans ce dépôt LinguaeLab comme sur une base de production statique, sans framework lourd et sans casser l’architecture existante. LinguaeLab conserve l’héritage ergonomique et logique d’ATRIUM, mais l’identité produit visible doit rester LinguaeLab.
 
 Contexte produit :
 - application d’apprentissage spiralaire du français au collège ;

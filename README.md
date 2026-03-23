@@ -1,12 +1,12 @@
-# ATRIUM-Français
+# LinguaeLab
 
 Application web statique d’apprentissage spiralaire du français au collège.
 
-ATRIUM-Français transpose l’architecture pédagogique d’ATRIUM à l’étude du français : grammaire, orthographe grammaticale, conjugaison, syntaxe, cohésion textuelle, reformulation et réécriture.
+LinguaeLab s’appuie sur l’héritage pédagogique et ergonomique d’ATRIUM pour l’étude du français : grammaire, orthographe grammaticale, conjugaison, syntaxe, cohésion textuelle, reformulation et réécriture.
 
 ## Vision produit
 
-ATRIUM-Français n’est pas une banque de QCM. L’application est conçue comme un parcours pédagogique structuré : l’élève progresse niveau par niveau, module par module, leçon par leçon, avec une alternance entre repérage, manipulation, justification et réemploi.
+LinguaeLab n’est pas une banque de QCM. L’application est conçue comme un parcours pédagogique structuré : l’élève progresse niveau par niveau, module par module, leçon par leçon, avec une alternance entre repérage, manipulation, justification et réemploi.
 
 L’objectif n’est pas seulement de “faire des exercices”, mais d’installer des automatismes de lecture, d’analyse, de révision et de production écrite, dans une logique spiralaire compatible avec les attendus du collège.
 
@@ -31,7 +31,7 @@ Total prévu sur le collège :
 ## Structure actuelle du dépôt
 
 ```text
-ATRIUM-francais/
+LinguaeLab/
   index.html
   manifest.json
   service-worker.js
@@ -81,7 +81,10 @@ Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège :
 - le registre central indexe 4 niveaux, 17 modules et 255 leçons ;
 - chaque leçon expose 12 `exerciseSlots` servant de cadre éditorial ;
 - les routes hash-based restent compatibles avec GitHub Pages ;
-- les contenus réels des exercices restent à rédiger module par module, en commençant par la 6e.
+- les contenus authored restent partiels : le dépôt fournit surtout un cadre stable,
+  avec rédaction progressive module par module ;
+- l’expérience complète d’exercices interactifs n’est pas encore généralisée
+  à l’ensemble du collège.
 
 ## Démarrage rapide
 

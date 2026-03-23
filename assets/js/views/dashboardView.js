@@ -16,7 +16,7 @@ export function renderDashboardView() {
     <section class="page">
       <header class="hero">
         <p class="eyebrow">Scaffold collège</p>
-        <h1>ATRIUM-Français</h1>
+        <h1>LinguaeLab</h1>
         <p>Base statique prête pour une rédaction progressive module par module.</p>
       </header>
       <section class="stats">
