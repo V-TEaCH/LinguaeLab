@@ -36,6 +36,17 @@ Chaque leçon doit viser 12 exercices.
 5. Souplesse de correction
 6. Facilité d’extension et de maintenance
 
+## Source de vérité éditoriale
+
+Pour toute génération ou modification des contenus 6e, utiliser en priorité :
+- docs/specs/6e-blueprint-complet.md
+- docs/specs/6e-rules.md
+
+Ne pas inventer de structure alternative.
+Ne pas changer le nombre de modules, de leçons ou d’exercices.
+Respecter strictement la logique spiralaire et la clarté des consignes.
+Toute génération doit rester compatible avec le registre de leçons, le routeur, le scoring et les tests existants.
+
 ## Style de code
 
 - JavaScript modulaire ES modules.
