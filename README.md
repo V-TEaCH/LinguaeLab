@@ -1,12 +1,12 @@
-# ATRIUM-Français
+# LinguaeLab
 
 Application web statique d’apprentissage spiralaire du français au collège.
 
-ATRIUM-Français transpose l’architecture pédagogique d’ATRIUM à l’étude du français : grammaire, orthographe grammaticale, conjugaison, syntaxe, cohésion textuelle, reformulation et réécriture.
+LinguaeLab s’appuie sur l’héritage pédagogique et ergonomique d’ATRIUM pour l’étude du français : grammaire, orthographe grammaticale, conjugaison, syntaxe, cohésion textuelle, reformulation et réécriture.
 
 ## Vision produit
 
-ATRIUM-Français n’est pas une banque de QCM. L’application est conçue comme un parcours pédagogique structuré : l’élève progresse niveau par niveau, module par module, leçon par leçon, avec une alternance entre repérage, manipulation, justification et réemploi.
+LinguaeLab n’est pas une banque de QCM. L’application est conçue comme un parcours pédagogique structuré : l’élève progresse niveau par niveau, module par module, leçon par leçon, avec une alternance entre repérage, manipulation, justification et réemploi.
 
 L’objectif n’est pas seulement de “faire des exercices”, mais d’installer des automatismes de lecture, d’analyse, de révision et de production écrite, dans une logique spiralaire compatible avec les attendus du collège.
 
@@ -31,7 +31,7 @@ Total prévu sur le collège :
 ## Structure actuelle du dépôt
 
 ```text
-ATRIUM-francais/
+LinguaeLab/
   index.html
   manifest.json
   service-worker.js

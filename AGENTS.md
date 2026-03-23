@@ -2,7 +2,7 @@
 
 ## Mission
 
-Construire ATRIUM-Français comme une application web statique, sans framework lourd, fidèle à l’ergonomie et à la logique d’ATRIUM, mais centrée sur l’apprentissage spiralaire du français au collège.
+Construire LinguaeLab comme une application web statique, sans framework lourd, dans l’héritage ergonomique et logique d’ATRIUM, mais centrée sur l’apprentissage spiralaire du français au collège.
 
 ## Périmètre du dépôt
 

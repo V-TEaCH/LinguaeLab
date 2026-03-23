@@ -1,19 +1,24 @@
-# Architecture du scaffold ATRIUM-Français
+# Architecture du scaffold LinguaeLab
 
 ## Objectif
 
-Ce dépôt fournit un scaffold statique multi-niveaux prêt pour GitHub Pages. Il sépare trois couches simples :
+Ce dépôt fournit un scaffold statique multi-niveaux prêt pour GitHub Pages.
+Il sépare trois couches simples :
 
 - `assets/js/data/` : blueprints et références officielles ;
 - `assets/js/lessonRegistry.js` : registre central indexé ;
 - `assets/js/views/` + `assets/js/router.js` : rendu et navigation hash-based.
+
+LinguaeLab conserve l’héritage structurel d’ATRIUM,
+mais l’identité produit et le scaffold courant restent alignés sur LinguaeLab.
 
 ## Principes retenus
 
 - pas de framework ;
 - ES modules uniquement ;
 - routes via `location.hash` pour rester compatibles avec un hébergement statique ;
-- génération de placeholders pédagogiques pour éviter de rédiger prématurément les 3060 exercices ;
+- génération de placeholders pédagogiques pour éviter de rédiger prématurément
+  les 3060 exercices ;
 - `officialRefs` conservées au niveau des niveaux, modules et leçons.
 
 ## Arborescence utile
