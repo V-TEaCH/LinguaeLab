@@ -1,0 +1,88 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #1e2a38;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#app {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page {
+  display: grid;
+  gap: 24px;
+}
+
+.hero,
+.card,
+.stat,
+.lesson-list,
+.exercise-list {
+  background: #ffffff;
+  border: 1px solid #d6deea;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(34, 50, 74, 0.06);
+}
+
+.hero,
+.card,
+.stat {
+  padding: 20px;
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4a5c75;
+  font-size: 0.8rem;
+}
+
+.grid,
+.stats {
+  display: grid;
+  gap: 16px;
+}
+
+.grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.stats {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.lesson-list,
+.exercise-list {
+  margin: 0;
+  padding: 20px 20px 20px 36px;
+}
+
+.lesson-list li,
+.exercise-list li {
+  margin-bottom: 12px;
+}
+
+.lesson-list span,
+.exercise-list span,
+.exercise-list em {
+  display: inline-block;
+  margin-left: 8px;
+  color: #4a5c75;
+}
