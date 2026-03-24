@@ -12,17 +12,6 @@ function formatContentStatus(status) {
   return labels[status] ?? status;
 }
 
-function formatContentStatus(status) {
-  const labels = {
-    scaffold: 'scaffold',
-    authored: 'authored',
-    tested: 'tested',
-    released: 'released',
-  };
-
-  return labels[status] ?? status;
-}
-
 export function renderDashboardView() {
   const stats = getCurriculumStats();
   const levelCards = getLevels()

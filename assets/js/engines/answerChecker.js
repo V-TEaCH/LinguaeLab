@@ -22,6 +22,10 @@ function extractKeywords(value) {
     .filter((token) => token.length >= 2);
 }
 
+function uniqueSorted(values) {
+  return Array.from(new Set(values)).sort();
+}
+
 function isCompleted(value) {
   return normalizeText(value).length > 0;
 }
@@ -40,7 +44,7 @@ function evaluateSingleChoice(exercise, userAnswer) {
     };
   }
 
-  const ok = correctOptions.length === 1 && selected === correctOptions[0];
+  const ok = correctOptions.includes(selected);
   return {
     isCorrect: ok,
     awarded: ok ? 1 : 0,
@@ -50,11 +54,10 @@ function evaluateSingleChoice(exercise, userAnswer) {
 }
 
 function evaluateMultipleChoice(exercise, userAnswer) {
-  const selected = Array.isArray(userAnswer.selected) ? userAnswer.selected.slice().sort() : [];
-  const correct = exercise.options
+  const selected = Array.isArray(userAnswer.selected) ? uniqueSorted(userAnswer.selected) : [];
+  const correct = uniqueSorted(exercise.options
     .filter((option) => option.isCorrect)
-    .map((option) => option.id)
-    .sort();
+    .map((option) => option.id));
 
   if (correct.length === 0) {
     const ok = selected.length > 0;
@@ -106,10 +109,14 @@ function evaluateTextInput(exercise, userAnswer) {
 
   const hasLooseMatch =
     expectedLoose.includes(normalizedLoose) ||
-    expectedLoose.some((candidate) => normalizedLoose.includes(candidate)) ||
     expectedLoose.some((candidate) => {
       const keywords = extractKeywords(candidate);
-      return keywords.length > 0 && keywords.every((keyword) => normalizedLoose.includes(keyword));
+      if (keywords.length === 0) {
+        return false;
+      }
+
+      const responseKeywords = extractKeywords(normalizedLoose);
+      return keywords.every((keyword) => responseKeywords.includes(keyword));
     });
   const ok = expected.includes(normalized) || hasLooseMatch;
   return {

@@ -13,14 +13,6 @@ function formatStatus(status) {
   return status;
 }
 
-function formatStatus(status) {
-  if (status === 'tested') {
-    return 'tested (release candidate)';
-  }
-
-  return status;
-}
-
 export function renderModuleView(levelId, moduleId) {
   const level = getLevel(levelId);
   const module = getModule(moduleId);
