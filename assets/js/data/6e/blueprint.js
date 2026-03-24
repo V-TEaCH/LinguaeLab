@@ -2,6 +2,7 @@ import { createModuleBlueprint } from '../blueprintFactory.js';
 import { OFFICIAL_REFS } from '../refs/officialRefs.js';
 import { module1LessonBlueprints } from './module1.js';
 import { module2LessonBlueprints } from './module2.js';
+import { module3LessonBlueprints } from './module3.js';
 
 const refs6e = OFFICIAL_REFS['6e'].map((ref) => ref.id);
 
@@ -31,7 +32,10 @@ export const modules6e = [
     moduleNumber: 3,
     title: 'Conjuguer et choisir',
     focus: 'installer des choix verbaux simples et cohérents dans la phrase puis le texte',
+    contentStatus: 'authored',
     officialRefs: refs6e,
+    lessonBlueprints: module3LessonBlueprints,
+    sourceSpec: 'docs/specs/6e-blueprint-complet.md#module-3',
   }),
   createModuleBlueprint({
     levelId: '6e',
