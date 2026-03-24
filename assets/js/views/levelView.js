@@ -9,6 +9,14 @@ function formatStatus(status) {
   return status;
 }
 
+function formatStatus(status) {
+  if (status === 'tested') {
+    return 'tested (release candidate)';
+  }
+
+  return status;
+}
+
 export function renderLevelView(levelId) {
   const level = getLevel(levelId);
 
