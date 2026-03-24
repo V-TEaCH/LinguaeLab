@@ -9,6 +9,11 @@ import {
   createLessonScoring,
   getLessonScore,
 } from '../engines/scoring.js';
+import {
+  formatProgressStatus,
+  getLessonProgress,
+  upsertLessonProgress,
+} from '../persistence/localProgress.js';
 
 const lessonSessions = new Map();
 
@@ -24,9 +29,29 @@ function getOrCreateLessonSession(lesson) {
     scoringSession,
     runtimeExerciseMap: new Map(runtimeExercises.map((exercise) => [exercise.id, exercise])),
   };
+  const persistedProgress = getLessonProgress(lesson.id);
+  if (persistedProgress?.exerciseResults) {
+    Object.entries(persistedProgress.exerciseResults).forEach(([exerciseId, result]) => {
+      if (session.runtimeExerciseMap.has(exerciseId)) {
+        applyExerciseResult(scoringSession, exerciseId, result);
+      }
+    });
+  }
 
   lessonSessions.set(lesson.id, session);
   return session;
+}
+
+function computeLessonProgressStatus(answeredCount, totalExercises) {
+  if (answeredCount <= 0) {
+    return 'not_started';
+  }
+
+  if (answeredCount >= totalExercises) {
+    return 'completed';
+  }
+
+  return 'in_progress';
 }
 
 function renderScaffoldExerciseSlots(lesson) {
@@ -112,6 +137,24 @@ export function bindLessonExercisePassation(rootElement = document) {
       if (maxNode) {
         maxNode.textContent = String(maxScore);
       }
+
+      const answeredCount = session.scoringSession.exerciseScores.size;
+      const status = computeLessonProgressStatus(
+        answeredCount,
+        session.scoringSession.runtimeExercises.length
+      );
+      const progressStatusNode = lessonContainer?.querySelector('[data-lesson-progress-status]');
+      if (progressStatusNode) {
+        progressStatusNode.textContent = formatProgressStatus(status);
+      }
+
+      upsertLessonProgress(lessonId, {
+        status,
+        score,
+        maxScore,
+        answeredCount,
+        exerciseResults: Object.fromEntries(session.scoringSession.exerciseScores.entries()),
+      });
     });
   });
 }
@@ -151,6 +194,15 @@ export function renderLessonView(levelId, moduleId, lessonId) {
     .map((exercise, index) => renderLessonExercise(exercise, index))
     .join('');
   const lessonScore = getLessonScore(session.scoringSession);
+  const persistedProgress = getLessonProgress(lesson.id);
+  const answeredCount = session.scoringSession.exerciseScores.size;
+  const lessonStatus = computeLessonProgressStatus(
+    answeredCount,
+    session.scoringSession.runtimeExercises.length
+  );
+  const resumeHint = persistedProgress?.status && persistedProgress.status !== 'not_started'
+    ? '<p><small>Progression locale restaurée automatiquement.</small></p>'
+    : '';
 
   return `
     <section class="page" data-lesson-id="${lesson.id}">
@@ -165,6 +217,12 @@ export function renderLessonView(levelId, moduleId, lessonId) {
           <span data-lesson-score>${lessonScore.score}</span> /
           <span data-lesson-max>${lessonScore.maxScore}</span>
         </p>
+        <p>
+          <strong>Statut local :</strong>
+          <span data-lesson-progress-status>${formatProgressStatus(lessonStatus)}</span>
+          <small> (${answeredCount}/${session.scoringSession.runtimeExercises.length} exercices validés)</small>
+        </p>
+        ${resumeHint}
       </header>
       <ul class="exercise-list">${exercisesHtml}</ul>
     </section>`;
