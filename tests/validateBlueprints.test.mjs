@@ -11,6 +11,10 @@ import { module1LessonBlueprints5e } from '../assets/js/data/5e/module1.js';
 import { module2LessonBlueprints5e } from '../assets/js/data/5e/module2.js';
 import { module3LessonBlueprints5e } from '../assets/js/data/5e/module3.js';
 import { module4LessonBlueprints5e } from '../assets/js/data/5e/module4.js';
+import { module1LessonBlueprints4e } from '../assets/js/data/4e/module1.js';
+import { module2LessonBlueprints4e } from '../assets/js/data/4e/module2.js';
+import { module3LessonBlueprints4e } from '../assets/js/data/4e/module3.js';
+import { module4LessonBlueprints4e } from '../assets/js/data/4e/module4.js';
 import {
   getCurriculumStats,
   getLesson,
@@ -209,6 +213,46 @@ test('5e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatibl
   });
 });
 
+test('4e module 1 is authored with engine-compatible exercise types', () => {
+  assert.equal(module1LessonBlueprints4e.length, 15);
+  module1LessonBlueprints4e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      assert.ok(exercise.instruction.length <= 150, `Instruction too long: ${exercise.instruction}`);
+      assert.ok(ALLOWED_6E_EXERCISE_TYPES.has(exercise.type), `Unexpected exercise type: ${exercise.type}`);
+    });
+  });
+});
+
+test('4e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+  const authoredModules = [
+    module2LessonBlueprints4e,
+    module3LessonBlueprints4e,
+    module4LessonBlueprints4e,
+  ];
+
+  authoredModules.forEach((moduleLessonBlueprints) => {
+    assert.equal(moduleLessonBlueprints.length, 15);
+    moduleLessonBlueprints.forEach((lessonBlueprint) => {
+      assert.equal(lessonBlueprint.exercises.length, 12);
+      assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+      assert.ok(lessonBlueprint.spiralReview.length >= 1);
+      assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+      assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+      lessonBlueprint.exercises.forEach((exercise) => {
+        assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+        assert.match(exercise.instruction, /\S/);
+      });
+    });
+  });
+});
+
 test('lesson registry exposes consistent cross-level indexes', () => {
   assert.equal(getLevels().length, 4);
   assert.equal(getModulesByLevel('3e').length, 5);
@@ -235,9 +279,17 @@ test('module contentStatus values reflect current scaffold reality', () => {
   assert.equal(moduleStatuses.get('5e-m2'), 'authored');
   assert.equal(moduleStatuses.get('5e-m3'), 'authored');
   assert.equal(moduleStatuses.get('5e-m4'), 'authored');
+  assert.equal(moduleStatuses.get('4e-m1'), 'authored');
+  assert.equal(moduleStatuses.get('4e-m2'), 'authored');
+  assert.equal(moduleStatuses.get('4e-m3'), 'authored');
+  assert.equal(moduleStatuses.get('4e-m4'), 'authored');
 
   moduleStatuses.forEach((status, moduleId) => {
-    if (!moduleId.startsWith('6e-') && !moduleId.startsWith('5e-')) {
+    if (
+      !moduleId.startsWith('6e-') &&
+      !moduleId.startsWith('5e-') &&
+      !moduleId.startsWith('4e-')
+    ) {
       assert.equal(status, 'scaffold');
     }
   });

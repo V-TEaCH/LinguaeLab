@@ -83,7 +83,8 @@ Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège, 
 - les routes hash-based restent compatibles avec GitHub Pages ;
 - les modules 6e (`6e-m1` à `6e-m4`) sont **testés** (`contentStatus: tested`) et servent de **release candidate** ;
 - les modules 5e (`5e-m1` à `5e-m4`) sont **authored** (15 leçons complètes chacun) ;
-- les niveaux 4e et 3e restent **scaffoldés** (`contentStatus: scaffold`) ;
+- les modules 4e (`4e-m1` à `4e-m4`) sont **authored** (15 leçons complètes chacun) ;
+- le niveau 3e reste **scaffoldé** (`contentStatus: scaffold`) ;
 - chaque module expose un `contentStatus` explicite (`scaffold`, `authored`, `tested`, `released`) ;
 - l’expérience interactive est disponible sans framework, avec fallback contrôlé pour les types non encore spécialisés ;
 - une persistance locale v1 (localStorage) conserve la progression de base par leçon
