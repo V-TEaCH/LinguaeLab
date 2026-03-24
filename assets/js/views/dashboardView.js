@@ -1,23 +1,58 @@
 import { getLevels, getCurriculumStats } from '../lessonRegistry.js';
+import { getModuleProgressSummary } from '../persistence/localProgress.js';
+
+function formatContentStatus(status) {
+  const labels = {
+    scaffold: 'scaffold',
+    authored: 'authored',
+    tested: 'tested',
+    released: 'released',
+  };
+
+  return labels[status] ?? status;
+}
 
 export function renderDashboardView() {
   const stats = getCurriculumStats();
   const levelCards = getLevels()
     .map(
-      (level) => `
+      (level) => {
+        const moduleStatuses = level.modules.reduce((acc, module) => {
+          acc[module.contentStatus] = (acc[module.contentStatus] ?? 0) + 1;
+          return acc;
+        }, {});
+        const progressTotals = level.modules.reduce(
+          (acc, module) => {
+            const moduleProgress = getModuleProgressSummary(module);
+            acc.completed += moduleProgress.completed;
+            acc.inProgress += moduleProgress.inProgress;
+            acc.notStarted += moduleProgress.notStarted;
+            return acc;
+          },
+          { completed: 0, inProgress: 0, notStarted: 0 }
+        );
+
+        const statusSummary = Object.entries(moduleStatuses)
+          .map(([status, count]) => `${count} ${formatContentStatus(status)}`)
+          .join(' · ');
+
+        return `
         <a class="card" href="#/level/${level.id}">
           <h2>${level.title}</h2>
           <p>${level.modules.length} modules · ${level.modules.length * 15} leçons</p>
-        </a>`
+          <p>Statuts: ${statusSummary}</p>
+          <p>Progression locale: ${progressTotals.completed} terminées · ${progressTotals.inProgress} en cours</p>
+        </a>`;
+      }
     )
     .join('');
 
   return `
     <section class="page">
       <header class="hero">
-        <p class="eyebrow">Scaffold collège</p>
-        <h1>ATRIUM-Français</h1>
-        <p>Base statique prête pour une rédaction progressive module par module.</p>
+        <p class="eyebrow">6e release candidate</p>
+        <h1>LinguaeLab</h1>
+        <p>6e est jouable et testée ; 5e, 4e et 3e restent scaffoldées.</p>
       </header>
       <section class="stats">
         <div class="stat"><strong>${stats.levelCount}</strong><span>niveaux</span></div>
