@@ -12,18 +12,21 @@ export const curriculumBlueprint = {
       modules: modules6e,
       officialRefs: OFFICIAL_REFS['6e'],
     },
+
     {
       id: '5e',
       title: '5e',
       modules: modules5e,
       officialRefs: OFFICIAL_REFS['5e'],
     },
+
     {
       id: '4e',
       title: '4e',
       modules: modules4e,
       officialRefs: OFFICIAL_REFS['4e'],
     },
+
     {
       id: '3e',
       title: '3e',

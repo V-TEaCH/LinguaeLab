@@ -24,6 +24,7 @@ export function renderModuleView(levelId, moduleId) {
       <header class="hero">
         <p class="eyebrow">${level.title} · module ${module.order}</p>
         <h1>${module.title}</h1>
+        <p>Statut contenu: ${module.contentStatus}</p>
         <p>${module.focus}</p>
       </header>
       <ol class="lesson-list">${lessonItems}</ol>
