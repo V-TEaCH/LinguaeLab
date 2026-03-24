@@ -13,6 +13,7 @@ export function renderLevelView(levelId) {
         <a class="card" href="#/level/${level.id}/module/${module.id}">
           <h2>${module.title}</h2>
           <p>Module ${module.order} · ${module.lessons.length} leçons</p>
+          <p>Statut contenu: ${module.contentStatus}</p>
           <p>${module.focus}</p>
         </a>`
     )
