@@ -26,7 +26,8 @@ export function renderLevelView(levelId) {
           <h2>${module.title}</h2>
           <p>Module ${module.order} · ${module.lessons.length} leçons</p>
           <p>Statut contenu: ${formatStatus(module.contentStatus)}</p>
-          <p>Progression locale: ${progress.completed} terminées · ${progress.inProgress} en cours</p>
+          <p>Progression locale: ${progress.completed} terminées · ${progress.inProgress} en cours · ${progress.notStarted} non commencées</p>
+          <p>Avancement module: ${progress.completionRate}%</p>
           <p>${module.focus}</p>
         </a>`;
       }

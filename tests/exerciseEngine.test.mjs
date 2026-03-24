@@ -103,7 +103,7 @@ test('singleChoice validates correct and rejects incorrect answers', () => {
   assert.equal(emptyResult.isCorrect, false);
 });
 
-test('multipleChoice validates exact set only (order-insensitive)', () => {
+test('multipleChoice supports exact match, partial credit and invalid extra choices', () => {
   const runtimeExercise = buildRuntimeExercise(
     {
       slotId: 'ex-mc',
@@ -122,11 +122,25 @@ test('multipleChoice validates exact set only (order-insensitive)', () => {
   const missingResult = checkAnswer(runtimeExercise, { selected: ['a'] });
   const extraResult = checkAnswer(runtimeExercise, { selected: ['a', 'b', 'c'] });
   const duplicateResult = checkAnswer(runtimeExercise, { selected: ['a', 'a', 'b'] });
+  const emptyResult = checkAnswer(runtimeExercise, { selected: [] });
 
   assert.equal(okResult.isCorrect, true);
+  assert.equal(okResult.awarded, 1);
+
   assert.equal(missingResult.isCorrect, false);
+  assert.equal(missingResult.awarded, 0.5);
+  assert.match(missingResult.feedback, /partielle/i);
+
   assert.equal(extraResult.isCorrect, false);
+  assert.equal(extraResult.awarded, 0);
+  assert.match(extraResult.feedback, /incorrecte/i);
+
   assert.equal(duplicateResult.isCorrect, true);
+  assert.equal(duplicateResult.awarded, 1);
+
+  assert.equal(emptyResult.isCorrect, false);
+  assert.equal(emptyResult.awarded, 0);
+  assert.match(emptyResult.feedback, /au moins une réponse/i);
 });
 
 test('textInput validates exact answers and variants but rejects unrelated responses', () => {
@@ -147,7 +161,7 @@ test('textInput validates exact answers and variants but rejects unrelated respo
   assert.equal(unrelatedResult.isCorrect, false);
 });
 
-test('ordering validates correct sequence and rejects wrong order', () => {
+test('ordering validates sequence, accepts multiple separators and grants partial credit', () => {
   const runtimeExercise = buildRuntimeExercise(
     {
       slotId: 'ex-order',
@@ -158,11 +172,20 @@ test('ordering validates correct sequence and rejects wrong order', () => {
     0
   );
 
-  const okResult = checkAnswer(runtimeExercise, { text: 'sujet, verbe, complément' });
-  const koResult = checkAnswer(runtimeExercise, { text: 'verbe, sujet, complément' });
+  const okResult = checkAnswer(runtimeExercise, { text: 'sujet > verbe > complément' });
+  const partialResult = checkAnswer(runtimeExercise, { text: 'sujet; complément; verbe' });
+  const emptyResult = checkAnswer(runtimeExercise, { text: '' });
 
   assert.equal(okResult.isCorrect, true);
-  assert.equal(koResult.isCorrect, false);
+  assert.equal(okResult.awarded, 1);
+
+  assert.equal(partialResult.isCorrect, false);
+  assert.equal(partialResult.awarded, 0.33);
+  assert.match(partialResult.feedback, /partiellement/i);
+
+  assert.equal(emptyResult.isCorrect, false);
+  assert.equal(emptyResult.awarded, 0);
+  assert.match(emptyResult.feedback, /saisis un ordre/i);
 });
 
 test('scoring aggregates basic results', () => {
@@ -268,7 +291,7 @@ test('text input acceptedAnswers remains tolerant to punctuation and casing vari
   assert.equal(result.awarded, 1);
 });
 
-test('scoring aggregates mixed runtime types deterministically', () => {
+test('scoring aggregates mixed runtime types deterministically with partial credit', () => {
   const runtimeExercises = [
     buildRuntimeExercise(
       {
@@ -311,9 +334,52 @@ test('scoring aggregates mixed runtime types deterministically', () => {
   applyExerciseResult(scoringSession, 'ex-02', checkAnswer(runtimeExercises[1], { selected: ['a'] }));
   applyExerciseResult(scoringSession, 'ex-03', checkAnswer(runtimeExercises[2], { text: 'a, b' }));
 
-  assert.deepEqual(getLessonScore(scoringSession), { score: 2, maxScore: 3 });
+  assert.deepEqual(getLessonScore(scoringSession), { score: 2.5, maxScore: 3 });
 });
 
+
+
+test('textInput rejects empty responses and preserves strict non-noted fallback', () => {
+  const scoredExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-empty',
+      type: 'textInput',
+      instruction: 'Réponds.',
+      acceptedAnswers: ['bonjour'],
+    },
+    0
+  );
+  const fallbackExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-fallback-empty',
+      type: 'type-inconnu',
+      instruction: 'Réponse libre.',
+    },
+    1
+  );
+
+  const emptyScored = checkAnswer(scoredExercise, { text: '' });
+  const emptyFallback = checkAnswer(fallbackExercise, { text: '' });
+
+  assert.equal(emptyScored.awarded, 0);
+  assert.match(emptyScored.feedback, /saisis une réponse/i);
+
+  assert.equal(emptyFallback.awarded, 0);
+  assert.match(emptyFallback.feedback, /enregistrer l’activité/i);
+});
+
+test('scoring sanitizes abnormal awarded values and keeps deterministic totals', () => {
+  const runtimeExercises = [
+    buildRuntimeExercise({ slotId: 'ex-1', type: 'textInput', instruction: 'A' }, 0),
+  ];
+  const scoringSession = createLessonScoring(runtimeExercises);
+
+  applyExerciseResult(scoringSession, 'ex-1', { awarded: 3, max: 1, isCorrect: true, feedback: 'x' });
+  assert.deepEqual(getLessonScore(scoringSession), { score: 1, maxScore: 1 });
+
+  applyExerciseResult(scoringSession, 'ex-1', { awarded: -2, max: 1, isCorrect: false, feedback: 'x' });
+  assert.deepEqual(getLessonScore(scoringSession), { score: 0, maxScore: 1 });
+});
 test('router non-regression on lesson route', () => {
   assert.match(resolveRoute('#/level/6e/module/6e-m1/lesson/6e-m1-l01'), /Score/);
 });

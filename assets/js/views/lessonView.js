@@ -10,6 +10,7 @@ import {
   getLessonScore,
 } from '../engines/scoring.js';
 import {
+  formatLocalScore,
   formatProgressStatus,
   getLessonProgress,
   upsertLessonProgress,
@@ -201,7 +202,7 @@ export function renderLessonView(levelId, moduleId, lessonId) {
     session.scoringSession.runtimeExercises.length
   );
   const resumeHint = persistedProgress?.status && persistedProgress.status !== 'not_started'
-    ? '<p><small>Progression locale restaurée automatiquement.</small></p>'
+    ? `<p><small>Reprise automatique active : progression locale restaurée (${formatProgressStatus(persistedProgress.status)}).</small></p>`
     : '';
 
   return `
@@ -216,6 +217,7 @@ export function renderLessonView(levelId, moduleId, lessonId) {
           <strong>Score :</strong>
           <span data-lesson-score>${lessonScore.score}</span> /
           <span data-lesson-max>${lessonScore.maxScore}</span>
+          <small>(${formatLocalScore(lessonScore.score, lessonScore.maxScore)})</small>
         </p>
         <p>
           <strong>Statut local :</strong>

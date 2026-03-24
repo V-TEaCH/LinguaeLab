@@ -1,8 +1,10 @@
 import { getLevel, getModule } from '../lessonRegistry.js';
 import {
+  formatLocalScore,
   formatProgressStatus,
   getLessonProgress,
   getModuleProgressSummary,
+  getMostRecentLessonProgress,
 } from '../persistence/localProgress.js';
 
 function formatStatus(status) {
@@ -22,6 +24,8 @@ export function renderModuleView(levelId, moduleId) {
   }
 
   const moduleProgress = getModuleProgressSummary(module);
+  const resumeCandidate = getMostRecentLessonProgress(module.lessons);
+  const resumeLessonId = resumeCandidate?.lessonId ?? module.lessons[0]?.id ?? null;
 
   const lessonItems = module.lessons
     .map(
@@ -29,8 +33,8 @@ export function renderModuleView(levelId, moduleId) {
         const localProgress = getLessonProgress(lesson.id);
         const status = formatProgressStatus(localProgress?.status ?? 'not_started');
         const scoreSnippet = localProgress
-          ? ` · score ${localProgress.score}/${localProgress.maxScore}`
-          : '';
+          ? ` · ${formatLocalScore(localProgress.score, localProgress.maxScore)}`
+          : ' · score non noté';
 
         return `
         <li>
@@ -41,6 +45,10 @@ export function renderModuleView(levelId, moduleId) {
       }
     )
     .join('');
+
+  const resumeSnippet = resumeLessonId
+    ? `<p><a href="#/level/${levelId}/module/${moduleId}/lesson/${resumeLessonId}">Reprendre la dernière leçon active</a></p>`
+    : '';
 
   return `
     <section class="page">
@@ -53,7 +61,9 @@ export function renderModuleView(levelId, moduleId) {
         <p>
           <strong>Progression locale :</strong>
           ${moduleProgress.completed} terminées · ${moduleProgress.inProgress} en cours · ${moduleProgress.notStarted} non commencées
+          <small>(${moduleProgress.completionRate}% terminé)</small>
         </p>
+        ${resumeSnippet}
       </header>
       <ol class="lesson-list">${lessonItems}</ol>
     </section>`;

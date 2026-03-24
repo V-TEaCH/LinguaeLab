@@ -41,7 +41,7 @@ export function renderDashboardView() {
           <h2>${level.title}</h2>
           <p>${level.modules.length} modules · ${level.modules.length * 15} leçons</p>
           <p>Statuts: ${statusSummary}</p>
-          <p>Progression locale: ${progressTotals.completed} terminées · ${progressTotals.inProgress} en cours</p>
+          <p>Progression locale: ${progressTotals.completed} terminées · ${progressTotals.inProgress} en cours · ${progressTotals.notStarted} non commencées</p>
         </a>`;
       }
     )
