@@ -1,12 +1,12 @@
 import { createModuleBlueprint } from '../blueprintFactory.js';
 import { OFFICIAL_REFS } from '../refs/officialRefs.js';
-import { module1AuthoringPreparation5e } from './module1.js';
+import { module1LessonBlueprints5e } from './module1.js';
 
 const refs5e = OFFICIAL_REFS['5e'].map((ref) => ref.id);
-const module1PreparationReady = module1AuthoringPreparation5e.length === 15;
+const module1Ready = module1LessonBlueprints5e.length === 15;
 
-if (!module1PreparationReady) {
-  throw new Error('5e module 1 preparation must define 15 lesson seeds.');
+if (!module1Ready) {
+  throw new Error('5e module 1 must define 15 lesson blueprints.');
 }
 
 export const modules5e = [
@@ -15,9 +15,10 @@ export const modules5e = [
     moduleNumber: 1,
     title: 'Étendre la phrase',
     focus: 'maîtriser expansions et compléments',
-    contentStatus: 'scaffold',
+    contentStatus: 'authored',
     officialRefs: refs5e,
-    sourceSpec: 'assets/js/data/5e/module1.js',
+    lessonBlueprints: module1LessonBlueprints5e,
+    sourceSpec: 'docs/specs/rulebook.md',
   }),
   createModuleBlueprint({
     levelId: '5e',

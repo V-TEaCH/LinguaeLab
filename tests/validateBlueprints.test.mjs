@@ -7,7 +7,7 @@ import { module2LessonBlueprints } from '../assets/js/data/6e/module2.js';
 import { module3LessonBlueprints } from '../assets/js/data/6e/module3.js';
 import { module4LessonBlueprints } from '../assets/js/data/6e/module4.js';
 import { modules5e } from '../assets/js/data/5e/blueprint.js';
-import { module1AuthoringPreparation5e } from '../assets/js/data/5e/module1.js';
+import { module1LessonBlueprints5e } from '../assets/js/data/5e/module1.js';
 import {
   getCurriculumStats,
   getLesson,
@@ -43,6 +43,7 @@ const EXERCISE_10_11_12_PATTERN = [
   /transfert/i,
   /(spirale|spirale-finale)/i,
 ];
+const ALLOWED_ENGINE_TYPES = new Set(['singleChoice', 'multipleChoice', 'textInput', 'ordering']);
 
 function assert6eModuleBlueprint(moduleLessonBlueprints) {
   assert.equal(moduleLessonBlueprints.length, 15);
@@ -162,29 +163,22 @@ test('6e full non-regression blueprint checks (cardinality, refs, and rulebook s
   });
 });
 
-test('5e structure is scaffolded and module 1 authoring preparation is ready', () => {
+test('5e module 1 is authored with engine-compatible exercise types', () => {
   assert.equal(modules5e.length, 4);
-  modules5e.forEach((module) => {
-    assert.equal(module.levelId, '5e');
-    assert.equal(module.contentStatus, 'scaffold');
-    assert.equal(module.lessons.length, 15);
-    assert.ok(Array.isArray(module.officialRefs));
-    assert.ok(module.officialRefs.includes('bo-cycle4-2026'));
-  });
+  const module1 = modules5e.find((module) => module.id === '5e-m1');
+  assert.ok(module1);
+  assert.equal(module1?.contentStatus, 'authored');
+  assert.equal(module1?.lessons.length, 15);
 
-  assert.equal(module1AuthoringPreparation5e.length, 15);
-
-  const uniqueTitles = new Set();
-  module1AuthoringPreparation5e.forEach((lessonSeed) => {
-    assert.match(lessonSeed.title, /\S/);
-    assert.match(lessonSeed.objective, /\S/);
-    assert.ok(Array.isArray(lessonSeed.spiralReview));
-    assert.ok(lessonSeed.spiralReview.length >= 1);
-    assert.ok(Array.isArray(lessonSeed.officialRefs));
-    assert.ok(lessonSeed.officialRefs.includes('bo-cycle4-2026'));
-    assert.equal(lessonSeed.sourceSpec, 'docs/specs/rulebook.md');
-    assert.ok(!uniqueTitles.has(lessonSeed.title));
-    uniqueTitles.add(lessonSeed.title);
+  assert.equal(module1LessonBlueprints5e.length, 15);
+  module1LessonBlueprints5e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+    });
   });
 });
 
@@ -210,9 +204,10 @@ test('module contentStatus values reflect current scaffold reality', () => {
   assert.equal(moduleStatuses.get('6e-m2'), 'tested');
   assert.equal(moduleStatuses.get('6e-m3'), 'tested');
   assert.equal(moduleStatuses.get('6e-m4'), 'tested');
+  assert.equal(moduleStatuses.get('5e-m1'), 'authored');
 
   moduleStatuses.forEach((status, moduleId) => {
-    if (!moduleId.startsWith('6e-')) {
+    if (!moduleId.startsWith('6e-') && moduleId !== '5e-m1') {
       assert.equal(status, 'scaffold');
     }
   });
