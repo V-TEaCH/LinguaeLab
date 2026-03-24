@@ -13,6 +13,8 @@ const EXERCISE_SEQUENCE = [
   'spirale',
 ];
 
+export const CONTENT_STATUSES = ['scaffold', 'authored', 'tested', 'released'];
+
 function createScaffoldExercise(slot, index) {
   return {
     slotId: `ex-${String(index + 1).padStart(2, '0')}`,
@@ -28,7 +30,11 @@ function createExercise(exercise, index) {
   return {
     slotId: exercise.slotId ?? `ex-${String(index + 1).padStart(2, '0')}`,
     slot: exercise.slot ?? EXERCISE_SEQUENCE[index] ?? `exercice-${index + 1}`,
-    type: exercise.type ?? exercise.slot ?? EXERCISE_SEQUENCE[index] ?? 'exercice',
+    type:
+      exercise.type ??
+      exercise.slot ??
+      EXERCISE_SEQUENCE[index] ??
+      'exercice',
     instruction: exercise.instruction,
     acceptedAnswers: exercise.acceptedAnswers ?? [],
     status: exercise.status ?? 'ready',
@@ -55,7 +61,13 @@ function createScaffoldLesson(moduleId, moduleTitle, levelId, lessonNumber, focu
   };
 }
 
-function createLessonFromBlueprint(moduleId, levelId, lessonNumber, lessonBlueprint, officialRefs) {
+function createLessonFromBlueprint(
+  moduleId,
+  levelId,
+  lessonNumber,
+  lessonBlueprint,
+  officialRefs
+) {
   const lessonOrdinal = String(lessonNumber).padStart(2, '0');
 
   return {
@@ -80,8 +92,14 @@ export function createModuleBlueprint({
   officialRefs,
   lessonBlueprints = null,
   sourceSpec = null,
+  contentStatus = null,
 }) {
   const moduleId = `${levelId}-m${moduleNumber}`;
+  const resolvedContentStatus = contentStatus ?? (lessonBlueprints ? 'authored' : 'scaffold');
+
+  if (!CONTENT_STATUSES.includes(resolvedContentStatus)) {
+    throw new Error(`Invalid contentStatus "${resolvedContentStatus}" for module ${moduleId}`);
+  }
 
   return {
     id: moduleId,
@@ -90,11 +108,18 @@ export function createModuleBlueprint({
     title,
     focus,
     status: lessonBlueprints ? 'ready' : 'scaffold',
+    contentStatus: resolvedContentStatus,
     officialRefs,
     sourceSpec,
     lessons: lessonBlueprints
       ? lessonBlueprints.map((lessonBlueprint, index) =>
-          createLessonFromBlueprint(moduleId, levelId, index + 1, lessonBlueprint, officialRefs)
+          createLessonFromBlueprint(
+            moduleId,
+            levelId,
+            index + 1,
+            lessonBlueprint,
+            officialRefs
+          )
         )
       : Array.from({ length: 15 }, (_, index) =>
           createScaffoldLesson(moduleId, title, levelId, index + 1, focus)
