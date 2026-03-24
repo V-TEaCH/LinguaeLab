@@ -67,6 +67,10 @@ function normalizeProgressPayload(lessonProgress) {
       ? lessonProgress.exerciseResults
       : {},
     updatedAt: Number.isFinite(lessonProgress.updatedAt) ? lessonProgress.updatedAt : 0,
+    masteryStatus: typeof lessonProgress.masteryStatus === 'string' ? lessonProgress.masteryStatus : 'non_maîtrisé',
+    unlockedPaths: Array.isArray(lessonProgress.unlockedPaths)
+      ? lessonProgress.unlockedPaths.filter((path) => typeof path === 'string')
+      : [],
   };
 }
 
@@ -97,6 +101,8 @@ export function upsertLessonProgress(lessonId, progressPatch) {
     answeredCount: 0,
     exerciseResults: {},
     updatedAt: 0,
+    masteryStatus: 'non_maîtrisé',
+    unlockedPaths: [],
   };
   const merged = normalizeProgressPayload({
     ...existing,

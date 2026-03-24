@@ -226,6 +226,28 @@ test('scoring aggregates basic results', () => {
 
 
 
+
+
+test('runtime exercise exposes adaptive lesson metadata defaults (12 authored, 6 visible)', () => {
+  const ex01 = buildRuntimeExercise({ slotId: 'ex-01', type: 'textInput', instruction: 'A' }, 0);
+  const ex07 = buildRuntimeExercise({ slotId: 'ex-07', type: 'textInput', instruction: 'B' }, 6);
+  const ex10 = buildRuntimeExercise({ slotId: 'ex-10', type: 'textInput', instruction: 'C' }, 9);
+  const ex12 = buildRuntimeExercise({ slotId: 'ex-12', type: 'textInput', instruction: 'D' }, 11);
+
+  assert.equal(ex01.deliveryModel, 'adaptive_12_to_6');
+  assert.equal(ex01.phase, 'standardPath');
+  assert.equal(ex01.visibleByDefault, true);
+
+  assert.equal(ex07.phase, 'reinforcementPath');
+  assert.equal(ex07.visibleByDefault, false);
+
+  assert.equal(ex10.phase, 'masteryPath');
+  assert.equal(ex10.visibleByDefault, false);
+
+  assert.equal(ex12.phase, 'deferredSpiralPath');
+  assert.equal(ex12.visibleByDefault, false);
+  assert.equal(ex12.unlockRules.masteryMinStandardRate, 0.75);
+});
 test('legacy authored 6e types are specialized to scored textInput without unsupported fallback', () => {
   const declaredTypes = [
     'rappel-flash',

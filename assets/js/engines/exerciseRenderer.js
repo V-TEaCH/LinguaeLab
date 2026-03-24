@@ -27,6 +27,11 @@ const DECLARED_TYPE_TO_RUNTIME_TYPE = {
   'spirale-finale': 'textInput',
 };
 
+const DEFAULT_UNLOCK_RULES = {
+  reinforcementMaxStandardRate: 0.74,
+  masteryMinStandardRate: 0.75,
+};
+
 function normalizeOptions(options = []) {
   return Array.isArray(options)
     ? options.map((option, index) => ({
@@ -45,6 +50,52 @@ function resolveRuntimeType(declaredType) {
   return DECLARED_TYPE_TO_RUNTIME_TYPE[declaredType] ?? null;
 }
 
+function resolvePedagogicalMeta(exercise, index) {
+  const explicitPhase = exercise.phase ?? null;
+  const explicitRole = exercise.pedagogicalRole ?? null;
+  const explicitVisible = typeof exercise.visibleByDefault === 'boolean'
+    ? exercise.visibleByDefault
+    : null;
+
+  if (explicitPhase && explicitRole && explicitVisible !== null) {
+    return {
+      phase: explicitPhase,
+      pedagogicalRole: explicitRole,
+      visibleByDefault: explicitVisible,
+    };
+  }
+
+  if (index <= 5) {
+    return {
+      phase: 'standardPath',
+      pedagogicalRole: 'core',
+      visibleByDefault: true,
+    };
+  }
+
+  if (index <= 8) {
+    return {
+      phase: 'reinforcementPath',
+      pedagogicalRole: 'reinforcement',
+      visibleByDefault: false,
+    };
+  }
+
+  if (index <= 10) {
+    return {
+      phase: 'masteryPath',
+      pedagogicalRole: 'mastery',
+      visibleByDefault: false,
+    };
+  }
+
+  return {
+    phase: 'deferredSpiralPath',
+    pedagogicalRole: 'spiral',
+    visibleByDefault: false,
+  };
+}
+
 export function buildRuntimeExercise(exercise, index) {
   const declaredType = exercise.type ?? 'textInput';
   const resolvedRuntimeType = resolveRuntimeType(declaredType);
@@ -56,6 +107,7 @@ export function buildRuntimeExercise(exercise, index) {
     (Array.isArray(exercise.expectedOrder) && exercise.expectedOrder.length > 0) ||
     (Array.isArray(exercise.acceptedAnswers) && exercise.acceptedAnswers.length > 0);
   const maxScore = fallbackFromUnsupported && !hasStructuredExpectation ? 0 : 1;
+  const pedagogicalMeta = resolvePedagogicalMeta(exercise, index);
 
   return {
     id: exercise.slotId ?? `ex-${String(index + 1).padStart(2, '0')}`,
@@ -67,6 +119,14 @@ export function buildRuntimeExercise(exercise, index) {
     expectedOrder: Array.isArray(exercise.expectedOrder) ? exercise.expectedOrder : [],
     fallbackFromUnsupported,
     maxScore,
+    deliveryModel: exercise.deliveryModel ?? 'adaptive_12_to_6',
+    phase: pedagogicalMeta.phase,
+    pedagogicalRole: pedagogicalMeta.pedagogicalRole,
+    visibleByDefault: pedagogicalMeta.visibleByDefault,
+    unlockRules: {
+      ...DEFAULT_UNLOCK_RULES,
+      ...(exercise.unlockRules ?? {}),
+    },
   };
 }
 
