@@ -87,6 +87,44 @@ test('scoring aggregates basic results', () => {
   assert.deepEqual(getLessonScore(scoringSession), { score: 2, maxScore: 2 });
 });
 
+test('unsupported free-text fallback is non-noted to avoid artificial scoring', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-03',
+      type: 'rappel-flash',
+      instruction: 'Réponds librement.',
+    },
+    2
+  );
+
+  assert.equal(runtimeExercise.runtimeType, 'textInput');
+  assert.equal(runtimeExercise.maxScore, 0);
+
+  const result = checkAnswer(runtimeExercise, { text: 'réponse élève' });
+  assert.equal(result.awarded, 0);
+  assert.match(result.feedback, /non notée/i);
+
+  const scoringSession = createLessonScoring([runtimeExercise]);
+  applyExerciseResult(scoringSession, runtimeExercise.id, result);
+  assert.deepEqual(getLessonScore(scoringSession), { score: 0, maxScore: 0 });
+});
+
+test('text input acceptedAnswers remains tolerant to punctuation and casing variants', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-04',
+      type: 'textInput',
+      instruction: 'Écris la notion.',
+      acceptedAnswers: ['a/à ; et/est'],
+    },
+    3
+  );
+
+  const result = checkAnswer(runtimeExercise, { text: 'A/À et ET/EST' });
+  assert.equal(result.isCorrect, true);
+  assert.equal(result.awarded, 1);
+});
+
 test('router non-regression on lesson route', () => {
   assert.match(resolveRoute('#/level/6e/module/6e-m1/lesson/6e-m1-l01'), /Score/);
 });

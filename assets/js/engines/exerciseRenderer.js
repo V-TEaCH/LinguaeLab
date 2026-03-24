@@ -21,6 +21,12 @@ export function buildRuntimeExercise(exercise, index) {
     ? declaredType
     : 'textInput';
   const options = normalizeOptions(exercise.options);
+  const fallbackFromUnsupported = !SUPPORTED_EXERCISE_TYPES.includes(declaredType);
+  const hasStructuredExpectation =
+    options.some((option) => option.isCorrect) ||
+    (Array.isArray(exercise.expectedOrder) && exercise.expectedOrder.length > 0) ||
+    (Array.isArray(exercise.acceptedAnswers) && exercise.acceptedAnswers.length > 0);
+  const maxScore = fallbackFromUnsupported && !hasStructuredExpectation ? 0 : 1;
 
   return {
     id: exercise.slotId ?? `ex-${String(index + 1).padStart(2, '0')}`,
@@ -30,8 +36,8 @@ export function buildRuntimeExercise(exercise, index) {
     options,
     acceptedAnswers: exercise.acceptedAnswers ?? [],
     expectedOrder: Array.isArray(exercise.expectedOrder) ? exercise.expectedOrder : [],
-    fallbackFromUnsupported: !SUPPORTED_EXERCISE_TYPES.includes(declaredType),
-    maxScore: 1,
+    fallbackFromUnsupported,
+    maxScore,
   };
 }
 
@@ -60,9 +66,11 @@ function renderMultipleChoice(exercise) {
 }
 
 function renderTextInput(exercise) {
-  const hint = exercise.fallbackFromUnsupported
-    ? 'Réponse libre (validation minimale sur complétude).'
-    : 'Réponse courte.';
+  const hint = exercise.fallbackFromUnsupported && exercise.maxScore === 0
+    ? 'Réponse libre (activité enregistrée, non notée).'
+    : exercise.fallbackFromUnsupported
+      ? 'Réponse libre (évaluation textuelle simplifiée).'
+      : 'Réponse courte.';
 
   return `
     <input type="text" name="${exercise.id}" autocomplete="off" />
@@ -93,7 +101,7 @@ function renderAnswerInput(exercise) {
 
 export function renderLessonExercise(exercise, index) {
   const unsupportedNote = exercise.fallbackFromUnsupported
-    ? `<small>Type "${exercise.declaredType}" rendu temporairement en textInput.</small>`
+    ? `<small>Type "${exercise.declaredType}" rendu temporairement en textInput${exercise.maxScore === 0 ? ' (non noté)' : ''}.</small>`
     : '';
 
   return `

@@ -27,7 +27,7 @@ export const module1LessonBlueprints = [
     [
       createExercise(
         'repérage',
-        `Lis 8 suites de mots. Indique pour chacune si elle forme une phrase complète. Coche « oui » seulement si la suite a un sens complet et un verbe conjugué.`
+        `Lis 8 suites de mots. Indique si chacune forme une phrase complète (sens complet + verbe conjugué).`
       ),
       createExercise(
         'tri',

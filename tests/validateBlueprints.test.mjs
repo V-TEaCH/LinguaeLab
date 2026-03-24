@@ -63,6 +63,7 @@ function assert6eModuleBlueprint(moduleLessonBlueprints) {
 
     lessonBlueprint.exercises.forEach((exercise) => {
       assert.match(exercise.instruction, /\S/);
+      assert.ok(exercise.instruction.length <= 150, `Instruction too long: ${exercise.instruction}`);
       assert.ok(ALLOWED_6E_EXERCISE_TYPES.has(exercise.type), `Unexpected exercise type: ${exercise.type}`);
     });
 
@@ -151,6 +152,7 @@ test('6e full non-regression blueprint checks (cardinality, refs, and rulebook s
 
     lessonBlueprint.exercises.forEach((exercise) => {
       assert.match(exercise.instruction, /\S/);
+      assert.ok(exercise.instruction.length <= 150, `Instruction too long: ${exercise.instruction}`);
       assert.ok(ALLOWED_6E_EXERCISE_TYPES.has(exercise.type), `Unexpected exercise type: ${exercise.type}`);
     });
 
