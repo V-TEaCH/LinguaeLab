@@ -3,6 +3,7 @@ import { OFFICIAL_REFS } from '../refs/officialRefs.js';
 import { module1LessonBlueprints } from './module1.js';
 import { module2LessonBlueprints } from './module2.js';
 import { module3LessonBlueprints } from './module3.js';
+import { module4LessonBlueprints } from './module4.js';
 
 const refs6e = OFFICIAL_REFS['6e'].map((ref) => ref.id);
 
@@ -42,6 +43,9 @@ export const modules6e = [
     moduleNumber: 4,
     title: 'Reformuler et styliser',
     focus: 'réinvestir syntaxe, orthographe grammaticale et conjugaison dans la réécriture',
+    contentStatus: 'authored',
     officialRefs: refs6e,
+    lessonBlueprints: module4LessonBlueprints,
+    sourceSpec: 'docs/specs/6e-blueprint-complet.md#module-4',
   }),
 ];
