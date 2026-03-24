@@ -7,7 +7,9 @@ const { resolveRoute } = await import('../assets/js/router.js');
 
 test('router resolves dashboard, level, module and lesson routes', () => {
   assert.match(resolveRoute('#/'), /LinguaeLab/);
+  assert.match(resolveRoute('#/'), /6e est jouable et testée/);
   assert.match(resolveRoute('#/level/6e'), /Construire la phrase/);
+  assert.match(resolveRoute('#/level/6e'), /tested \(release candidate\)/);
   assert.match(resolveRoute('#/level/3e/module/3e-m5'), /Révisions DNB/);
   assert.match(
     resolveRoute('#/level/6e/module/6e-m1/lesson/6e-m1-l01'),

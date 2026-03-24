@@ -1,5 +1,13 @@
 import { getLevel } from '../lessonRegistry.js';
 
+function formatStatus(status) {
+  if (status === 'tested') {
+    return 'tested (release candidate)';
+  }
+
+  return status;
+}
+
 export function renderLevelView(levelId) {
   const level = getLevel(levelId);
 
@@ -13,7 +21,7 @@ export function renderLevelView(levelId) {
         <a class="card" href="#/level/${level.id}/module/${module.id}">
           <h2>${module.title}</h2>
           <p>Module ${module.order} · ${module.lessons.length} leçons</p>
-          <p>Statut contenu: ${module.contentStatus}</p>
+          <p>Statut contenu: ${formatStatus(module.contentStatus)}</p>
           <p>${module.focus}</p>
         </a>`
     )

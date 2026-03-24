@@ -38,9 +38,9 @@ export function renderDashboardView() {
   return `
     <section class="page">
       <header class="hero">
-        <p class="eyebrow">Scaffold collège</p>
+        <p class="eyebrow">6e release candidate</p>
         <h1>LinguaeLab</h1>
-        <p>Base statique prête pour une rédaction progressive module par module.</p>
+        <p>6e est jouable et testée ; 5e, 4e et 3e restent scaffoldées.</p>
       </header>
       <section class="stats">
         <div class="stat"><strong>${stats.levelCount}</strong><span>niveaux</span></div>

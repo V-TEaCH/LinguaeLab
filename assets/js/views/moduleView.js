@@ -1,5 +1,13 @@
 import { getLevel, getModule } from '../lessonRegistry.js';
 
+function formatStatus(status) {
+  if (status === 'tested') {
+    return 'tested (release candidate)';
+  }
+
+  return status;
+}
+
 export function renderModuleView(levelId, moduleId) {
   const level = getLevel(levelId);
   const module = getModule(moduleId);
@@ -24,7 +32,7 @@ export function renderModuleView(levelId, moduleId) {
       <header class="hero">
         <p class="eyebrow">${level.title} · module ${module.order}</p>
         <h1>${module.title}</h1>
-        <p>Statut contenu: ${module.contentStatus}</p>
+        <p>Statut contenu: ${formatStatus(module.contentStatus)}</p>
         <p>${module.focus}</p>
       </header>
       <ol class="lesson-list">${lessonItems}</ol>

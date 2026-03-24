@@ -75,18 +75,16 @@ LinguaeLab/
 
 ## État du scaffold
 
-Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège :
+Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège, avec un premier niveau stabilisé :
 
 - l’arborescence multi-niveaux est présente ;
 - le registre central indexe 4 niveaux, 17 modules et 255 leçons ;
 - chaque leçon expose 12 `exerciseSlots` servant de cadre éditorial ;
 - les routes hash-based restent compatibles avec GitHub Pages ;
-- les contenus authored restent partiels : le dépôt fournit surtout un cadre stable,
-  avec rédaction progressive module par module ;
-- chaque module expose désormais un `contentStatus` explicite
-  (`scaffold`, `authored`, `tested`, `released`) pour suivre l’avancement réel ;
-- l’expérience complète d’exercices interactifs n’est pas encore généralisée
-  à l’ensemble du collège.
+- les modules 6e (`6e-m1` à `6e-m4`) sont **testés** (`contentStatus: tested`) et servent de **release candidate** ;
+- les niveaux 5e, 4e et 3e restent **scaffoldés** (`contentStatus: scaffold`) ;
+- chaque module expose un `contentStatus` explicite (`scaffold`, `authored`, `tested`, `released`) ;
+- l’expérience interactive est disponible sans framework, avec fallback contrôlé pour les types non encore spécialisés.
 
 ## Démarrage rapide
 
