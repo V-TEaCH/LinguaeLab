@@ -15,6 +15,10 @@ import { module1LessonBlueprints4e } from '../assets/js/data/4e/module1.js';
 import { module2LessonBlueprints4e } from '../assets/js/data/4e/module2.js';
 import { module3LessonBlueprints4e } from '../assets/js/data/4e/module3.js';
 import { module4LessonBlueprints4e } from '../assets/js/data/4e/module4.js';
+import { module1LessonBlueprints3e } from '../assets/js/data/3e/module1.js';
+import { module2LessonBlueprints3e } from '../assets/js/data/3e/module2.js';
+import { module3LessonBlueprints3e } from '../assets/js/data/3e/module3.js';
+import { module4LessonBlueprints3e } from '../assets/js/data/3e/module4.js';
 import {
   getCurriculumStats,
   getLesson,
@@ -253,6 +257,32 @@ test('4e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatibl
   });
 });
 
+
+
+test('3e modules 1, 2, 3 and 4 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+  const authoredModules = [
+    module1LessonBlueprints3e,
+    module2LessonBlueprints3e,
+    module3LessonBlueprints3e,
+    module4LessonBlueprints3e,
+  ];
+
+  authoredModules.forEach((moduleLessonBlueprints) => {
+    assert.equal(moduleLessonBlueprints.length, 15);
+    moduleLessonBlueprints.forEach((lessonBlueprint) => {
+      assert.equal(lessonBlueprint.exercises.length, 12);
+      assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+      assert.ok(lessonBlueprint.spiralReview.length >= 1);
+      assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+      assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+
+      lessonBlueprint.exercises.forEach((exercise) => {
+        assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+        assert.match(exercise.instruction, /\S/);
+      });
+    });
+  });
+});
 test('lesson registry exposes consistent cross-level indexes', () => {
   assert.equal(getLevels().length, 4);
   assert.equal(getModulesByLevel('3e').length, 5);
@@ -283,13 +313,14 @@ test('module contentStatus values reflect current scaffold reality', () => {
   assert.equal(moduleStatuses.get('4e-m2'), 'authored');
   assert.equal(moduleStatuses.get('4e-m3'), 'authored');
   assert.equal(moduleStatuses.get('4e-m4'), 'authored');
+  assert.equal(moduleStatuses.get('3e-m1'), 'authored');
+  assert.equal(moduleStatuses.get('3e-m2'), 'authored');
+  assert.equal(moduleStatuses.get('3e-m3'), 'authored');
+  assert.equal(moduleStatuses.get('3e-m4'), 'authored');
+  assert.equal(moduleStatuses.get('3e-m5'), 'scaffold');
 
   moduleStatuses.forEach((status, moduleId) => {
-    if (
-      !moduleId.startsWith('6e-') &&
-      !moduleId.startsWith('5e-') &&
-      !moduleId.startsWith('4e-')
-    ) {
+    if (moduleId === '3e-m5') {
       assert.equal(status, 'scaffold');
     }
   });

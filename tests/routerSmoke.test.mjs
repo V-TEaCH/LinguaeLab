@@ -14,7 +14,9 @@ test('router resolves dashboard, level, module and lesson routes', () => {
   assert.match(resolveRoute('#/level/6e'), /tested \(release candidate\)/);
   assert.match(resolveRoute('#/level/5e'), /authored/);
   assert.match(resolveRoute('#/level/4e'), /authored/);
+  assert.match(resolveRoute('#/level/3e'), /authored/);
   assert.match(resolveRoute('#/level/3e/module/3e-m5'), /Révisions DNB/);
+  assert.match(resolveRoute('#/level/3e/module/3e-m5'), /scaffold/);
   assert.match(resolveRoute('#/level/6e/module/6e-m1'), /Statut local/);
   assert.match(
     resolveRoute('#/level/6e/module/6e-m1/lesson/6e-m1-l01'),
