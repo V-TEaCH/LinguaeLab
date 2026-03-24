@@ -1,12 +1,12 @@
-# ATRIUM-Français
+# LinguaeLab
 
 Application web statique d’apprentissage spiralaire du français au collège.
 
-ATRIUM-Français transpose l’architecture pédagogique d’ATRIUM à l’étude du français : grammaire, orthographe grammaticale, conjugaison, syntaxe, cohésion textuelle, reformulation et réécriture.
+LinguaeLab s’appuie sur l’héritage pédagogique et ergonomique d’ATRIUM pour l’étude du français : grammaire, orthographe grammaticale, conjugaison, syntaxe, cohésion textuelle, reformulation et réécriture.
 
 ## Vision produit
 
-ATRIUM-Français n’est pas une banque de QCM. L’application est conçue comme un parcours pédagogique structuré : l’élève progresse niveau par niveau, module par module, leçon par leçon, avec une alternance entre repérage, manipulation, justification et réemploi.
+LinguaeLab n’est pas une banque de QCM. L’application est conçue comme un parcours pédagogique structuré : l’élève progresse niveau par niveau, module par module, leçon par leçon, avec une alternance entre repérage, manipulation, justification et réemploi.
 
 L’objectif n’est pas seulement de “faire des exercices”, mais d’installer des automatismes de lecture, d’analyse, de révision et de production écrite, dans une logique spiralaire compatible avec les attendus du collège.
 
@@ -31,7 +31,7 @@ Total prévu sur le collège :
 ## Structure actuelle du dépôt
 
 ```text
-ATRIUM-francais/
+LinguaeLab/
   index.html
   manifest.json
   service-worker.js
@@ -75,13 +75,19 @@ ATRIUM-francais/
 
 ## État du scaffold
 
-Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège :
+Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège, avec un premier niveau stabilisé :
 
 - l’arborescence multi-niveaux est présente ;
 - le registre central indexe 4 niveaux, 17 modules et 255 leçons ;
 - chaque leçon expose 12 `exerciseSlots` servant de cadre éditorial ;
 - les routes hash-based restent compatibles avec GitHub Pages ;
-- les contenus réels des exercices restent à rédiger module par module, en commençant par la 6e.
+- les modules 6e (`6e-m1` à `6e-m4`) sont **testés** (`contentStatus: tested`) et servent de **release candidate** ;
+- le niveau 5e reste **scaffoldé** (`contentStatus: scaffold`) avec une préparation de terrain pour l’authoring du module 1 ;
+- les niveaux 4e et 3e restent **scaffoldés** (`contentStatus: scaffold`) ;
+- chaque module expose un `contentStatus` explicite (`scaffold`, `authored`, `tested`, `released`) ;
+- l’expérience interactive est disponible sans framework, avec fallback contrôlé pour les types non encore spécialisés ;
+- une persistance locale v1 (localStorage) conserve la progression de base par leçon
+  (statut non commencée / en cours / terminée + score local).
 
 ## Démarrage rapide
 

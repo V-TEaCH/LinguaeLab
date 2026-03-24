@@ -3,6 +3,11 @@ import assert from 'node:assert/strict';
 
 import { curriculumBlueprint } from '../assets/js/data/curriculumBlueprint.js';
 import { module1LessonBlueprints } from '../assets/js/data/6e/module1.js';
+import { module2LessonBlueprints } from '../assets/js/data/6e/module2.js';
+import { module3LessonBlueprints } from '../assets/js/data/6e/module3.js';
+import { module4LessonBlueprints } from '../assets/js/data/6e/module4.js';
+import { modules5e } from '../assets/js/data/5e/blueprint.js';
+import { module1AuthoringPreparation5e } from '../assets/js/data/5e/module1.js';
 import {
   getCurriculumStats,
   getLesson,
@@ -12,6 +17,61 @@ import {
 } from '../assets/js/lessonRegistry.js';
 
 const EXPECTED_MODULES = { '6e': 4, '5e': 4, '4e': 4, '3e': 5 };
+const ALLOWED_CONTENT_STATUSES = new Set(['scaffold', 'authored', 'tested', 'released']);
+const ALLOWED_6E_EXERCISE_TYPES = new Set([
+  'rappel-flash',
+  'rappel-global',
+  'repérage',
+  'repérage-en-contexte',
+  'segmentation',
+  'tri',
+  'ponctuation-finale',
+  'analyse',
+  'manipulation',
+  'discrimination',
+  'correction',
+  'justification',
+  'vigilance',
+  'réécriture',
+  'réécriture-guidée',
+  'transfert',
+  'spirale',
+  'spirale-finale',
+]);
+const EXERCISE_10_11_12_PATTERN = [
+  /(réécriture|réécriture-guidée)/i,
+  /transfert/i,
+  /(spirale|spirale-finale)/i,
+];
+
+function assert6eModuleBlueprint(moduleLessonBlueprints) {
+  assert.equal(moduleLessonBlueprints.length, 15);
+
+  const lessonTitles = new Set();
+
+  moduleLessonBlueprints.forEach((lessonBlueprint) => {
+    assert.ok(!lessonTitles.has(lessonBlueprint.title));
+    lessonTitles.add(lessonBlueprint.title);
+
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.length >= 1);
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle3-2025'));
+    assert.match(String(lessonBlueprint.sourceSpec ?? ''), /docs\/specs\/6e-blueprint-complet\.md#module-[1-4]/);
+
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.match(exercise.instruction, /\S/);
+      assert.ok(exercise.instruction.length <= 150, `Instruction too long: ${exercise.instruction}`);
+      assert.ok(ALLOWED_6E_EXERCISE_TYPES.has(exercise.type), `Unexpected exercise type: ${exercise.type}`);
+    });
+
+    EXERCISE_10_11_12_PATTERN.forEach((pattern, index) => {
+      assert.match(lessonBlueprint.exercises[index + 9].type, pattern);
+    });
+  });
+}
 
 test('curriculum blueprint matches expected college scaffold', () => {
   assert.equal(curriculumBlueprint.levels.length, 4);
@@ -27,8 +87,20 @@ test('curriculum blueprint matches expected college scaffold', () => {
       assert.equal(module.levelId, level.id);
       assert.equal(module.lessons.length, 15);
       assert.ok(module.officialRefs.length >= 1);
+      assert.ok(ALLOWED_CONTENT_STATUSES.has(module.contentStatus));
       assert.ok(!moduleIds.has(module.id));
       moduleIds.add(module.id);
+
+      if (module.contentStatus === 'released') {
+        const hasPlaceholderExercises = module.lessons.some((lesson) =>
+          lesson.exerciseSlots.some(
+            (exercise) =>
+              exercise.status === 'placeholder' ||
+              exercise.instruction.startsWith('Complète un exercice de type ')
+          )
+        );
+        assert.equal(hasPlaceholderExercises, false);
+      }
 
       module.lessons.forEach((lesson) => {
         assert.equal(lesson.exerciseSlots.length, 12);
@@ -48,24 +120,71 @@ test('curriculum blueprint matches expected college scaffold', () => {
 });
 
 test('6e module 1 is fully authored from the blueprint with 15 lessons and 12 exercises each', () => {
-  assert.equal(module1LessonBlueprints.length, 15);
+  assert6eModuleBlueprint(module1LessonBlueprints);
+});
 
-  const lessonTitles = new Set();
+test('6e module 2 is fully authored from the blueprint with 15 lessons and 12 exercises each', () => {
+  assert6eModuleBlueprint(module2LessonBlueprints);
+});
 
-  module1LessonBlueprints.forEach((lessonBlueprint) => {
-    assert.ok(!lessonTitles.has(lessonBlueprint.title));
-    lessonTitles.add(lessonBlueprint.title);
+test('6e module 3 is fully authored from the blueprint with 15 lessons and 12 exercises each', () => {
+  assert6eModuleBlueprint(module3LessonBlueprints);
+});
+
+test('6e module 4 is fully authored from the blueprint with 15 lessons and 12 exercises each', () => {
+  assert6eModuleBlueprint(module4LessonBlueprints);
+});
+
+test('6e full non-regression blueprint checks (cardinality, refs, and rulebook sequencing)', () => {
+  const allLessons6e = [
+    ...module1LessonBlueprints,
+    ...module2LessonBlueprints,
+    ...module3LessonBlueprints,
+    ...module4LessonBlueprints,
+  ];
+
+  assert.equal(allLessons6e.length, 60);
+
+  allLessons6e.forEach((lessonBlueprint) => {
     assert.equal(lessonBlueprint.exercises.length, 12);
-    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
-    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.length >= 1);
 
     lessonBlueprint.exercises.forEach((exercise) => {
       assert.match(exercise.instruction, /\S/);
+      assert.ok(exercise.instruction.length <= 150, `Instruction too long: ${exercise.instruction}`);
+      assert.ok(ALLOWED_6E_EXERCISE_TYPES.has(exercise.type), `Unexpected exercise type: ${exercise.type}`);
     });
 
-    assert.match(lessonBlueprint.exercises[9].type, /réécriture/i);
-    assert.match(lessonBlueprint.exercises[10].type, /transfert/i);
-    assert.match(lessonBlueprint.exercises[11].type, /spirale/i);
+    EXERCISE_10_11_12_PATTERN.forEach((pattern, index) => {
+      assert.match(lessonBlueprint.exercises[index + 9].type, pattern);
+    });
+  });
+});
+
+test('5e structure is scaffolded and module 1 authoring preparation is ready', () => {
+  assert.equal(modules5e.length, 4);
+  modules5e.forEach((module) => {
+    assert.equal(module.levelId, '5e');
+    assert.equal(module.contentStatus, 'scaffold');
+    assert.equal(module.lessons.length, 15);
+    assert.ok(Array.isArray(module.officialRefs));
+    assert.ok(module.officialRefs.includes('bo-cycle4-2026'));
+  });
+
+  assert.equal(module1AuthoringPreparation5e.length, 15);
+
+  const uniqueTitles = new Set();
+  module1AuthoringPreparation5e.forEach((lessonSeed) => {
+    assert.match(lessonSeed.title, /\S/);
+    assert.match(lessonSeed.objective, /\S/);
+    assert.ok(Array.isArray(lessonSeed.spiralReview));
+    assert.ok(lessonSeed.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonSeed.officialRefs));
+    assert.ok(lessonSeed.officialRefs.includes('bo-cycle4-2026'));
+    assert.equal(lessonSeed.sourceSpec, 'docs/specs/rulebook.md');
+    assert.ok(!uniqueTitles.has(lessonSeed.title));
+    uniqueTitles.add(lessonSeed.title);
   });
 });
 
@@ -78,4 +197,23 @@ test('lesson registry exposes consistent cross-level indexes', () => {
 
   const stats = getCurriculumStats();
   assert.deepEqual(stats, { levelCount: 4, moduleCount: 17, lessonCount: 255 });
+});
+
+test('module contentStatus values reflect current scaffold reality', () => {
+  const moduleStatuses = new Map(
+    curriculumBlueprint.levels.flatMap((level) =>
+      level.modules.map((module) => [module.id, module.contentStatus])
+    )
+  );
+
+  assert.equal(moduleStatuses.get('6e-m1'), 'tested');
+  assert.equal(moduleStatuses.get('6e-m2'), 'tested');
+  assert.equal(moduleStatuses.get('6e-m3'), 'tested');
+  assert.equal(moduleStatuses.get('6e-m4'), 'tested');
+
+  moduleStatuses.forEach((status, moduleId) => {
+    if (!moduleId.startsWith('6e-')) {
+      assert.equal(status, 'scaffold');
+    }
+  });
 });
