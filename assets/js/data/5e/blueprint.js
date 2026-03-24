@@ -30,7 +30,7 @@ export const modules5e = [
     moduleNumber: 1,
     title: 'Étendre la phrase',
     focus: 'maîtriser expansions et compléments',
-    contentStatus: 'authored',
+    contentStatus: 'tested',
     officialRefs: refs5e,
     lessonBlueprints: module1LessonBlueprints5e,
     sourceSpec: 'docs/specs/rulebook.md',
