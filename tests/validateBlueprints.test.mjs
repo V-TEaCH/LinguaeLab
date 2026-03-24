@@ -228,6 +228,8 @@ test('4e module 1 is authored with engine-compatible exercise types', () => {
     lessonBlueprint.exercises.forEach((exercise) => {
       assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
       assert.match(exercise.instruction, /\S/);
+      assert.ok(exercise.instruction.length <= 150, `Instruction too long: ${exercise.instruction}`);
+      assert.ok(ALLOWED_6E_EXERCISE_TYPES.has(exercise.type), `Unexpected exercise type: ${exercise.type}`);
     });
   });
 });
