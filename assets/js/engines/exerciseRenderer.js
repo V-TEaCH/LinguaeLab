@@ -5,6 +5,28 @@ export const SUPPORTED_EXERCISE_TYPES = [
   'ordering',
 ];
 
+const DECLARED_TYPE_TO_RUNTIME_TYPE = {
+  // 6e historical authored types specialized as text input workflows
+  'rappel-flash': 'textInput',
+  'rappel-global': 'textInput',
+  'repérage': 'textInput',
+  'repérage-en-contexte': 'textInput',
+  'segmentation': 'textInput',
+  'tri': 'textInput',
+  'ponctuation-finale': 'textInput',
+  'analyse': 'textInput',
+  'manipulation': 'textInput',
+  'discrimination': 'textInput',
+  'correction': 'textInput',
+  'justification': 'textInput',
+  'vigilance': 'textInput',
+  'réécriture': 'textInput',
+  'réécriture-guidée': 'textInput',
+  'transfert': 'textInput',
+  'spirale': 'textInput',
+  'spirale-finale': 'textInput',
+};
+
 function normalizeOptions(options = []) {
   return Array.isArray(options)
     ? options.map((option, index) => ({
@@ -15,13 +37,20 @@ function normalizeOptions(options = []) {
     : [];
 }
 
+function resolveRuntimeType(declaredType) {
+  if (SUPPORTED_EXERCISE_TYPES.includes(declaredType)) {
+    return declaredType;
+  }
+
+  return DECLARED_TYPE_TO_RUNTIME_TYPE[declaredType] ?? null;
+}
+
 export function buildRuntimeExercise(exercise, index) {
   const declaredType = exercise.type ?? 'textInput';
-  const runtimeType = SUPPORTED_EXERCISE_TYPES.includes(declaredType)
-    ? declaredType
-    : 'textInput';
+  const resolvedRuntimeType = resolveRuntimeType(declaredType);
+  const runtimeType = resolvedRuntimeType ?? 'textInput';
   const options = normalizeOptions(exercise.options);
-  const fallbackFromUnsupported = !SUPPORTED_EXERCISE_TYPES.includes(declaredType);
+  const fallbackFromUnsupported = resolvedRuntimeType === null;
   const hasStructuredExpectation =
     options.some((option) => option.isCorrect) ||
     (Array.isArray(exercise.expectedOrder) && exercise.expectedOrder.length > 0) ||

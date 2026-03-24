@@ -27,6 +27,7 @@ import {
   getModule,
   getModulesByLevel,
 } from '../assets/js/lessonRegistry.js';
+import { buildRuntimeExercise } from '../assets/js/engines/exerciseRenderer.js';
 
 const EXPECTED_MODULES = { '6e': 4, '5e': 4, '4e': 4, '3e': 5 };
 const ALLOWED_CONTENT_STATUSES = new Set(['scaffold', 'authored', 'tested', 'released']);
@@ -284,6 +285,31 @@ test('3e modules 1, 2, 3, 4 and DNB module 5 are authored with 15 lessons and 12
       });
     });
   });
+});
+
+
+test('authored and tested modules no longer rely on unsupported fallback exercise types', () => {
+  const authoredOrTestedModules = curriculumBlueprint.levels
+    .flatMap((level) => level.modules)
+    .filter((module) => module.contentStatus === 'authored' || module.contentStatus === 'tested');
+
+  const fallbackTypes = new Map();
+
+  authoredOrTestedModules.forEach((module) => {
+    module.lessons.forEach((lesson) => {
+      lesson.exerciseSlots.forEach((exercise, index) => {
+        const runtimeExercise = buildRuntimeExercise(exercise, index);
+        if (runtimeExercise.fallbackFromUnsupported) {
+          fallbackTypes.set(
+            runtimeExercise.declaredType,
+            (fallbackTypes.get(runtimeExercise.declaredType) ?? 0) + 1
+          );
+        }
+      });
+    });
+  });
+
+  assert.deepEqual(Array.from(fallbackTypes.entries()), []);
 });
 test('lesson registry exposes consistent cross-level indexes', () => {
   assert.equal(getLevels().length, 4);

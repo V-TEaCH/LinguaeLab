@@ -201,11 +201,40 @@ test('scoring aggregates basic results', () => {
   assert.deepEqual(getLessonScore(scoringSession), { score: 2, maxScore: 2 });
 });
 
+
+
+test('legacy authored 6e types are specialized to scored textInput without unsupported fallback', () => {
+  const declaredTypes = [
+    'rappel-flash',
+    'repérage',
+    'manipulation',
+    'correction',
+    'justification',
+    'réécriture',
+    'transfert',
+    'spirale',
+  ];
+
+  declaredTypes.forEach((type, index) => {
+    const runtimeExercise = buildRuntimeExercise(
+      {
+        slotId: `legacy-${index + 1}`,
+        type,
+        instruction: `Exercice ${type}`,
+      },
+      index
+    );
+
+    assert.equal(runtimeExercise.runtimeType, 'textInput');
+    assert.equal(runtimeExercise.fallbackFromUnsupported, false);
+    assert.equal(runtimeExercise.maxScore, 1);
+  });
+});
 test('unsupported free-text fallback is non-noted to avoid artificial scoring', () => {
   const runtimeExercise = buildRuntimeExercise(
     {
       slotId: 'ex-03',
-      type: 'rappel-flash',
+      type: 'custom-unsupported',
       instruction: 'Réponds librement.',
     },
     2
