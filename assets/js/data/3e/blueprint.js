@@ -4,12 +4,14 @@ import { module1LessonBlueprints3e } from './module1.js';
 import { module2LessonBlueprints3e } from './module2.js';
 import { module3LessonBlueprints3e } from './module3.js';
 import { module4LessonBlueprints3e } from './module4.js';
+import { module5LessonBlueprints3e } from './module5.js';
 
 const refs3e = OFFICIAL_REFS['3e'].map((ref) => ref.id);
 const module1Ready = module1LessonBlueprints3e.length === 15;
 const module2Ready = module2LessonBlueprints3e.length === 15;
 const module3Ready = module3LessonBlueprints3e.length === 15;
 const module4Ready = module4LessonBlueprints3e.length === 15;
+const module5Ready = module5LessonBlueprints3e.length === 15;
 
 if (!module1Ready) {
   throw new Error('3e module 1 must define 15 lesson blueprints.');
@@ -22,6 +24,9 @@ if (!module3Ready) {
 }
 if (!module4Ready) {
   throw new Error('3e module 4 must define 15 lesson blueprints.');
+}
+if (!module5Ready) {
+  throw new Error('3e module 5 must define 15 lesson blueprints.');
 }
 
 export const modules3e = [
@@ -70,7 +75,9 @@ export const modules3e = [
     moduleNumber: 5,
     title: 'Révisions DNB',
     focus: 'entraîner les automatismes utiles à l’épreuve',
-    contentStatus: 'scaffold',
+    contentStatus: 'authored',
     officialRefs: refs3e,
+    lessonBlueprints: module5LessonBlueprints3e,
+    sourceSpec: 'docs/specs/rulebook.md',
   }),
 ];

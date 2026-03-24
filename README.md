@@ -85,7 +85,8 @@ Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège, 
 - les modules 5e (`5e-m1` à `5e-m4`) sont **authored** (15 leçons complètes chacun) ;
 - les modules 4e (`4e-m1` à `4e-m4`) sont **authored** (15 leçons complètes chacun) ;
 - les modules 3e généraux (`3e-m1` à `3e-m4`) sont **authored** (15 leçons complètes chacun) ;
-- le module 3e DNB (`3e-m5`) reste **scaffoldé** (`contentStatus: scaffold`) ;
+- le module 3e DNB (`3e-m5`) est désormais **authored** pour un entraînement guidé ;
+- ce module DNB reste un entraînement progressif (compréhension/langue/réécriture) et **pas** encore une simulation complète d’épreuve ;
 - chaque module expose un `contentStatus` explicite (`scaffold`, `authored`, `tested`, `released`) ;
 - l’expérience interactive est disponible sans framework, avec fallback contrôlé pour les types non encore spécialisés ;
 - une persistance locale v1 (localStorage) conserve la progression de base par leçon

@@ -19,6 +19,7 @@ import { module1LessonBlueprints3e } from '../assets/js/data/3e/module1.js';
 import { module2LessonBlueprints3e } from '../assets/js/data/3e/module2.js';
 import { module3LessonBlueprints3e } from '../assets/js/data/3e/module3.js';
 import { module4LessonBlueprints3e } from '../assets/js/data/3e/module4.js';
+import { module5LessonBlueprints3e } from '../assets/js/data/3e/module5.js';
 import {
   getCurriculumStats,
   getLesson,
@@ -259,12 +260,13 @@ test('4e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatibl
 
 
 
-test('3e modules 1, 2, 3 and 4 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+test('3e modules 1, 2, 3, 4 and DNB module 5 are authored with 15 lessons and 12 engine-compatible exercises', () => {
   const authoredModules = [
     module1LessonBlueprints3e,
     module2LessonBlueprints3e,
     module3LessonBlueprints3e,
     module4LessonBlueprints3e,
+    module5LessonBlueprints3e,
   ];
 
   authoredModules.forEach((moduleLessonBlueprints) => {
@@ -317,11 +319,6 @@ test('module contentStatus values reflect current scaffold reality', () => {
   assert.equal(moduleStatuses.get('3e-m2'), 'authored');
   assert.equal(moduleStatuses.get('3e-m3'), 'authored');
   assert.equal(moduleStatuses.get('3e-m4'), 'authored');
-  assert.equal(moduleStatuses.get('3e-m5'), 'scaffold');
+  assert.equal(moduleStatuses.get('3e-m5'), 'authored');
 
-  moduleStatuses.forEach((status, moduleId) => {
-    if (moduleId === '3e-m5') {
-      assert.equal(status, 'scaffold');
-    }
-  });
 });
