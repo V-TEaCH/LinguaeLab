@@ -83,6 +83,8 @@ Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège :
 - les routes hash-based restent compatibles avec GitHub Pages ;
 - les contenus authored restent partiels : le dépôt fournit surtout un cadre stable,
   avec rédaction progressive module par module ;
+- chaque module expose désormais un `contentStatus` explicite
+  (`scaffold`, `authored`, `tested`, `released`) pour suivre l’avancement réel ;
 - l’expérience complète d’exercices interactifs n’est pas encore généralisée
   à l’ensemble du collège.
 

@@ -1,14 +1,37 @@
 import { getLevels, getCurriculumStats } from '../lessonRegistry.js';
 
+function formatContentStatus(status) {
+  const labels = {
+    scaffold: 'scaffold',
+    authored: 'authored',
+    tested: 'tested',
+    released: 'released',
+  };
+
+  return labels[status] ?? status;
+}
+
 export function renderDashboardView() {
   const stats = getCurriculumStats();
   const levelCards = getLevels()
     .map(
-      (level) => `
+      (level) => {
+        const moduleStatuses = level.modules.reduce((acc, module) => {
+          acc[module.contentStatus] = (acc[module.contentStatus] ?? 0) + 1;
+          return acc;
+        }, {});
+
+        const statusSummary = Object.entries(moduleStatuses)
+          .map(([status, count]) => `${count} ${formatContentStatus(status)}`)
+          .join(' · ');
+
+        return `
         <a class="card" href="#/level/${level.id}">
           <h2>${level.title}</h2>
           <p>${level.modules.length} modules · ${level.modules.length * 15} leçons</p>
-        </a>`
+          <p>Statuts: ${statusSummary}</p>
+        </a>`;
+      }
     )
     .join('');
 

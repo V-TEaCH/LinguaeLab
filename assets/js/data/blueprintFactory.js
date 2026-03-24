@@ -13,6 +13,8 @@ const EXERCISE_SEQUENCE = [
   'spirale',
 ];
 
+export const CONTENT_STATUSES = ['scaffold', 'authored', 'tested', 'released'];
+
 function createScaffoldExercise(slot, index) {
   return {
     slotId: `ex-${String(index + 1).padStart(2, '0')}`,
@@ -90,8 +92,14 @@ export function createModuleBlueprint({
   officialRefs,
   lessonBlueprints = null,
   sourceSpec = null,
+  contentStatus = null,
 }) {
   const moduleId = `${levelId}-m${moduleNumber}`;
+  const resolvedContentStatus = contentStatus ?? (lessonBlueprints ? 'authored' : 'scaffold');
+
+  if (!CONTENT_STATUSES.includes(resolvedContentStatus)) {
+    throw new Error(`Invalid contentStatus "${resolvedContentStatus}" for module ${moduleId}`);
+  }
 
   return {
     id: moduleId,
@@ -100,6 +108,7 @@ export function createModuleBlueprint({
     title,
     focus,
     status: lessonBlueprints ? 'ready' : 'scaffold',
+    contentStatus: resolvedContentStatus,
     officialRefs,
     sourceSpec,
     lessons: lessonBlueprints
