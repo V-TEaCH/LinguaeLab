@@ -75,7 +75,7 @@ LinguaeLab/
 
 ## État du scaffold
 
-Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège, avec un premier niveau stabilisé :
+Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège, avec des niveaux de maturité explicites par niveau/module :
 
 - l’arborescence multi-niveaux est présente ;
 - le registre central indexe 4 niveaux, 17 modules et 255 leçons ;

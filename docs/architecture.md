@@ -17,8 +17,7 @@ mais l’identité produit et le scaffold courant restent alignés sur LinguaeLa
 - pas de framework ;
 - ES modules uniquement ;
 - routes via `location.hash` pour rester compatibles avec un hébergement statique ;
-- génération de placeholders pédagogiques pour éviter de rédiger prématurément
-  les 3060 exercices ;
+- coexistence de modules authored et tested avec fallback scaffold pour les surfaces non rédigées ;
 - `officialRefs` conservées au niveau des niveaux, modules et leçons.
 
 ## Arborescence utile
@@ -52,6 +51,13 @@ assets/
 - 15 leçons par module ;
 - 12 `exerciseSlots` par leçon ;
 - 3e module 5 réservé aux révisions DNB.
+
+## État de maturité (référentiel courant)
+
+- 6e : modules `tested` (release candidate) ;
+- 5e : modules `authored` ;
+- 4e : modules `authored` ;
+- 3e : modules `authored` (dont `3e-m5` DNB en entraînement guidé).
 
 ## Tests de cohérence
 

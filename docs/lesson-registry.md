@@ -24,7 +24,9 @@ Exemples :
 
 ## Statut actuel
 
-- chaque module expose 15 leçons scaffoldées ;
-- chaque leçon expose 12 `exerciseSlots` ;
-- les contenus d’exercices réels restent à rédiger,
-  en commençant par la 6e.
+- tous les modules exposent 15 leçons et 12 `exerciseSlots` par leçon ;
+- 6e (`6e-m1` à `6e-m4`) : `contentStatus: tested` ;
+- 5e (`5e-m1` à `5e-m4`) : `contentStatus: authored` ;
+- 4e (`4e-m1` à `4e-m4`) : `contentStatus: authored` ;
+- 3e (`3e-m1` à `3e-m5`) : `contentStatus: authored` ;
+- `3e-m5` est authored pour un entraînement DNB guidé (pas une simulation complète d’épreuve).
