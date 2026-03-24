@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import { curriculumBlueprint } from '../assets/js/data/curriculumBlueprint.js';
 import { module1LessonBlueprints } from '../assets/js/data/6e/module1.js';
+import { module2LessonBlueprints } from '../assets/js/data/6e/module2.js';
 import {
   getCurriculumStats,
   getLesson,
@@ -82,6 +83,32 @@ test('6e module 1 is fully authored from the blueprint with 15 lessons and 12 ex
   });
 });
 
+test('6e module 2 is fully authored from the blueprint with 15 lessons and 12 exercises each', () => {
+  assert.equal(module2LessonBlueprints.length, 15);
+
+  const lessonTitles = new Set();
+
+  module2LessonBlueprints.forEach((lessonBlueprint) => {
+    assert.ok(!lessonTitles.has(lessonBlueprint.title));
+    lessonTitles.add(lessonBlueprint.title);
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.match(exercise.instruction, /\S/);
+      assert.match(
+        exercise.type,
+        /rappel|repérage|manipulation|discrimination|correction|justification|vigilance|réécriture|transfert|spirale/i
+      );
+    });
+
+    assert.match(lessonBlueprint.exercises[9].type, /réécriture/i);
+    assert.match(lessonBlueprint.exercises[10].type, /transfert/i);
+    assert.match(lessonBlueprint.exercises[11].type, /spirale/i);
+  });
+});
+
 test('lesson registry exposes consistent cross-level indexes', () => {
   assert.equal(getLevels().length, 4);
   assert.equal(getModulesByLevel('3e').length, 5);
@@ -101,9 +128,10 @@ test('module contentStatus values reflect current scaffold reality', () => {
   );
 
   assert.equal(moduleStatuses.get('6e-m1'), 'authored');
+  assert.equal(moduleStatuses.get('6e-m2'), 'authored');
 
   moduleStatuses.forEach((status, moduleId) => {
-    if (moduleId !== '6e-m1') {
+    if (moduleId !== '6e-m1' && moduleId !== '6e-m2') {
       assert.equal(status, 'scaffold');
     }
   });
