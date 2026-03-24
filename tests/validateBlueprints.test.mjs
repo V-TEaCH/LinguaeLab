@@ -12,6 +12,7 @@ import {
 } from '../assets/js/lessonRegistry.js';
 
 const EXPECTED_MODULES = { '6e': 4, '5e': 4, '4e': 4, '3e': 5 };
+const ALLOWED_CONTENT_STATUSES = new Set(['scaffold', 'authored', 'tested', 'released']);
 
 test('curriculum blueprint matches expected college scaffold', () => {
   assert.equal(curriculumBlueprint.levels.length, 4);
@@ -27,8 +28,20 @@ test('curriculum blueprint matches expected college scaffold', () => {
       assert.equal(module.levelId, level.id);
       assert.equal(module.lessons.length, 15);
       assert.ok(module.officialRefs.length >= 1);
+      assert.ok(ALLOWED_CONTENT_STATUSES.has(module.contentStatus));
       assert.ok(!moduleIds.has(module.id));
       moduleIds.add(module.id);
+
+      if (module.contentStatus === 'released') {
+        const hasPlaceholderExercises = module.lessons.some((lesson) =>
+          lesson.exerciseSlots.some(
+            (exercise) =>
+              exercise.status === 'placeholder' ||
+              exercise.instruction.startsWith('Complète un exercice de type ')
+          )
+        );
+        assert.equal(hasPlaceholderExercises, false);
+      }
 
       module.lessons.forEach((lesson) => {
         assert.equal(lesson.exerciseSlots.length, 12);
@@ -78,4 +91,20 @@ test('lesson registry exposes consistent cross-level indexes', () => {
 
   const stats = getCurriculumStats();
   assert.deepEqual(stats, { levelCount: 4, moduleCount: 17, lessonCount: 255 });
+});
+
+test('module contentStatus values reflect current scaffold reality', () => {
+  const moduleStatuses = new Map(
+    curriculumBlueprint.levels.flatMap((level) =>
+      level.modules.map((module) => [module.id, module.contentStatus])
+    )
+  );
+
+  assert.equal(moduleStatuses.get('6e-m1'), 'authored');
+
+  moduleStatuses.forEach((status, moduleId) => {
+    if (moduleId !== '6e-m1') {
+      assert.equal(status, 'scaffold');
+    }
+  });
 });

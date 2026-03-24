@@ -10,6 +10,7 @@ export const modules6e = [
     moduleNumber: 1,
     title: 'Construire la phrase',
     focus: 'comprendre l’architecture de la phrase, de la ponctuation initiale jusqu’aux premiers liens entre propositions',
+    contentStatus: 'authored',
     officialRefs: refs6e,
     lessonBlueprints: module1LessonBlueprints,
     sourceSpec: 'docs/specs/6e-blueprint-complet.md#module-1',

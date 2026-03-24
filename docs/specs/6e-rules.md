@@ -1,4 +1,4 @@
-# RULEBOOK — ATRIUM-Français
+# RULEBOOK — LinguaeLab
 
 ## Objet
 
@@ -14,6 +14,7 @@ Pour toute génération ou modification de contenu, utiliser en priorité :
 - `AGENTS.md`
 - `docs/specs/6e-blueprint-complet.md`
 - `docs/specs/6e-rules.md`
+- `docs/specs/rulebook.md`
 - les fichiers déjà présents dans `assets/js/data/`
 
 Ne pas inventer de structure parallèle si une structure existe déjà dans le dépôt.
