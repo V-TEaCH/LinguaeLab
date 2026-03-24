@@ -50,7 +50,7 @@ export function renderDashboardView() {
   return `
     <section class="page">
       <header class="hero">
-        <p class="eyebrow">État des contenus: 6e testé · 5e/4e/3e authored</p>
+        <p class="eyebrow">État des contenus: 6e testée · 5e/4e/3e authored</p>
         <h1>LinguaeLab</h1>
         <p>6e est testée (release candidate) ; 5e, 4e et 3e sont authored, dont un module DNB guidé en 3e.</p>
       </header>

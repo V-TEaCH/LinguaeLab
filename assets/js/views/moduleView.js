@@ -26,6 +26,9 @@ export function renderModuleView(levelId, moduleId) {
   const moduleProgress = getModuleProgressSummary(module);
   const resumeCandidate = getMostRecentLessonProgress(module.lessons);
   const resumeLessonId = resumeCandidate?.lessonId ?? module.lessons[0]?.id ?? null;
+  const resumeLabel = resumeCandidate
+    ? 'Reprendre la dernière leçon active'
+    : 'Commencer la première leçon';
 
   const lessonItems = module.lessons
     .map(
@@ -47,7 +50,7 @@ export function renderModuleView(levelId, moduleId) {
     .join('');
 
   const resumeSnippet = resumeLessonId
-    ? `<p><a href="#/level/${levelId}/module/${moduleId}/lesson/${resumeLessonId}">Reprendre la dernière leçon active</a></p>`
+    ? `<p><a href="#/level/${levelId}/module/${moduleId}/lesson/${resumeLessonId}">${resumeLabel}</a></p>`
     : '';
 
   return `
