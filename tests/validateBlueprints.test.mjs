@@ -57,6 +57,12 @@ const EXERCISE_10_11_12_PATTERN = [
   /(spirale|spirale-finale)/i,
 ];
 const ALLOWED_ENGINE_TYPES = new Set(['singleChoice', 'multipleChoice', 'textInput', 'ordering']);
+const ALLOWED_ADAPTIVE_PHASES = new Set([
+  'standardPath',
+  'reinforcementPath',
+  'masteryPath',
+  'deferredSpiralPath',
+]);
 
 function assert6eModuleBlueprint(moduleLessonBlueprints) {
   assert.equal(moduleLessonBlueprints.length, 15);
@@ -260,6 +266,29 @@ test('4e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatibl
   });
 });
 
+test('4e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+  const authoredModules = [
+    module2LessonBlueprints4e,
+    module3LessonBlueprints4e,
+    module4LessonBlueprints4e,
+  ];
+
+  authoredModules.forEach((moduleLessonBlueprints) => {
+    assert.equal(moduleLessonBlueprints.length, 15);
+    moduleLessonBlueprints.forEach((lessonBlueprint) => {
+      assert.equal(lessonBlueprint.exercises.length, 12);
+      assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+      assert.ok(lessonBlueprint.spiralReview.length >= 1);
+      assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+      assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+      lessonBlueprint.exercises.forEach((exercise) => {
+        assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+        assert.match(exercise.instruction, /\S/);
+      });
+    });
+  });
+});
+
 
 
 test('3e modules 1, 2, 3, 4 and DNB module 5 are authored with 15 lessons and 12 engine-compatible exercises', () => {
@@ -311,6 +340,38 @@ test('authored and tested modules no longer rely on unsupported fallback exercis
   });
 
   assert.deepEqual(Array.from(fallbackTypes.entries()), []);
+});
+
+test('adaptive lesson contract is available on 6e, 5e and 3e pilot lessons', () => {
+  const pilotLessons = [
+    getLesson('6e-m1-l01'),
+    getLesson('5e-m1-l06'),
+    getLesson('3e-m4-l09'),
+  ];
+
+  pilotLessons.forEach((lesson) => {
+    assert.ok(lesson);
+    assert.equal(lesson.exerciseSlots.length, 12);
+
+    const runtimeExercises = lesson.exerciseSlots.map((exercise, index) =>
+      buildRuntimeExercise(exercise, index)
+    );
+
+    const standardCount = runtimeExercises.filter((exercise) => exercise.phase === 'standardPath').length;
+    const reinforcementCount = runtimeExercises.filter((exercise) => exercise.phase === 'reinforcementPath').length;
+    const masteryCount = runtimeExercises.filter((exercise) => exercise.phase === 'masteryPath').length;
+    const deferredCount = runtimeExercises.filter((exercise) => exercise.phase === 'deferredSpiralPath').length;
+
+    assert.equal(standardCount, 6);
+    assert.equal(reinforcementCount, 3);
+    assert.equal(masteryCount, 2);
+    assert.equal(deferredCount, 1);
+
+    runtimeExercises.forEach((runtimeExercise) => {
+      assert.ok(ALLOWED_ADAPTIVE_PHASES.has(runtimeExercise.phase));
+      assert.match(runtimeExercise.pedagogicalRole, /\S/);
+    });
+  });
 });
 test('lesson registry exposes consistent cross-level indexes', () => {
   assert.equal(getLevels().length, 4);

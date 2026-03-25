@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   buildRuntimeExercise,
+  createRuntimeExercises,
   renderLessonExercise,
 } from '../assets/js/engines/exerciseRenderer.js';
 import { checkAnswer } from '../assets/js/engines/answerChecker.js';
@@ -247,6 +248,36 @@ test('runtime exercise exposes adaptive lesson metadata defaults (12 authored, 6
   assert.equal(ex12.phase, 'deferredSpiralPath');
   assert.equal(ex12.visibleByDefault, false);
   assert.equal(ex12.unlockRules.masteryMinStandardRate, 0.75);
+});
+
+test('runtime exercise normalizes adaptive phase and keeps deferred metadata', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-12',
+      type: 'textInput',
+      instruction: 'Spirale',
+      prompt: 'Texte source',
+      phase: 'unexpectedPhase',
+      deferredTo: { targetLessonId: '5e-m4-l3', reason: 'spirale croisée' },
+    },
+    11
+  );
+
+  assert.equal(runtimeExercise.phase, 'deferredSpiralPath');
+  assert.equal(runtimeExercise.prompt, 'Texte source');
+  assert.equal(runtimeExercise.deferredTo?.targetLessonId, '5e-m4-l3');
+});
+
+test('createRuntimeExercises inherits lesson delivery model when exercise has no override', () => {
+  const runtimeExercises = createRuntimeExercises(
+    [{ slotId: 'ex-01', type: 'textInput', instruction: 'A' }],
+    { authoredExerciseCount: 12, defaultVisibleCount: 6 }
+  );
+
+  assert.deepEqual(runtimeExercises[0].deliveryModel, {
+    authoredExerciseCount: 12,
+    defaultVisibleCount: 6,
+  });
 });
 test('legacy authored 6e types are specialized to scored textInput without unsupported fallback', () => {
   const declaredTypes = [

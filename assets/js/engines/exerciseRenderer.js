@@ -31,6 +31,12 @@ const DEFAULT_UNLOCK_RULES = {
   reinforcementMaxStandardRate: 0.74,
   masteryMinStandardRate: 0.75,
 };
+const ADAPTIVE_PHASES = new Set([
+  'standardPath',
+  'reinforcementPath',
+  'masteryPath',
+  'deferredSpiralPath',
+]);
 
 function normalizeOptions(options = []) {
   return Array.isArray(options)
@@ -51,7 +57,7 @@ function resolveRuntimeType(declaredType) {
 }
 
 function resolvePedagogicalMeta(exercise, index) {
-  const explicitPhase = exercise.phase ?? null;
+  const explicitPhase = ADAPTIVE_PHASES.has(exercise.phase) ? exercise.phase : null;
   const explicitRole = exercise.pedagogicalRole ?? null;
   const explicitVisible = typeof exercise.visibleByDefault === 'boolean'
     ? exercise.visibleByDefault
@@ -113,7 +119,7 @@ export function buildRuntimeExercise(exercise, index) {
     id: exercise.slotId ?? `ex-${String(index + 1).padStart(2, '0')}`,
     declaredType,
     runtimeType,
-    prompt: exercise.instruction,
+    prompt: exercise.prompt ?? exercise.instruction,
     options,
     acceptedAnswers: exercise.acceptedAnswers ?? [],
     expectedOrder: Array.isArray(exercise.expectedOrder) ? exercise.expectedOrder : [],
@@ -123,6 +129,7 @@ export function buildRuntimeExercise(exercise, index) {
     phase: pedagogicalMeta.phase,
     pedagogicalRole: pedagogicalMeta.pedagogicalRole,
     visibleByDefault: pedagogicalMeta.visibleByDefault,
+    deferredTo: exercise.deferredTo ?? null,
     unlockRules: {
       ...DEFAULT_UNLOCK_RULES,
       ...(exercise.unlockRules ?? {}),
@@ -207,6 +214,14 @@ export function renderLessonExercise(exercise, index) {
     </li>`;
 }
 
-export function createRuntimeExercises(exerciseSlots = []) {
-  return exerciseSlots.map(buildRuntimeExercise);
+export function createRuntimeExercises(exerciseSlots = [], lessonDeliveryModel = null) {
+  return exerciseSlots.map((exercise, index) =>
+    buildRuntimeExercise(
+      {
+        ...exercise,
+        deliveryModel: exercise.deliveryModel ?? lessonDeliveryModel ?? 'adaptive_12_to_6',
+      },
+      index
+    )
+  );
 }

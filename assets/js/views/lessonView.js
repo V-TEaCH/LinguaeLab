@@ -28,7 +28,7 @@ function getOrCreateLessonSession(lesson) {
     return existingSession;
   }
 
-  const runtimeExercises = createRuntimeExercises(lesson.exerciseSlots);
+  const runtimeExercises = createRuntimeExercises(lesson.exerciseSlots, lesson.deliveryModel);
   const scoringSession = createLessonScoring(runtimeExercises);
   const session = {
     scoringSession,
@@ -97,7 +97,7 @@ function readUserAnswer(form, runtimeType, exerciseId) {
 }
 
 function getStandardExercises(runtimeExercises) {
-  return runtimeExercises.filter((exercise) => exercise.phase === 'standardPath' || exercise.visibleByDefault);
+  return runtimeExercises.filter((exercise) => exercise.phase === 'standardPath');
 }
 
 function computeRate(exercises, exerciseScores) {
@@ -152,8 +152,15 @@ export function resolveAdaptiveLessonState(runtimeExercises, exerciseScores) {
     }
   }
 
-  const visibleExercises = runtimeExercises.filter((exercise) =>
-    unlockedPaths.includes(exercise.phase)
+  const visibleExercises = runtimeExercises.filter((exercise) => {
+    if (exercise.phase === 'deferredSpiralPath') {
+      return false;
+    }
+
+    return unlockedPaths.includes(exercise.phase);
+  });
+  const deferredSpiralExercises = runtimeExercises.filter(
+    (exercise) => exercise.phase === 'deferredSpiralPath'
   );
 
   return {
@@ -164,6 +171,7 @@ export function resolveAdaptiveLessonState(runtimeExercises, exerciseScores) {
     standardRate,
     standardAnsweredCount: answeredStandard.length,
     standardTotalCount: standardExercises.length,
+    deferredSpiralExercises,
   };
 }
 
@@ -346,6 +354,7 @@ export function renderLessonView(levelId, moduleId, lessonId) {
           <small> (${adaptiveState.standardAnsweredCount}/${adaptiveState.standardTotalCount} standard validés)</small>
         </p>
         <p><strong>Parcours actif :</strong> ${unlockedLabels}</p>
+        <p><small>Spirale différée : ${adaptiveState.deferredSpiralExercises.length} exercice(s) conservé(s) hors affichage à cette étape.</small></p>
         ${resumeHint}
       </header>
       <ul class="exercise-list">${exercisesHtml}</ul>

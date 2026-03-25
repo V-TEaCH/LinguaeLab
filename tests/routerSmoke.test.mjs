@@ -116,6 +116,24 @@ test('lesson route unlocks masteryPath when standardPath is successful', () => {
   assert.equal(/<strong>ex-07<\/strong>/.test(html), false);
 });
 
+test('adaptive lesson keeps deferredSpiralPath hidden while retaining standard visibility', () => {
+  resetRouteState();
+  const html = resolveRoute('#/level/5e/module/5e-m1/lesson/5e-m1-l06');
+
+  assert.match(html, /Spirale différée : 1 exercice\(s\) conservé\(s\) hors affichage/);
+  assert.match(html, /<strong>5e-m1-l6-ex01<\/strong>/);
+  assert.equal(/<strong>5e-m1-l6-ex12<\/strong>/.test(html), false);
+});
+
+test('3e authored adaptive lesson starts on 6 standard exercises only', () => {
+  resetRouteState();
+  const html = resolveRoute('#/level/3e/module/3e-m4/lesson/3e-m4-l09');
+
+  assert.match(html, /Parcours actif :<\/strong> parcours standard/);
+  assert.match(html, /<strong>3e-m4-l9-ex01<\/strong>/);
+  assert.equal(/<strong>3e-m4-l9-ex07<\/strong>/.test(html), false);
+});
+
 test('router falls back to dashboard on invalid paths', () => {
   assert.match(resolveRoute('#/unknown/path'), /LinguaeLab/);
 });

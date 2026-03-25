@@ -34,6 +34,20 @@ test('local progress store persists lesson status and score payload', () => {
   assert.equal(restored?.exerciseResults['ex-01']?.awarded, 1);
 });
 
+test('local progress stores adaptive mastery status and unlocked paths', () => {
+  __resetProgressForTests();
+
+  upsertLessonProgress('5e-m1-l06', {
+    status: 'in_progress',
+    masteryStatus: 'fragile',
+    unlockedPaths: ['standardPath', 'reinforcementPath'],
+  });
+
+  const restored = getLessonProgress('5e-m1-l06');
+  assert.equal(restored?.masteryStatus, 'fragile');
+  assert.deepEqual(restored?.unlockedPaths, ['standardPath', 'reinforcementPath']);
+});
+
 test('module progress summary aggregates statuses and completion rate', () => {
   __resetProgressForTests();
   upsertLessonProgress('6e-m1-l01', { status: 'completed' });
