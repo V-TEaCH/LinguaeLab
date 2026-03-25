@@ -50,7 +50,7 @@ export const modules5e = [
     moduleNumber: 3,
     title: 'Conjuguer dans le récit',
     focus: 'choisir les temps utiles au récit',
-    contentStatus: 'authored',
+    contentStatus: 'tested',
     officialRefs: refs5e,
     lessonBlueprints: module3LessonBlueprints5e,
     sourceSpec: 'docs/specs/rulebook.md',

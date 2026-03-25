@@ -31,7 +31,7 @@ test('router resolves dashboard, level, module and lesson routes', () => {
 
   assert.match(resolveRoute('#/'), /LinguaeLab/);
   assert.match(resolveRoute('#/'), /6e est testée \(release candidate\)/);
-  assert.match(resolveRoute('#/'), /5e-m1 et 5e-m2 sont testés, 5e-m3 à m4 restent authored/);
+  assert.match(resolveRoute('#/'), /5e-m1 à m3 sont testés, 5e-m4 reste authored/);
   assert.match(resolveRoute('#/level/6e'), /Construire la phrase/);
   assert.match(resolveRoute('#/level/6e'), /Progression locale/);
   assert.match(resolveRoute('#/level/6e'), /non commencées/);

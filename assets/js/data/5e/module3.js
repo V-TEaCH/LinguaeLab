@@ -18,9 +18,9 @@ function createLesson(title, objective, spiralReview, focusLabel) {
     exercises: [
       createExercise('singleChoice', `Choisis la forme verbale correcte pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'forme attendue', isCorrect: true },
-          { id: 'b', label: 'forme fautive', isCorrect: false },
-          { id: 'c', label: 'forme incohérente', isCorrect: false },
+          { id: 'a', label: `forme verbale correcte pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `forme verbale fautive pour ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: `forme verbale incohérente pour ${focusLabel}`, isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 repères temporels utiles pour ${focusLabel}.`, {
@@ -38,10 +38,10 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Repère toutes les formes verbales recevables pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'forme recevable 1', isCorrect: true },
-          { id: 'b', label: 'forme recevable 2', isCorrect: true },
-          { id: 'c', label: 'forme incompatible 1', isCorrect: false },
-          { id: 'd', label: 'forme incompatible 2', isCorrect: false },
+          { id: 'a', label: 'forme verbale cohérente avec le repère temporel', isCorrect: true },
+          { id: 'b', label: 'forme verbale alignée avec la progression du récit', isCorrect: true },
+          { id: 'c', label: 'forme verbale incompatible avec la chronologie', isCorrect: false },
+          { id: 'd', label: 'forme verbale isolée sans cohérence de système', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Transforme 2 phrases en respectant ${focusLabel}.`),
