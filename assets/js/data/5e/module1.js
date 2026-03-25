@@ -8,12 +8,24 @@ function createExercise(type, instruction, options = {}) {
   };
 }
 
-function createLesson(title, objective, spiralReview, focusLabel) {
+function createLesson(title, objective, spiralReview, focusLabel, options = {}) {
+  if (Array.isArray(options.exercises)) {
+    return {
+      title,
+      objective,
+      spiralReview,
+      officialRefs: options.officialRefs ?? ['bo-cycle4-2026'],
+      sourceSpec: SOURCE_SPEC,
+      ...options,
+      exercises: options.exercises,
+    };
+  }
+
   return {
     title,
     objective,
     spiralReview,
-    officialRefs: ['bo-cycle4-2026'],
+    officialRefs: options.officialRefs ?? ['bo-cycle4-2026'],
     sourceSpec: SOURCE_SPEC,
     exercises: [
       createExercise(
@@ -132,10 +144,204 @@ const LESSON_DEFINITIONS = [
     focusLabel: 'l’attribut du sujet',
   },
   {
-    title: 'Étendre la phrase avec des compléments circonstanciels',
-    objective: 'Ajouter lieu, temps et manière sans nuire à la clarté.',
-    spiralReview: ['ponctuation', 'déplacement des groupes'],
-    focusLabel: 'les compléments circonstanciels',
+    title: 'Coordination ou subordination ?',
+    objective: 'Distinguer deux manières de relier des propositions.',
+    primarySkill: 'coordination_subordination',
+    secondarySpiralSkills: [
+      'repérer_verbe_conjugué',
+      'compter_les_propositions',
+      'ponctuation_phrase_complexe',
+    ],
+    spiralReview: [
+      'Repérer les verbes conjugués',
+      'Compter les propositions',
+      'Observer les mots de liaison',
+    ],
+    focusLabel: 'la coordination et la subordination',
+    officialRefs: ['bo-cycle4-2026', 'cycle4_2026_phrase_complexe'],
+    deliveryModel: {
+      authoredExerciseCount: 12,
+      defaultVisibleCount: 6,
+      deferredSpiralExerciseIds: ['5e-m1-l6-ex12'],
+    },
+    exercises: [
+      {
+        slotId: '5e-m1-l6-ex01',
+        type: 'singleChoice',
+        phase: 'standardPath',
+        visibleByDefault: true,
+        pedagogicalRole: 'rappel_flash',
+        instruction: 'Combien de verbes conjugués y a-t-il dans cette phrase ?',
+        prompt: 'Je rentre et je ferme la porte.',
+        options: [
+          { id: 'a', label: '1', isCorrect: false },
+          { id: 'b', label: '2', isCorrect: true },
+          { id: 'c', label: '3', isCorrect: false },
+        ],
+        maxScore: 1,
+        unlockRules: {
+          reinforcementMaxStandardRate: 0.69,
+          masteryMinStandardRate: 0.8,
+        },
+      },
+      {
+        slotId: '5e-m1-l6-ex02',
+        type: 'singleChoice',
+        phase: 'standardPath',
+        visibleByDefault: true,
+        pedagogicalRole: 'repérage',
+        instruction: 'Choisis le mot qui relie les deux propositions.',
+        prompt: 'Je pars parce qu\'il pleut.',
+        options: [
+          { id: 'a', label: 'parce que', isCorrect: true },
+          { id: 'b', label: 'pars', isCorrect: false },
+          { id: 'c', label: 'pleut', isCorrect: false },
+        ],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex03',
+        type: 'singleChoice',
+        phase: 'standardPath',
+        visibleByDefault: true,
+        pedagogicalRole: 'discrimination',
+        instruction: 'Cette phrase relève-t-elle de la coordination ou de la subordination ?',
+        prompt: 'Il avance mais il hésite.',
+        options: [
+          { id: 'a', label: 'coordination', isCorrect: true },
+          { id: 'b', label: 'subordination', isCorrect: false },
+        ],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex04',
+        type: 'multipleChoice',
+        phase: 'standardPath',
+        visibleByDefault: true,
+        pedagogicalRole: 'tri',
+        instruction: 'Coche toutes les conjonctions de coordination.',
+        options: [
+          { id: 'a', label: 'mais', isCorrect: true },
+          { id: 'b', label: 'parce que', isCorrect: false },
+          { id: 'c', label: 'ou', isCorrect: true },
+          { id: 'd', label: 'quand', isCorrect: false },
+        ],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex05',
+        type: 'ordering',
+        phase: 'standardPath',
+        visibleByDefault: true,
+        pedagogicalRole: 'manipulation',
+        instruction: 'Remets les groupes dans l’ordre pour former une phrase subordonnée correcte.',
+        expectedOrder: [
+          'Je reste à l\'intérieur',
+          'parce qu\'',
+          'il pleut',
+        ],
+        options: [
+          'il pleut',
+          'Je reste à l\'intérieur',
+          'parce qu\'',
+        ],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex06',
+        type: 'multipleChoice',
+        phase: 'standardPath',
+        visibleByDefault: true,
+        pedagogicalRole: 'mini_validation',
+        instruction: 'Coche toutes les phrases relevant de la subordination.',
+        options: [
+          { id: 'a', label: 'Je viens quand tu m\'appelles.', isCorrect: true },
+          { id: 'b', label: 'Je viens et tu pars.', isCorrect: false },
+          { id: 'c', label: 'Il rit parce qu\'il a gagné.', isCorrect: true },
+          { id: 'd', label: 'Il rit mais il tousse.', isCorrect: false },
+        ],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex07',
+        type: 'textInput',
+        phase: 'reinforcementPath',
+        visibleByDefault: false,
+        pedagogicalRole: 'correction',
+        instruction: 'Corrige cette phrase pour qu’elle devienne une vraie phrase de subordination.',
+        prompt: 'Je pars, mais il pleut beaucoup, parce.',
+        acceptedAnswers: [
+          'Je pars parce qu\'il pleut beaucoup.',
+          'je pars parce qu\'il pleut beaucoup',
+        ],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex08',
+        type: 'singleChoice',
+        phase: 'reinforcementPath',
+        visibleByDefault: false,
+        pedagogicalRole: 'justification_guidée',
+        instruction: 'Pourquoi la phrase est-elle subordonnée ?',
+        prompt: 'Je rentre quand la nuit tombe.',
+        options: [
+          { id: 'a', label: 'Parce qu\'un mot subordonnant relie deux propositions.', isCorrect: true },
+          { id: 'b', label: 'Parce qu\'elle est plus longue.', isCorrect: false },
+        ],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex09',
+        type: 'textInput',
+        phase: 'reinforcementPath',
+        visibleByDefault: false,
+        pedagogicalRole: 'vigilance',
+        instruction: 'Recopie seulement le mot ou groupe de mots qui marque la subordination.',
+        prompt: 'Nous partons lorsque la pluie cesse.',
+        acceptedAnswers: ['lorsque'],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex10',
+        type: 'textInput',
+        phase: 'masteryPath',
+        visibleByDefault: false,
+        pedagogicalRole: 'réécriture',
+        instruction: 'Transforme cette coordination en subordination.',
+        prompt: 'Il s\'arrête, car il est fatigué.',
+        acceptedAnswers: [
+          'Il s\'arrête parce qu\'il est fatigué.',
+          'il s\'arrête parce qu\'il est fatigué',
+        ],
+        maxScore: 1,
+      },
+      {
+        slotId: '5e-m1-l6-ex11',
+        type: 'textInput',
+        phase: 'masteryPath',
+        visibleByDefault: false,
+        pedagogicalRole: 'transfert',
+        instruction: 'Écris une phrase avec coordination et une phrase avec subordination sur le même thème.',
+        prompt: 'Thème : le départ en voyage.',
+        acceptedAnswers: [],
+        maxScore: 0,
+      },
+      {
+        slotId: '5e-m1-l6-ex12',
+        type: 'textInput',
+        phase: 'deferredSpiralPath',
+        visibleByDefault: false,
+        pedagogicalRole: 'spirale',
+        instruction: 'Dans ce court texte, repère la relation logique puis vérifie la ponctuation.',
+        prompt: 'Il hésite parce qu\'il a peur, mais il avance',
+        acceptedAnswers: [],
+        maxScore: 0,
+        deferredTo: {
+          targetLessonId: '5e-m4-l3',
+          reason: 'réactivation croisée liaison logique + reformulation',
+        },
+      },
+    ],
   },
   {
     title: 'Gérer l’ordre des groupes dans la phrase',
@@ -198,6 +404,13 @@ export const module1LessonBlueprints5e = LESSON_DEFINITIONS.map((lessonDefinitio
     lessonDefinition.title,
     lessonDefinition.objective,
     lessonDefinition.spiralReview,
-    lessonDefinition.focusLabel
+    lessonDefinition.focusLabel,
+    {
+      officialRefs: lessonDefinition.officialRefs,
+      primarySkill: lessonDefinition.primarySkill,
+      secondarySpiralSkills: lessonDefinition.secondarySpiralSkills,
+      deliveryModel: lessonDefinition.deliveryModel,
+      exercises: lessonDefinition.exercises,
+    }
   )
 );

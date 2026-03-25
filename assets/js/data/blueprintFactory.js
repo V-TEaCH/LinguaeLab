@@ -27,17 +27,28 @@ function createScaffoldExercise(slot, index) {
 }
 
 function createExercise(exercise, index) {
+  const {
+    slotId,
+    slot,
+    type,
+    instruction,
+    acceptedAnswers,
+    status,
+    ...extraExerciseFields
+  } = exercise;
+
   return {
-    slotId: exercise.slotId ?? `ex-${String(index + 1).padStart(2, '0')}`,
-    slot: exercise.slot ?? EXERCISE_SEQUENCE[index] ?? `exercice-${index + 1}`,
+    slotId: slotId ?? `ex-${String(index + 1).padStart(2, '0')}`,
+    slot: slot ?? EXERCISE_SEQUENCE[index] ?? `exercice-${index + 1}`,
     type:
-      exercise.type ??
-      exercise.slot ??
+      type ??
+      slot ??
       EXERCISE_SEQUENCE[index] ??
       'exercice',
-    instruction: exercise.instruction,
-    acceptedAnswers: exercise.acceptedAnswers ?? [],
-    status: exercise.status ?? 'ready',
+    instruction,
+    acceptedAnswers: acceptedAnswers ?? [],
+    status: status ?? 'ready',
+    ...extraExerciseFields,
   };
 }
 
@@ -69,18 +80,29 @@ function createLessonFromBlueprint(
   officialRefs
 ) {
   const lessonOrdinal = String(lessonNumber).padStart(2, '0');
+  const {
+    title,
+    objective,
+    spiralReview,
+    status,
+    exercises,
+    sourceSpec,
+    officialRefs: lessonOfficialRefs,
+    ...extraLessonFields
+  } = lessonBlueprint;
 
   return {
     id: `${moduleId}-l${lessonOrdinal}`,
     order: lessonNumber,
-    title: lessonBlueprint.title,
-    notion: lessonBlueprint.objective,
-    objective: lessonBlueprint.objective,
-    spiralReview: lessonBlueprint.spiralReview,
-    status: lessonBlueprint.status ?? 'ready',
-    exerciseSlots: lessonBlueprint.exercises.map(createExercise),
-    officialRefs: lessonBlueprint.officialRefs ?? officialRefs,
-    sourceSpec: lessonBlueprint.sourceSpec ?? null,
+    title,
+    notion: objective,
+    objective,
+    spiralReview,
+    status: status ?? 'ready',
+    exerciseSlots: exercises.map(createExercise),
+    officialRefs: lessonOfficialRefs ?? officialRefs,
+    sourceSpec: sourceSpec ?? null,
+    ...extraLessonFields,
   };
 }
 
