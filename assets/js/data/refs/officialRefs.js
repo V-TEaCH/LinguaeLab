@@ -35,6 +35,11 @@ export const OFFICIAL_REFS = {
       source: 'BO du 5 mars 2026',
     },
     {
+      id: 'cycle4_2026_paroles_rapportees',
+      title: 'Cycle 4 2026 — paroles rapportées (discours direct/indirect)',
+      source: 'Extraction thématique du BO du 5 mars 2026',
+    },
+    {
       id: 'dnb-2026',
       title: 'Repères de préparation au DNB',
       source: 'Référentiel DNB 2026',

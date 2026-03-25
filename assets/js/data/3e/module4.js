@@ -8,12 +8,24 @@ function createExercise(type, instruction, options = {}) {
   };
 }
 
-function createLesson(title, objective, spiralReview, focusLabel) {
+function createLesson(title, objective, spiralReview, focusLabel, options = {}) {
+  if (Array.isArray(options.exercises)) {
+    return {
+      title,
+      objective,
+      spiralReview,
+      officialRefs: options.officialRefs ?? ['bo-cycle4-2026'],
+      sourceSpec: SOURCE_SPEC,
+      ...options,
+      exercises: options.exercises,
+    };
+  }
+
   return {
     title,
     objective,
     spiralReview,
-    officialRefs: ['bo-cycle4-2026'],
+    officialRefs: options.officialRefs ?? ['bo-cycle4-2026'],
     sourceSpec: SOURCE_SPEC,
     exercises: [
       createExercise('singleChoice', `Choisis la reformulation la plus efficace pour ${focusLabel}.`, {
@@ -67,7 +79,200 @@ const LESSON_DEFINITIONS = [
   ['Renforcer la précision lexicale', 'Choisir des mots précis pour éviter le flou.', ['champ lexical', 'nuance'], 'la précision lexicale'],
   ['Passer du registre familier au registre attendu', 'Adapter la formulation au contexte scolaire.', ['registre de langue', 'destinataire'], 'l’adaptation du registre'],
   ['Rendre une phrase plus concise', 'Condenser une formulation sans perdre l’essentiel.', ['réduction', 'syntaxe'], 'la concision'],
-  ['Développer une phrase trop minimale', 'Enrichir une phrase pour gagner en précision.', ['expansion', 'compléments'], 'l’enrichissement de phrase'],
+  [
+    'Passer du discours direct au discours indirect',
+    'Transformer une parole rapportée sans perdre le sens ni la correction de la phrase.',
+    [
+      'Repérer les paroles rapportées',
+      'Observer les verbes introducteurs',
+      'Vérifier la cohérence des temps',
+    ],
+    'le passage du discours direct au discours indirect',
+    {
+      primarySkill: 'discours_direct_indirect',
+      secondarySpiralSkills: [
+        'ponctuation_du_dialogue',
+        'temps_du_verbe',
+        'subordination',
+      ],
+      officialRefs: ['bo-cycle4-2026', 'cycle4_2026_paroles_rapportees'],
+      deliveryModel: {
+        authoredExerciseCount: 12,
+        defaultVisibleCount: 6,
+        deferredSpiralExerciseIds: ['3e-m4-l9-ex12'],
+      },
+      exercises: [
+        {
+          slotId: '3e-m4-l9-ex01',
+          type: 'singleChoice',
+          phase: 'standardPath',
+          visibleByDefault: true,
+          pedagogicalRole: 'rappel_flash',
+          instruction: 'Cette phrase est-elle au discours direct ou indirect ?',
+          prompt: 'Il dit qu\'il reviendra demain.',
+          options: [
+            { id: 'a', label: 'direct', isCorrect: false },
+            { id: 'b', label: 'indirect', isCorrect: true },
+          ],
+          maxScore: 1,
+          unlockRules: {
+            reinforcementMaxStandardRate: 0.69,
+            masteryMinStandardRate: 0.8,
+          },
+        },
+        {
+          slotId: '3e-m4-l9-ex02',
+          type: 'textInput',
+          phase: 'standardPath',
+          visibleByDefault: true,
+          pedagogicalRole: 'repérage',
+          instruction: 'Recopie seulement le verbe introducteur.',
+          prompt: 'Le témoin affirme : « Je n\'ai rien vu. »',
+          acceptedAnswers: ['affirme'],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex03',
+          type: 'singleChoice',
+          phase: 'standardPath',
+          visibleByDefault: true,
+          pedagogicalRole: 'discrimination',
+          instruction: 'Choisis la bonne transformation au discours indirect.',
+          prompt: 'Elle dit : « Je pars. »',
+          options: [
+            { id: 'a', label: 'Elle dit qu\'elle part.', isCorrect: true },
+            { id: 'b', label: 'Elle dit qu\'elle pars.', isCorrect: false },
+            { id: 'c', label: 'Elle dit : elle part.', isCorrect: false },
+          ],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex04',
+          type: 'multipleChoice',
+          phase: 'standardPath',
+          visibleByDefault: true,
+          pedagogicalRole: 'tri',
+          instruction: 'Coche tous les éléments qui changent souvent lors du passage au discours indirect.',
+          options: [
+            { id: 'a', label: 'les guillemets', isCorrect: true },
+            { id: 'b', label: 'certains pronoms', isCorrect: true },
+            { id: 'c', label: 'toujours tous les noms', isCorrect: false },
+            { id: 'd', label: 'parfois les temps', isCorrect: true },
+          ],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex05',
+          type: 'textInput',
+          phase: 'standardPath',
+          visibleByDefault: true,
+          pedagogicalRole: 'manipulation',
+          instruction: 'Transforme cette phrase au discours indirect.',
+          prompt: 'Le professeur annonce : « Vous rendrez le devoir demain. »',
+          acceptedAnswers: [
+            'Le professeur annonce que nous rendrons le devoir demain.',
+            'Le professeur annonce que vous rendrez le devoir demain.',
+          ],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex06',
+          type: 'multipleChoice',
+          phase: 'standardPath',
+          visibleByDefault: true,
+          pedagogicalRole: 'mini_validation',
+          instruction: 'Coche toutes les transformations correctes.',
+          options: [
+            { id: 'a', label: 'Il affirme : « Je viendrai. » → Il affirme qu\'il viendra.', isCorrect: true },
+            { id: 'b', label: 'Elle dit : « Nous partons. » → Elle dit que nous partons.', isCorrect: true },
+            { id: 'c', label: 'Il demande : « Où vas-tu ? » → Il demande où vas-tu.', isCorrect: false },
+            { id: 'd', label: 'Elle répond : « Je suis prête. » → Elle répond qu\'elle est prête.', isCorrect: true },
+          ],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex07',
+          type: 'textInput',
+          phase: 'reinforcementPath',
+          visibleByDefault: false,
+          pedagogicalRole: 'correction',
+          instruction: 'Corrige la transformation fautive.',
+          prompt: 'Il dit qu\'il viens demain.',
+          acceptedAnswers: [
+            'Il dit qu\'il vient demain.',
+            'il dit qu\'il vient demain',
+          ],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex08',
+          type: 'singleChoice',
+          phase: 'reinforcementPath',
+          visibleByDefault: false,
+          pedagogicalRole: 'justification_guidée',
+          instruction: 'Pourquoi faut-il introduire une subordonnée ici ?',
+          prompt: 'Elle dit : « Je suis prête. »',
+          options: [
+            {
+              id: 'a',
+              label: 'Parce qu\'au discours indirect, la parole est intégrée à la phrase du narrateur.',
+              isCorrect: true,
+            },
+            { id: 'b', label: 'Parce qu\'il faut toujours ajouter un adjectif.', isCorrect: false },
+          ],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex09',
+          type: 'textInput',
+          phase: 'reinforcementPath',
+          visibleByDefault: false,
+          pedagogicalRole: 'vigilance',
+          instruction: 'Recopie la conjonction ou le mot interrogatif qui introduit la proposition rapportée.',
+          prompt: 'Il demande où nous allons.',
+          acceptedAnswers: ['où'],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex10',
+          type: 'textInput',
+          phase: 'masteryPath',
+          visibleByDefault: false,
+          pedagogicalRole: 'réécriture',
+          instruction: 'Réécris ce court dialogue au discours indirect, en gardant le sens et la correction.',
+          prompt: 'Paul dit : « Je n\'ai pas fini. » Sa sœur répond : « Tu exagères. »',
+          acceptedAnswers: [],
+          maxScore: 1,
+        },
+        {
+          slotId: '3e-m4-l9-ex11',
+          type: 'textInput',
+          phase: 'masteryPath',
+          visibleByDefault: false,
+          pedagogicalRole: 'transfert',
+          instruction: 'Rédige un court passage narratif de trois phrases incluant une parole rapportée au discours indirect.',
+          prompt: 'Contexte : un témoin raconte une scène.',
+          acceptedAnswers: [],
+          maxScore: 0,
+        },
+        {
+          slotId: '3e-m4-l9-ex12',
+          type: 'textInput',
+          phase: 'deferredSpiralPath',
+          visibleByDefault: false,
+          pedagogicalRole: 'spirale',
+          instruction: 'Dans un paragraphe argumentatif bref, repère une parole rapportée puis vérifie la cohérence des temps.',
+          prompt: 'L\'auteur explique qu\'il voulait convaincre, puis il affirme : « J\'avais raison. »',
+          acceptedAnswers: [],
+          maxScore: 0,
+          deferredTo: {
+            targetLessonId: '3e-m3-l11',
+            reason: 'réactivation croisée temps + parole rapportée',
+          },
+        },
+      ],
+    },
+  ],
   ['Structurer un paragraphe argumentatif court', 'Organiser thèse, argument et exemple avec cohérence.', ['argumentation', 'connecteurs'], 'la structure argumentative'],
   ['Structurer un paragraphe narratif court', 'Assurer la cohérence des actions et des repères temporels.', ['chronologie', 'temps verbaux'], 'la structure narrative'],
   ['Réviser la cohésion d’un texte bref', 'Vérifier enchaînements et reprises à l’échelle du texte.', ['cohésion textuelle', 'références pronominales'], 'la cohésion du texte'],
@@ -77,6 +282,6 @@ const LESSON_DEFINITIONS = [
 ];
 
 export const module4LessonBlueprints3e = LESSON_DEFINITIONS.map(
-  ([title, objective, spiralReview, focusLabel]) =>
-    createLesson(title, objective, spiralReview, focusLabel)
+  ([title, objective, spiralReview, focusLabel, options = {}]) =>
+    createLesson(title, objective, spiralReview, focusLabel, options)
 );
