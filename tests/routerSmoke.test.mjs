@@ -120,9 +120,18 @@ test('adaptive lesson keeps deferredSpiralPath hidden while retaining standard v
   resetRouteState();
   const html = resolveRoute('#/level/5e/module/5e-m1/lesson/5e-m1-l06');
 
-  assert.match(html, /Spirale différée : 1 exercice\(s\) conservé\(s\) hors affichage/);
+  assert.match(html, /Spirale différée : 1 exercice\(s\) liés à cette leçon/);
   assert.match(html, /<strong>5e-m1-l6-ex01<\/strong>/);
   assert.equal(/<strong>5e-m1-l6-ex12<\/strong>/.test(html), false);
+});
+
+test('target lesson displays deferred spiral replay from a previous lesson', () => {
+  resetRouteState();
+  resolveRoute('#/level/5e/module/5e-m1/lesson/5e-m1-l06');
+
+  const html = resolveRoute('#/level/5e/module/5e-m4/lesson/5e-m4-l03');
+  assert.match(html, /Réactivation différée à traiter/);
+  assert.match(html, /deferred-5e-m1-l06::5e-m1-l6-ex12/);
 });
 
 test('3e authored adaptive lesson starts on 6 standard exercises only', () => {

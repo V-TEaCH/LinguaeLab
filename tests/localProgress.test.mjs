@@ -3,11 +3,14 @@ import assert from 'node:assert/strict';
 
 import {
   __resetProgressForTests,
+  enqueueDeferredSpiralExercise,
   formatLocalScore,
   formatProgressStatus,
+  getDeferredSpiralExercisesForLesson,
   getLessonProgress,
   getModuleProgressSummary,
   getMostRecentLessonProgress,
+  markDeferredSpiralExerciseDone,
   upsertLessonProgress,
 } from '../assets/js/persistence/localProgress.js';
 
@@ -46,6 +49,31 @@ test('local progress stores adaptive mastery status and unlocked paths', () => {
   const restored = getLessonProgress('5e-m1-l06');
   assert.equal(restored?.masteryStatus, 'fragile');
   assert.deepEqual(restored?.unlockedPaths, ['standardPath', 'reinforcementPath']);
+});
+
+test('deferred spiral queue stores pending exercises and marks completion', () => {
+  __resetProgressForTests();
+
+  enqueueDeferredSpiralExercise('5e-m4-l03', {
+    deferredKey: '5e-m1-l06::5e-m1-l6-ex12',
+    sourceLessonId: '5e-m1-l06',
+    sourceLessonTitle: 'Coordination ou subordination ?',
+    exercise: {
+      id: '5e-m1-l6-ex12',
+      type: 'textInput',
+      instruction: 'Repère la relation logique.',
+      acceptedAnswers: ['parce que'],
+    },
+  });
+
+  const pendingBefore = getDeferredSpiralExercisesForLesson('5e-m4-l03');
+  assert.equal(pendingBefore.length, 1);
+  assert.equal(pendingBefore[0].sourceLessonId, '5e-m1-l06');
+
+  const marked = markDeferredSpiralExerciseDone('5e-m4-l03', '5e-m1-l06::5e-m1-l6-ex12');
+  assert.equal(marked, true);
+  const pendingAfter = getDeferredSpiralExercisesForLesson('5e-m4-l03');
+  assert.equal(pendingAfter.length, 0);
 });
 
 test('module progress summary aggregates statuses and completion rate', () => {

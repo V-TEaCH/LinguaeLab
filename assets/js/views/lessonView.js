@@ -1,6 +1,7 @@
 import { getLesson } from '../lessonRegistry.js';
 import { checkAnswer } from '../engines/answerChecker.js';
 import {
+  buildRuntimeExercise,
   createRuntimeExercises,
   renderLessonExercise,
 } from '../engines/exerciseRenderer.js';
@@ -10,9 +11,12 @@ import {
   getLessonScore,
 } from '../engines/scoring.js';
 import {
+  enqueueDeferredSpiralExercise,
   formatLocalScore,
   formatProgressStatus,
+  getDeferredSpiralExercisesForLesson,
   getLessonProgress,
+  markDeferredSpiralExerciseDone,
   upsertLessonProgress,
 } from '../persistence/localProgress.js';
 
@@ -28,7 +32,55 @@ function getOrCreateLessonSession(lesson) {
     return existingSession;
   }
 
-  const runtimeExercises = createRuntimeExercises(lesson.exerciseSlots, lesson.deliveryModel);
+  const authoredRuntimeExercises = createRuntimeExercises(lesson.exerciseSlots, lesson.deliveryModel);
+  authoredRuntimeExercises
+    .filter((exercise) => exercise.phase === 'deferredSpiralPath' && exercise.deferredTo?.targetLessonId)
+    .forEach((exercise) => {
+      const deferredKey = `${lesson.id}::${exercise.id}`;
+      enqueueDeferredSpiralExercise(exercise.deferredTo.targetLessonId, {
+        deferredKey,
+        sourceLessonId: lesson.id,
+        sourceLessonTitle: lesson.title,
+        exercise: {
+          id: exercise.id,
+          type: exercise.declaredType,
+          instruction: exercise.prompt,
+          prompt: exercise.prompt,
+          acceptedAnswers: exercise.acceptedAnswers,
+          expectedOrder: exercise.expectedOrder,
+          options: exercise.options,
+          unlockRules: exercise.unlockRules,
+          deferredTo: exercise.deferredTo,
+          phase: 'deferredSpiralPath',
+          pedagogicalRole: exercise.pedagogicalRole,
+          visibleByDefault: false,
+        },
+      });
+    });
+
+  const deferredReplayExercises = getDeferredSpiralExercisesForLesson(lesson.id)
+    .map((entry, index) => {
+      const runtimeExercise = buildRuntimeExercise(
+        {
+          ...entry.exercise,
+          slotId: `deferred-${entry.deferredKey}`,
+          phase: 'deferredSpiralPath',
+          pedagogicalRole: 'spirale',
+          visibleByDefault: false,
+        },
+        12 + index
+      );
+
+      return {
+        ...runtimeExercise,
+        deferredReplay: true,
+        deferredKey: entry.deferredKey,
+        sourceLessonId: entry.sourceLessonId,
+        sourceLessonTitle: entry.sourceLessonTitle,
+        countsTowardLessonProgress: false,
+      };
+    });
+  const runtimeExercises = [...authoredRuntimeExercises, ...deferredReplayExercises];
   const scoringSession = createLessonScoring(runtimeExercises);
   const session = {
     scoringSession,
@@ -45,6 +97,10 @@ function getOrCreateLessonSession(lesson) {
 
   lessonSessions.set(lesson.id, session);
   return session;
+}
+
+function countProgressExercises(runtimeExercises) {
+  return runtimeExercises.filter((exercise) => exercise.countsTowardLessonProgress !== false).length;
 }
 
 function computeLessonProgressStatus(answeredCount, totalExercises) {
@@ -162,6 +218,7 @@ export function resolveAdaptiveLessonState(runtimeExercises, exerciseScores) {
   const deferredSpiralExercises = runtimeExercises.filter(
     (exercise) => exercise.phase === 'deferredSpiralPath'
   );
+  const deferredReplayExercises = deferredSpiralExercises.filter((exercise) => exercise.deferredReplay);
 
   return {
     visibleExercises,
@@ -172,6 +229,7 @@ export function resolveAdaptiveLessonState(runtimeExercises, exerciseScores) {
     standardAnsweredCount: answeredStandard.length,
     standardTotalCount: standardExercises.length,
     deferredSpiralExercises,
+    deferredReplayExercises,
   };
 }
 
@@ -231,7 +289,7 @@ export function bindLessonExercisePassation(rootElement = document) {
       const answeredCount = session.scoringSession.exerciseScores.size;
       const status = computeLessonProgressStatus(
         answeredCount,
-        session.scoringSession.runtimeExercises.length
+        countProgressExercises(session.scoringSession.runtimeExercises)
       );
       const progressStatusNode = lessonContainer?.querySelector('[data-lesson-progress-status]');
       if (progressStatusNode) {
@@ -242,6 +300,9 @@ export function bindLessonExercisePassation(rootElement = document) {
         session.scoringSession.runtimeExercises,
         session.scoringSession.exerciseScores
       );
+      if (runtimeExercise.deferredReplay && result.isCorrect) {
+        markDeferredSpiralExerciseDone(lessonId, runtimeExercise.deferredKey);
+      }
 
       upsertLessonProgress(lessonId, {
         status,
@@ -308,7 +369,7 @@ export function renderLessonView(levelId, moduleId, lessonId) {
   const answeredCount = session.scoringSession.exerciseScores.size;
   const lessonStatus = computeLessonProgressStatus(
     answeredCount,
-    session.scoringSession.runtimeExercises.length
+    countProgressExercises(session.scoringSession.runtimeExercises)
   );
   const resumeHint = persistedProgress?.status && persistedProgress.status !== 'not_started'
     ? `<p><small>Reprise automatique active : progression locale restaurée (${formatProgressStatus(persistedProgress.status)}).</small></p>`
@@ -328,6 +389,9 @@ export function renderLessonView(levelId, moduleId, lessonId) {
       return path;
     })
     .join(' + ');
+  const deferredReplayHtml = adaptiveState.deferredReplayExercises
+    .map((exercise, index) => renderLessonExercise(exercise, index))
+    .join('');
 
   return `
     <section class="page" data-lesson-id="${lesson.id}">
@@ -346,7 +410,7 @@ export function renderLessonView(levelId, moduleId, lessonId) {
         <p>
           <strong>Statut local :</strong>
           <span data-lesson-progress-status>${formatProgressStatus(lessonStatus)}</span>
-          <small> (${answeredCount}/${session.scoringSession.runtimeExercises.length} exercices validés)</small>
+          <small> (${answeredCount}/${countProgressExercises(session.scoringSession.runtimeExercises)} exercices validés)</small>
         </p>
         <p>
           <strong>Niveau de maîtrise (standard) :</strong>
@@ -354,9 +418,18 @@ export function renderLessonView(levelId, moduleId, lessonId) {
           <small> (${adaptiveState.standardAnsweredCount}/${adaptiveState.standardTotalCount} standard validés)</small>
         </p>
         <p><strong>Parcours actif :</strong> ${unlockedLabels}</p>
-        <p><small>Spirale différée : ${adaptiveState.deferredSpiralExercises.length} exercice(s) conservé(s) hors affichage à cette étape.</small></p>
+        <p><small>Spirale différée : ${adaptiveState.deferredSpiralExercises.length} exercice(s) liés à cette leçon.</small></p>
         ${resumeHint}
       </header>
       <ul class="exercise-list">${exercisesHtml}</ul>
+      ${
+        deferredReplayHtml
+          ? `<section class="card">
+        <h2>Réactivation différée à traiter</h2>
+        <p><small>Ces exercices proviennent d’une leçon antérieure et servent à la spirale inter-leçons.</small></p>
+        <ul class="exercise-list">${deferredReplayHtml}</ul>
+      </section>`
+          : ''
+      }
     </section>`;
 }

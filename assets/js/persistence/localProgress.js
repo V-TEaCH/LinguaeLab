@@ -1,6 +1,8 @@
 const STORAGE_KEY = 'linguaelab.lessonProgress.v1';
+const DEFERRED_SPIRAL_QUEUE_KEY = 'linguaelab.deferredSpiralQueue.v1';
 
 let memoryStore = {};
+let memoryDeferredQueue = {};
 
 function getLocalStorage() {
   try {
@@ -47,6 +49,74 @@ function writeStore(data) {
   } catch {
     // Dépassement quota ou stockage indisponible : on conserve la mémoire volatile.
   }
+}
+
+function readDeferredQueueStore() {
+  const storage = getLocalStorage();
+  if (!storage) {
+    return { ...memoryDeferredQueue };
+  }
+
+  try {
+    const raw = storage.getItem(DEFERRED_SPIRAL_QUEUE_KEY);
+    if (!raw) {
+      return {};
+    }
+
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeDeferredQueueStore(data) {
+  const normalized = data && typeof data === 'object' ? data : {};
+  memoryDeferredQueue = { ...normalized };
+
+  const storage = getLocalStorage();
+  if (!storage) {
+    return;
+  }
+
+  try {
+    storage.setItem(DEFERRED_SPIRAL_QUEUE_KEY, JSON.stringify(normalized));
+  } catch {
+    // no-op
+  }
+}
+
+function normalizeDeferredExerciseEntry(entry) {
+  if (!entry || typeof entry !== 'object') {
+    return null;
+  }
+
+  const deferredKey = String(entry.deferredKey ?? '').trim();
+  const sourceLessonId = String(entry.sourceLessonId ?? '').trim();
+  const sourceLessonTitle = String(entry.sourceLessonTitle ?? '').trim();
+  const exercise = entry.exercise && typeof entry.exercise === 'object' ? entry.exercise : null;
+
+  if (!deferredKey || !sourceLessonId || !exercise) {
+    return null;
+  }
+
+  return {
+    deferredKey,
+    sourceLessonId,
+    sourceLessonTitle,
+    exercise,
+    done: Boolean(entry.done),
+    updatedAt: Number.isFinite(entry.updatedAt) ? entry.updatedAt : 0,
+  };
+}
+
+function normalizeLessonId(value) {
+  const raw = String(value ?? '').trim();
+  if (!raw) {
+    return '';
+  }
+
+  return raw.replace(/-l(\d)$/i, '-l0$1');
 }
 
 function normalizeStatus(status) {
@@ -120,6 +190,87 @@ export function getProgressSnapshot() {
   return readStore();
 }
 
+export function enqueueDeferredSpiralExercise(targetLessonId, deferredEntry) {
+  const normalizedTargetLessonId = normalizeLessonId(targetLessonId);
+  if (!normalizedTargetLessonId) {
+    return null;
+  }
+
+  const normalizedEntry = normalizeDeferredExerciseEntry(deferredEntry);
+  if (!normalizedEntry) {
+    return null;
+  }
+
+  const queueStore = readDeferredQueueStore();
+  const existingEntries = Array.isArray(queueStore[normalizedTargetLessonId])
+    ? queueStore[normalizedTargetLessonId].map(normalizeDeferredExerciseEntry).filter(Boolean)
+    : [];
+  const existingIndex = existingEntries.findIndex(
+    (entry) => entry.deferredKey === normalizedEntry.deferredKey
+  );
+
+  if (existingIndex >= 0) {
+    existingEntries[existingIndex] = {
+      ...existingEntries[existingIndex],
+      ...normalizedEntry,
+      done: existingEntries[existingIndex].done,
+      updatedAt: Date.now(),
+    };
+  } else {
+    existingEntries.push({
+      ...normalizedEntry,
+      done: false,
+      updatedAt: Date.now(),
+    });
+  }
+
+  queueStore[normalizedTargetLessonId] = existingEntries;
+  writeDeferredQueueStore(queueStore);
+  return queueStore[normalizedTargetLessonId];
+}
+
+export function getDeferredSpiralExercisesForLesson(targetLessonId) {
+  const normalizedTargetLessonId = normalizeLessonId(targetLessonId);
+  if (!normalizedTargetLessonId) {
+    return [];
+  }
+
+  const queueStore = readDeferredQueueStore();
+  const entries = Array.isArray(queueStore[normalizedTargetLessonId])
+    ? queueStore[normalizedTargetLessonId]
+    : [];
+
+  return entries
+    .map(normalizeDeferredExerciseEntry)
+    .filter((entry) => entry && !entry.done);
+}
+
+export function markDeferredSpiralExerciseDone(targetLessonId, deferredKey) {
+  const normalizedTargetLessonId = normalizeLessonId(targetLessonId);
+  const normalizedDeferredKey = String(deferredKey ?? '').trim();
+  if (!normalizedTargetLessonId || !normalizedDeferredKey) {
+    return false;
+  }
+
+  const queueStore = readDeferredQueueStore();
+  const entries = Array.isArray(queueStore[normalizedTargetLessonId])
+    ? queueStore[normalizedTargetLessonId].map(normalizeDeferredExerciseEntry).filter(Boolean)
+    : [];
+  const entryIndex = entries.findIndex((entry) => entry.deferredKey === normalizedDeferredKey);
+  if (entryIndex < 0) {
+    return false;
+  }
+
+  entries[entryIndex] = {
+    ...entries[entryIndex],
+    done: true,
+    updatedAt: Date.now(),
+  };
+  queueStore[normalizedTargetLessonId] = entries;
+  writeDeferredQueueStore(queueStore);
+  return true;
+}
+
 export function getModuleProgressSummary(module) {
   if (!module?.lessons?.length) {
     return { notStarted: 0, inProgress: 0, completed: 0, completionRate: 0 };
@@ -184,9 +335,11 @@ export function formatLocalScore(score, maxScore) {
 
 export function __resetProgressForTests() {
   memoryStore = {};
+  memoryDeferredQueue = {};
   const storage = getLocalStorage();
   try {
     storage?.removeItem(STORAGE_KEY);
+    storage?.removeItem(DEFERRED_SPIRAL_QUEUE_KEY);
   } catch {
     // no-op
   }
