@@ -1,4 +1,4 @@
-const CACHE_NAME = 'atrium-francais-v1';
+const CACHE_NAME = 'linguaelab-v1';
 const URLS = [
   './',
   './index.html',
@@ -14,6 +14,9 @@ const URLS = [
   './assets/js/data/4e/blueprint.js',
   './assets/js/data/3e/blueprint.js',
   './assets/js/data/refs/officialRefs.js',
+  './assets/js/engines/exerciseRenderer.js',
+  './assets/js/engines/answerChecker.js',
+  './assets/js/engines/scoring.js',
   './assets/js/views/dashboardView.js',
   './assets/js/views/levelView.js',
   './assets/js/views/moduleView.js',
@@ -27,11 +30,17 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
+      Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      )
     )
   );
 });
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(caches.match(event.request).then((response) => response || fetch(event.request)));
+  event.respondWith(
+    caches.match(event.request).then((response) => response || fetch(event.request))
+  );
 });

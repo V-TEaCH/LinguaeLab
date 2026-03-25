@@ -4,7 +4,7 @@ Ce fichier sert de plan d’exécution pour Codex.
 
 ## Objectif global
 
-Transformer ce scaffold en application exploitable pour l’ensemble du collège, en gardant l’ADN d’ATRIUM : progression explicite, scoring contractuel, correction robuste, interface simple, déploiement statique.
+Transformer ce scaffold en application exploitable pour l’ensemble du collège sous l’identité LinguaeLab, en conservant l’héritage d’ATRIUM : progression explicite, scoring contractuel, correction robuste, interface simple, déploiement statique.
 
 ## Répartition
 

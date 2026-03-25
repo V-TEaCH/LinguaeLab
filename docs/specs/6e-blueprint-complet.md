@@ -1,4 +1,4 @@
-# ATRIUM‑Français — Blueprint complet 6e des 4 axes
+# LinguaeLab — Blueprint complet 6e des 4 axes
 
 ## Statut du document
 
