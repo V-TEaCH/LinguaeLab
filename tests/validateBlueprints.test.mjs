@@ -317,6 +317,59 @@ test('3e modules 1, 2, 3, 4 and DNB module 5 are authored with 15 lessons and 12
   });
 });
 
+test('4e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+  const authoredModules = [
+    module2LessonBlueprints4e,
+    module3LessonBlueprints4e,
+    module4LessonBlueprints4e,
+  ];
+
+  authoredModules.forEach((moduleLessonBlueprints) => {
+    assert.equal(moduleLessonBlueprints.length, 15);
+    moduleLessonBlueprints.forEach((lessonBlueprint) => {
+      assert.equal(lessonBlueprint.exercises.length, 12);
+      assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+      assert.ok(lessonBlueprint.spiralReview.length >= 1);
+      assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+      assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+      lessonBlueprint.exercises.forEach((exercise) => {
+        assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+        assert.match(exercise.instruction, /\S/);
+      });
+    });
+  });
+
+  assert.deepEqual(Array.from(fallbackTypes.entries()), []);
+});
+
+
+
+test('3e modules 1, 2, 3, 4 and DNB module 5 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+  const authoredModules = [
+    module1LessonBlueprints3e,
+    module2LessonBlueprints3e,
+    module3LessonBlueprints3e,
+    module4LessonBlueprints3e,
+    module5LessonBlueprints3e,
+  ];
+
+  authoredModules.forEach((moduleLessonBlueprints) => {
+    assert.equal(moduleLessonBlueprints.length, 15);
+    moduleLessonBlueprints.forEach((lessonBlueprint) => {
+      assert.equal(lessonBlueprint.exercises.length, 12);
+      assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+      assert.ok(lessonBlueprint.spiralReview.length >= 1);
+      assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+      assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+
+      lessonBlueprint.exercises.forEach((exercise) => {
+        assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+        assert.match(exercise.instruction, /\S/);
+      });
+    });
+  });
+});
+
 
 test('authored and tested modules no longer rely on unsupported fallback exercise types', () => {
   const authoredOrTestedModules = curriculumBlueprint.levels

@@ -56,6 +56,28 @@ function resolveRuntimeType(declaredType) {
   return DECLARED_TYPE_TO_RUNTIME_TYPE[declaredType] ?? null;
 }
 
+function inferRuntimeTypeFromStructure(exercise, normalizedOptions) {
+  if (Array.isArray(exercise.expectedOrder) && exercise.expectedOrder.length > 0) {
+    return 'ordering';
+  }
+
+  if (normalizedOptions.length > 0) {
+    const correctOptionCount = normalizedOptions.filter((option) => option.isCorrect).length;
+    if (correctOptionCount > 1) {
+      return 'multipleChoice';
+    }
+    if (correctOptionCount === 1) {
+      return 'singleChoice';
+    }
+  }
+
+  if (Array.isArray(exercise.acceptedAnswers) && exercise.acceptedAnswers.length > 0) {
+    return 'textInput';
+  }
+
+  return null;
+}
+
 function resolvePedagogicalMeta(exercise, index) {
   const explicitPhase = ADAPTIVE_PHASES.has(exercise.phase) ? exercise.phase : null;
   const explicitRole = exercise.pedagogicalRole ?? null;
@@ -104,9 +126,10 @@ function resolvePedagogicalMeta(exercise, index) {
 
 export function buildRuntimeExercise(exercise, index) {
   const declaredType = exercise.type ?? 'textInput';
-  const resolvedRuntimeType = resolveRuntimeType(declaredType);
-  const runtimeType = resolvedRuntimeType ?? 'textInput';
   const options = normalizeOptions(exercise.options);
+  const resolvedRuntimeType =
+    resolveRuntimeType(declaredType) ?? inferRuntimeTypeFromStructure(exercise, options);
+  const runtimeType = resolvedRuntimeType ?? 'textInput';
   const fallbackFromUnsupported = resolvedRuntimeType === null;
   const hasStructuredExpectation =
     options.some((option) => option.isCorrect) ||

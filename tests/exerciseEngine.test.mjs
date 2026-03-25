@@ -279,6 +279,50 @@ test('createRuntimeExercises inherits lesson delivery model when exercise has no
     defaultVisibleCount: 6,
   });
 });
+
+test('historical or custom declared types infer runtime type from structured payloads', () => {
+  const inferredSingleChoice = buildRuntimeExercise(
+    {
+      slotId: 'ex-infer-sc',
+      type: 'repérage-guidé',
+      instruction: 'Choisis.',
+      options: [
+        { id: 'a', label: 'A', isCorrect: true },
+        { id: 'b', label: 'B', isCorrect: false },
+      ],
+    },
+    0
+  );
+  const inferredMultipleChoice = buildRuntimeExercise(
+    {
+      slotId: 'ex-infer-mc',
+      type: 'tri-guidé',
+      instruction: 'Trie.',
+      options: [
+        { id: 'a', label: 'A', isCorrect: true },
+        { id: 'b', label: 'B', isCorrect: true },
+        { id: 'c', label: 'C', isCorrect: false },
+      ],
+    },
+    1
+  );
+  const inferredOrdering = buildRuntimeExercise(
+    {
+      slotId: 'ex-infer-order',
+      type: 'segmentation-guidée',
+      instruction: 'Range.',
+      expectedOrder: ['a', 'b', 'c'],
+    },
+    2
+  );
+
+  assert.equal(inferredSingleChoice.runtimeType, 'singleChoice');
+  assert.equal(inferredSingleChoice.fallbackFromUnsupported, false);
+  assert.equal(inferredMultipleChoice.runtimeType, 'multipleChoice');
+  assert.equal(inferredMultipleChoice.fallbackFromUnsupported, false);
+  assert.equal(inferredOrdering.runtimeType, 'ordering');
+  assert.equal(inferredOrdering.fallbackFromUnsupported, false);
+});
 test('legacy authored 6e types are specialized to scored textInput without unsupported fallback', () => {
   const declaredTypes = [
     'rappel-flash',
