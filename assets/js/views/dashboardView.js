@@ -52,7 +52,7 @@ export function renderDashboardView() {
       <header class="hero">
         <p class="eyebrow">État des contenus: 6e testée · 5e-m1 testé · 4e/3e authored</p>
         <h1>LinguaeLab</h1>
-        <p>6e est testée (release candidate) ; 5e-m1 est testé, 5e-m2 à m4 restent authored ; 4e et 3e sont authored.</p>
+        <p>6e est testée (release candidate) ; 5e-m1 et 5e-m2 sont testés, 5e-m3 à m4 restent authored ; 4e et 3e sont authored.</p>
       </header>
       <section class="stats">
         <div class="stat"><strong>${stats.levelCount}</strong><span>niveaux</span></div>

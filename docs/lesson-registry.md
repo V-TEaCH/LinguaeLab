@@ -26,7 +26,7 @@ Exemples :
 
 - tous les modules exposent 15 leçons et 12 `exerciseSlots` par leçon ;
 - 6e (`6e-m1` à `6e-m4`) : `contentStatus: tested` ;
-- 5e : `5e-m1` en `contentStatus: tested`, `5e-m2` à `5e-m4` en `contentStatus: authored` ;
+- 5e : `5e-m1` et `5e-m2` en `contentStatus: tested`, `5e-m3` à `5e-m4` en `contentStatus: authored` ;
 - 4e (`4e-m1` à `4e-m4`) : `contentStatus: authored` ;
 - 3e (`3e-m1` à `3e-m5`) : `contentStatus: authored` ;
 - `3e-m5` est authored pour un entraînement DNB guidé (pas une simulation complète d’épreuve).

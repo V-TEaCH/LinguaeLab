@@ -40,7 +40,7 @@ export const modules5e = [
     moduleNumber: 2,
     title: 'Accorder avec plus de précision',
     focus: 'sécuriser accords sujet-verbe et GN étendus',
-    contentStatus: 'authored',
+    contentStatus: 'tested',
     officialRefs: refs5e,
     lessonBlueprints: module2LessonBlueprints5e,
     sourceSpec: 'docs/specs/rulebook.md',

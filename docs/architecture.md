@@ -55,7 +55,7 @@ assets/
 ## État de maturité (référentiel courant)
 
 - 6e : modules `tested` (release candidate) ;
-- 5e : `5e-m1` en `tested`, `5e-m2` à `5e-m4` en `authored` ;
+- 5e : `5e-m1` et `5e-m2` en `tested`, `5e-m3` à `5e-m4` en `authored` ;
 - 4e : modules `authored` ;
 - 3e : modules `authored` (dont `3e-m5` DNB en entraînement guidé).
 

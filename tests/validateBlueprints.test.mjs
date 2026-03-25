@@ -202,9 +202,33 @@ test('5e module 1 is tested with engine-compatible exercise types', () => {
   });
 });
 
-test('5e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+test('5e module 2 is tested with non-placeholder exercise wording and compatible engine types', () => {
+  const module2 = modules5e.find((module) => module.id === '5e-m2');
+  assert.ok(module2);
+  assert.equal(module2?.contentStatus, 'tested');
+  assert.equal(module2LessonBlueprints5e.length, 15);
+
+  module2LessonBlueprints5e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      if (Array.isArray(exercise.options)) {
+        exercise.options.forEach((option) => {
+          assert.equal(
+            /forme correcte$|proposition correcte [12]$/i.test(String(option.label ?? '')),
+            false
+          );
+        });
+      }
+    });
+  });
+});
+
+test('5e modules 3 and 4 are authored with 15 lessons and 12 engine-compatible exercises', () => {
   const authoredModules = [
-    module2LessonBlueprints5e,
     module3LessonBlueprints5e,
     module4LessonBlueprints5e,
   ];
@@ -370,6 +394,59 @@ test('3e modules 1, 2, 3, 4 and DNB module 5 are authored with 15 lessons and 12
   });
 });
 
+test('4e modules 2, 3 and 4 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+  const authoredModules = [
+    module2LessonBlueprints4e,
+    module3LessonBlueprints4e,
+    module4LessonBlueprints4e,
+  ];
+
+  authoredModules.forEach((moduleLessonBlueprints) => {
+    assert.equal(moduleLessonBlueprints.length, 15);
+    moduleLessonBlueprints.forEach((lessonBlueprint) => {
+      assert.equal(lessonBlueprint.exercises.length, 12);
+      assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+      assert.ok(lessonBlueprint.spiralReview.length >= 1);
+      assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+      assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+      lessonBlueprint.exercises.forEach((exercise) => {
+        assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+        assert.match(exercise.instruction, /\S/);
+      });
+    });
+  });
+
+  assert.deepEqual(Array.from(fallbackTypes.entries()), []);
+});
+
+
+
+test('3e modules 1, 2, 3, 4 and DNB module 5 are authored with 15 lessons and 12 engine-compatible exercises', () => {
+  const authoredModules = [
+    module1LessonBlueprints3e,
+    module2LessonBlueprints3e,
+    module3LessonBlueprints3e,
+    module4LessonBlueprints3e,
+    module5LessonBlueprints3e,
+  ];
+
+  authoredModules.forEach((moduleLessonBlueprints) => {
+    assert.equal(moduleLessonBlueprints.length, 15);
+    moduleLessonBlueprints.forEach((lessonBlueprint) => {
+      assert.equal(lessonBlueprint.exercises.length, 12);
+      assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+      assert.ok(lessonBlueprint.spiralReview.length >= 1);
+      assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+      assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+
+      lessonBlueprint.exercises.forEach((exercise) => {
+        assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+        assert.match(exercise.instruction, /\S/);
+      });
+    });
+  });
+});
+
 
 test('authored and tested modules no longer rely on unsupported fallback exercise types', () => {
   const authoredOrTestedModules = curriculumBlueprint.levels
@@ -449,7 +526,7 @@ test('module contentStatus values reflect current scaffold reality', () => {
   assert.equal(moduleStatuses.get('6e-m3'), 'tested');
   assert.equal(moduleStatuses.get('6e-m4'), 'tested');
   assert.equal(moduleStatuses.get('5e-m1'), 'tested');
-  assert.equal(moduleStatuses.get('5e-m2'), 'authored');
+  assert.equal(moduleStatuses.get('5e-m2'), 'tested');
   assert.equal(moduleStatuses.get('5e-m3'), 'authored');
   assert.equal(moduleStatuses.get('5e-m4'), 'authored');
   assert.equal(moduleStatuses.get('4e-m1'), 'authored');

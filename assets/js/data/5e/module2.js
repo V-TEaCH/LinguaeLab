@@ -18,9 +18,9 @@ function createLesson(title, objective, spiralReview, focusLabel) {
     exercises: [
       createExercise('singleChoice', `Choisis la forme correcte pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'forme correcte', isCorrect: true },
-          { id: 'b', label: 'forme fautive', isCorrect: false },
-          { id: 'c', label: 'forme ambiguë', isCorrect: false },
+          { id: 'a', label: `accord correct pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `accord fautif pour ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: `accord incohérent pour ${focusLabel}`, isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 indices d’accord utiles pour ${focusLabel}.`, {
@@ -38,10 +38,10 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Coche toutes les propositions correctes pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'proposition correcte 1', isCorrect: true },
-          { id: 'b', label: 'proposition correcte 2', isCorrect: true },
-          { id: 'c', label: 'proposition fautive 1', isCorrect: false },
-          { id: 'd', label: 'proposition fautive 2', isCorrect: false },
+          { id: 'a', label: 'accord justifié par le noyau sujet', isCorrect: true },
+          { id: 'b', label: 'chaîne d’accord cohérente', isCorrect: true },
+          { id: 'c', label: 'accord au mot le plus proche sans vérification', isCorrect: false },
+          { id: 'd', label: 'accord contredit par le nombre du sujet', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Réécris 2 phrases pour sécuriser ${focusLabel}.`),
