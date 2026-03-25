@@ -1,0 +1,438 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+
+import {
+  buildRuntimeExercise,
+  createRuntimeExercises,
+  renderLessonExercise,
+} from '../assets/js/engines/exerciseRenderer.js';
+import { checkAnswer } from '../assets/js/engines/answerChecker.js';
+import {
+  applyExerciseResult,
+  createLessonScoring,
+  getLessonScore,
+} from '../assets/js/engines/scoring.js';
+
+globalThis.window = { location: { hash: '' } };
+
+const { resolveRoute } = await import('../assets/js/router.js');
+
+test('renderer outputs a singleChoice form', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-01',
+      type: 'singleChoice',
+      instruction: 'Choisis la bonne réponse.',
+      options: [
+        { id: 'a', label: 'A', isCorrect: true },
+        { id: 'b', label: 'B', isCorrect: false },
+      ],
+    },
+    0
+  );
+
+  const html = renderLessonExercise(runtimeExercise, 0);
+  assert.match(html, /type="radio"/);
+  assert.match(html, /Choisis la bonne réponse/);
+});
+
+test('renderer outputs multipleChoice and ordering inputs', () => {
+  const mcExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-mc',
+      type: 'multipleChoice',
+      instruction: 'Choisis les bonnes réponses.',
+      options: [
+        { id: 'a', label: 'A', isCorrect: true },
+        { id: 'b', label: 'B', isCorrect: false },
+      ],
+    },
+    0
+  );
+  const orderingExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-order',
+      type: 'ordering',
+      instruction: 'Range les éléments.',
+      expectedOrder: ['a', 'b', 'c'],
+    },
+    1
+  );
+
+  assert.match(renderLessonExercise(mcExercise, 0), /type="checkbox"/);
+  assert.match(renderLessonExercise(orderingExercise, 1), /placeholder="élément 1, élément 2, ..."/);
+});
+
+test('renderer outputs a textInput form', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-02',
+      type: 'textInput',
+      instruction: 'Écris ta réponse.',
+      acceptedAnswers: ['bonjour'],
+    },
+    1
+  );
+
+  const html = renderLessonExercise(runtimeExercise, 1);
+  assert.match(html, /type="text"/);
+  assert.match(html, /Écris ta réponse/);
+});
+
+test('singleChoice validates correct and rejects incorrect answers', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-sc',
+      type: 'singleChoice',
+      instruction: 'Choisis.',
+      options: [
+        { id: 'a', label: 'A', isCorrect: true },
+        { id: 'b', label: 'B', isCorrect: false },
+      ],
+    },
+    0
+  );
+
+  const okResult = checkAnswer(runtimeExercise, { selected: 'a' });
+  const koResult = checkAnswer(runtimeExercise, { selected: 'b' });
+  const emptyResult = checkAnswer(runtimeExercise, { selected: '' });
+
+  assert.equal(okResult.isCorrect, true);
+  assert.equal(okResult.awarded, 1);
+  assert.equal(koResult.isCorrect, false);
+  assert.equal(koResult.awarded, 0);
+  assert.equal(emptyResult.isCorrect, false);
+});
+
+test('multipleChoice supports exact match, partial credit and invalid extra choices', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-mc',
+      type: 'multipleChoice',
+      instruction: 'Choisis les réponses justes.',
+      options: [
+        { id: 'a', label: 'A', isCorrect: true },
+        { id: 'b', label: 'B', isCorrect: true },
+        { id: 'c', label: 'C', isCorrect: false },
+      ],
+    },
+    0
+  );
+
+  const okResult = checkAnswer(runtimeExercise, { selected: ['b', 'a'] });
+  const missingResult = checkAnswer(runtimeExercise, { selected: ['a'] });
+  const extraResult = checkAnswer(runtimeExercise, { selected: ['a', 'b', 'c'] });
+  const duplicateResult = checkAnswer(runtimeExercise, { selected: ['a', 'a', 'b'] });
+  const emptyResult = checkAnswer(runtimeExercise, { selected: [] });
+
+  assert.equal(okResult.isCorrect, true);
+  assert.equal(okResult.awarded, 1);
+
+  assert.equal(missingResult.isCorrect, false);
+  assert.equal(missingResult.awarded, 0.5);
+  assert.match(missingResult.feedback, /partielle/i);
+
+  assert.equal(extraResult.isCorrect, false);
+  assert.equal(extraResult.awarded, 0);
+  assert.match(extraResult.feedback, /incorrecte/i);
+
+  assert.equal(duplicateResult.isCorrect, true);
+  assert.equal(duplicateResult.awarded, 1);
+
+  assert.equal(emptyResult.isCorrect, false);
+  assert.equal(emptyResult.awarded, 0);
+  assert.match(emptyResult.feedback, /au moins une réponse/i);
+});
+
+test('textInput validates exact answers and variants but rejects unrelated responses', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-tx',
+      type: 'textInput',
+      instruction: 'Donne la notion.',
+      acceptedAnswers: ['a/à ; et/est'],
+    },
+    0
+  );
+
+  const variantResult = checkAnswer(runtimeExercise, { text: 'A/À et ET/EST' });
+  const unrelatedResult = checkAnswer(runtimeExercise, { text: 'réponse hors sujet' });
+
+  assert.equal(variantResult.isCorrect, true);
+  assert.equal(unrelatedResult.isCorrect, false);
+});
+
+test('ordering validates sequence, accepts multiple separators and grants partial credit', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-order',
+      type: 'ordering',
+      instruction: 'Ordonne.',
+      expectedOrder: ['sujet', 'verbe', 'complément'],
+    },
+    0
+  );
+
+  const okResult = checkAnswer(runtimeExercise, { text: 'sujet > verbe > complément' });
+  const partialResult = checkAnswer(runtimeExercise, { text: 'sujet; complément; verbe' });
+  const emptyResult = checkAnswer(runtimeExercise, { text: '' });
+
+  assert.equal(okResult.isCorrect, true);
+  assert.equal(okResult.awarded, 1);
+
+  assert.equal(partialResult.isCorrect, false);
+  assert.equal(partialResult.awarded, 0.33);
+  assert.match(partialResult.feedback, /partiellement/i);
+
+  assert.equal(emptyResult.isCorrect, false);
+  assert.equal(emptyResult.awarded, 0);
+  assert.match(emptyResult.feedback, /saisis un ordre/i);
+});
+
+test('scoring aggregates basic results', () => {
+  const runtimeExercises = [
+    buildRuntimeExercise(
+      {
+        slotId: 'ex-01',
+        type: 'singleChoice',
+        instruction: 'Choisis la bonne réponse.',
+        options: [
+          { id: 'a', label: 'A', isCorrect: true },
+          { id: 'b', label: 'B', isCorrect: false },
+        ],
+      },
+      0
+    ),
+    buildRuntimeExercise(
+      {
+        slotId: 'ex-02',
+        type: 'textInput',
+        instruction: 'Écris ta réponse.',
+        acceptedAnswers: ['bonjour'],
+      },
+      1
+    ),
+  ];
+
+  const scoringSession = createLessonScoring(runtimeExercises);
+
+  const result1 = checkAnswer(runtimeExercises[0], { selected: 'a' });
+  const result2 = checkAnswer(runtimeExercises[1], { text: 'bonjour' });
+
+  applyExerciseResult(scoringSession, runtimeExercises[0].id, result1);
+  applyExerciseResult(scoringSession, runtimeExercises[1].id, result2);
+
+  assert.deepEqual(getLessonScore(scoringSession), { score: 2, maxScore: 2 });
+});
+
+
+
+
+
+test('runtime exercise exposes adaptive lesson metadata defaults (12 authored, 6 visible)', () => {
+  const ex01 = buildRuntimeExercise({ slotId: 'ex-01', type: 'textInput', instruction: 'A' }, 0);
+  const ex07 = buildRuntimeExercise({ slotId: 'ex-07', type: 'textInput', instruction: 'B' }, 6);
+  const ex10 = buildRuntimeExercise({ slotId: 'ex-10', type: 'textInput', instruction: 'C' }, 9);
+  const ex12 = buildRuntimeExercise({ slotId: 'ex-12', type: 'textInput', instruction: 'D' }, 11);
+
+  assert.equal(ex01.deliveryModel, 'adaptive_12_to_6');
+  assert.equal(ex01.phase, 'standardPath');
+  assert.equal(ex01.visibleByDefault, true);
+
+  assert.equal(ex07.phase, 'reinforcementPath');
+  assert.equal(ex07.visibleByDefault, false);
+
+  assert.equal(ex10.phase, 'masteryPath');
+  assert.equal(ex10.visibleByDefault, false);
+
+  assert.equal(ex12.phase, 'deferredSpiralPath');
+  assert.equal(ex12.visibleByDefault, false);
+  assert.equal(ex12.unlockRules.masteryMinStandardRate, 0.75);
+});
+
+test('runtime exercise normalizes adaptive phase and keeps deferred metadata', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-12',
+      type: 'textInput',
+      instruction: 'Spirale',
+      prompt: 'Texte source',
+      phase: 'unexpectedPhase',
+      deferredTo: { targetLessonId: '5e-m4-l3', reason: 'spirale croisée' },
+    },
+    11
+  );
+
+  assert.equal(runtimeExercise.phase, 'deferredSpiralPath');
+  assert.equal(runtimeExercise.prompt, 'Texte source');
+  assert.equal(runtimeExercise.deferredTo?.targetLessonId, '5e-m4-l3');
+});
+
+test('createRuntimeExercises inherits lesson delivery model when exercise has no override', () => {
+  const runtimeExercises = createRuntimeExercises(
+    [{ slotId: 'ex-01', type: 'textInput', instruction: 'A' }],
+    { authoredExerciseCount: 12, defaultVisibleCount: 6 }
+  );
+
+  assert.deepEqual(runtimeExercises[0].deliveryModel, {
+    authoredExerciseCount: 12,
+    defaultVisibleCount: 6,
+  });
+});
+test('legacy authored 6e types are specialized to scored textInput without unsupported fallback', () => {
+  const declaredTypes = [
+    'rappel-flash',
+    'repérage',
+    'manipulation',
+    'correction',
+    'justification',
+    'réécriture',
+    'transfert',
+    'spirale',
+  ];
+
+  declaredTypes.forEach((type, index) => {
+    const runtimeExercise = buildRuntimeExercise(
+      {
+        slotId: `legacy-${index + 1}`,
+        type,
+        instruction: `Exercice ${type}`,
+      },
+      index
+    );
+
+    assert.equal(runtimeExercise.runtimeType, 'textInput');
+    assert.equal(runtimeExercise.fallbackFromUnsupported, false);
+    assert.equal(runtimeExercise.maxScore, 1);
+  });
+});
+test('unsupported free-text fallback is non-noted to avoid artificial scoring', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-03',
+      type: 'custom-unsupported',
+      instruction: 'Réponds librement.',
+    },
+    2
+  );
+
+  assert.equal(runtimeExercise.runtimeType, 'textInput');
+  assert.equal(runtimeExercise.maxScore, 0);
+
+  const result = checkAnswer(runtimeExercise, { text: 'réponse élève' });
+  assert.equal(result.awarded, 0);
+  assert.match(result.feedback, /non notée/i);
+
+  const scoringSession = createLessonScoring([runtimeExercise]);
+  applyExerciseResult(scoringSession, runtimeExercise.id, result);
+  assert.deepEqual(getLessonScore(scoringSession), { score: 0, maxScore: 0 });
+});
+
+test('text input acceptedAnswers remains tolerant to punctuation and casing variants', () => {
+  const runtimeExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-04',
+      type: 'textInput',
+      instruction: 'Écris la notion.',
+      acceptedAnswers: ['a/à ; et/est'],
+    },
+    3
+  );
+
+  const result = checkAnswer(runtimeExercise, { text: 'A/À et ET/EST' });
+  assert.equal(result.isCorrect, true);
+  assert.equal(result.awarded, 1);
+});
+
+test('scoring aggregates mixed runtime types deterministically with partial credit', () => {
+  const runtimeExercises = [
+    buildRuntimeExercise(
+      {
+        slotId: 'ex-01',
+        type: 'singleChoice',
+        instruction: 'Choisis.',
+        options: [
+          { id: 'a', label: 'A', isCorrect: true },
+          { id: 'b', label: 'B', isCorrect: false },
+        ],
+      },
+      0
+    ),
+    buildRuntimeExercise(
+      {
+        slotId: 'ex-02',
+        type: 'multipleChoice',
+        instruction: 'Choisis deux réponses.',
+        options: [
+          { id: 'a', label: 'A', isCorrect: true },
+          { id: 'b', label: 'B', isCorrect: true },
+          { id: 'c', label: 'C', isCorrect: false },
+        ],
+      },
+      1
+    ),
+    buildRuntimeExercise(
+      {
+        slotId: 'ex-03',
+        type: 'ordering',
+        instruction: 'Range.',
+        expectedOrder: ['a', 'b'],
+      },
+      2
+    ),
+  ];
+
+  const scoringSession = createLessonScoring(runtimeExercises);
+  applyExerciseResult(scoringSession, 'ex-01', checkAnswer(runtimeExercises[0], { selected: 'a' }));
+  applyExerciseResult(scoringSession, 'ex-02', checkAnswer(runtimeExercises[1], { selected: ['a'] }));
+  applyExerciseResult(scoringSession, 'ex-03', checkAnswer(runtimeExercises[2], { text: 'a, b' }));
+
+  assert.deepEqual(getLessonScore(scoringSession), { score: 2.5, maxScore: 3 });
+});
+
+
+
+test('textInput rejects empty responses and preserves strict non-noted fallback', () => {
+  const scoredExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-empty',
+      type: 'textInput',
+      instruction: 'Réponds.',
+      acceptedAnswers: ['bonjour'],
+    },
+    0
+  );
+  const fallbackExercise = buildRuntimeExercise(
+    {
+      slotId: 'ex-fallback-empty',
+      type: 'type-inconnu',
+      instruction: 'Réponse libre.',
+    },
+    1
+  );
+
+  const emptyScored = checkAnswer(scoredExercise, { text: '' });
+  const emptyFallback = checkAnswer(fallbackExercise, { text: '' });
+
+  assert.equal(emptyScored.awarded, 0);
+  assert.match(emptyScored.feedback, /saisis une réponse/i);
+
+  assert.equal(emptyFallback.awarded, 0);
+  assert.match(emptyFallback.feedback, /enregistrer l’activité/i);
+});
+
+test('scoring sanitizes abnormal awarded values and keeps deterministic totals', () => {
+  const runtimeExercises = [
+    buildRuntimeExercise({ slotId: 'ex-1', type: 'textInput', instruction: 'A' }, 0),
+  ];
+  const scoringSession = createLessonScoring(runtimeExercises);
+
+  applyExerciseResult(scoringSession, 'ex-1', { awarded: 3, max: 1, isCorrect: true, feedback: 'x' });
+  assert.deepEqual(getLessonScore(scoringSession), { score: 1, maxScore: 1 });
+
+  applyExerciseResult(scoringSession, 'ex-1', { awarded: -2, max: 1, isCorrect: false, feedback: 'x' });
+  assert.deepEqual(getLessonScore(scoringSession), { score: 0, maxScore: 1 });
+});
+test('router non-regression on lesson route', () => {
+  assert.match(resolveRoute('#/level/6e/module/6e-m1/lesson/6e-m1-l01'), /Score/);
+});
