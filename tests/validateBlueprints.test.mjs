@@ -370,28 +370,113 @@ test('4e module 4 is tested with non-placeholder wording and engine-compatible e
     });
   });
 });
-test('3e modules 1, 2, 3, 4 and DNB module 5 are authored with 15 lessons and 12 engine-compatible exercises', () => {
-  const authoredModules = [
-    module1LessonBlueprints3e,
-    module2LessonBlueprints3e,
-    module3LessonBlueprints3e,
-    module4LessonBlueprints3e,
-    module5LessonBlueprints3e,
-  ];
+test('3e module 1 is tested with non-placeholder wording and engine-compatible exercise types', () => {
+  const module1 = getModule('3e-m1');
+  assert.ok(module1);
+  assert.equal(module1?.contentStatus, 'tested');
+  assert.equal(module1LessonBlueprints3e.length, 15);
+  module1LessonBlueprints3e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      if (Array.isArray(exercise.options)) {
+        exercise.options.forEach((option) => {
+          assert.equal(/formulation recevable [12]$/i.test(String(option.label ?? '')), false);
+        });
+      }
+    });
+  });
+});
 
-  authoredModules.forEach((moduleLessonBlueprints) => {
-    assert.equal(moduleLessonBlueprints.length, 15);
-    moduleLessonBlueprints.forEach((lessonBlueprint) => {
-      assert.equal(lessonBlueprint.exercises.length, 12);
-      assert.ok(Array.isArray(lessonBlueprint.spiralReview));
-      assert.ok(lessonBlueprint.spiralReview.length >= 1);
-      assert.ok(Array.isArray(lessonBlueprint.officialRefs));
-      assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+test('3e module 2 is tested with non-placeholder wording and engine-compatible exercise types', () => {
+  const module2 = getModule('3e-m2');
+  assert.ok(module2);
+  assert.equal(module2?.contentStatus, 'tested');
+  assert.equal(module2LessonBlueprints3e.length, 15);
+  module2LessonBlueprints3e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      if (Array.isArray(exercise.options)) {
+        exercise.options.forEach((option) => {
+          assert.equal(/graphie correcte [12]$|graphie fautive [12]$/i.test(String(option.label ?? '')), false);
+        });
+      }
+    });
+  });
+});
 
-      lessonBlueprint.exercises.forEach((exercise) => {
-        assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
-        assert.match(exercise.instruction, /\S/);
-      });
+test('3e module 3 is tested with non-placeholder wording and engine-compatible exercise types', () => {
+  const module3 = getModule('3e-m3');
+  assert.ok(module3);
+  assert.equal(module3?.contentStatus, 'tested');
+  assert.equal(module3LessonBlueprints3e.length, 15);
+  module3LessonBlueprints3e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      if (Array.isArray(exercise.options)) {
+        exercise.options.forEach((option) => {
+          assert.equal(/formulation correcte [12]$|formulation erronée [12]$/i.test(String(option.label ?? '')), false);
+        });
+      }
+    });
+  });
+});
+
+test('3e module 4 is tested with non-placeholder wording and engine-compatible exercise types', () => {
+  const module4 = getModule('3e-m4');
+  assert.ok(module4);
+  assert.equal(module4?.contentStatus, 'tested');
+  assert.equal(module4LessonBlueprints3e.length, 15);
+  module4LessonBlueprints3e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      if (Array.isArray(exercise.options)) {
+        exercise.options.forEach((option) => {
+          assert.equal(/amélioration recevable [12]$/i.test(String(option.label ?? '')), false);
+        });
+      }
+    });
+  });
+});
+
+test('3e DNB module 5 remains authored with 15 lessons and 12 engine-compatible exercises', () => {
+  const module5 = getModule('3e-m5');
+  assert.ok(module5);
+  assert.equal(module5?.contentStatus, 'authored');
+  assert.equal(module5LessonBlueprints3e.length, 15);
+  module5LessonBlueprints3e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
+
+    lessonBlueprint.exercises.forEach((exercise) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
     });
   });
 });
@@ -482,10 +567,10 @@ test('module contentStatus values reflect current scaffold reality', () => {
   assert.equal(moduleStatuses.get('4e-m2'), 'tested');
   assert.equal(moduleStatuses.get('4e-m3'), 'tested');
   assert.equal(moduleStatuses.get('4e-m4'), 'tested');
-  assert.equal(moduleStatuses.get('3e-m1'), 'authored');
-  assert.equal(moduleStatuses.get('3e-m2'), 'authored');
-  assert.equal(moduleStatuses.get('3e-m3'), 'authored');
-  assert.equal(moduleStatuses.get('3e-m4'), 'authored');
+  assert.equal(moduleStatuses.get('3e-m1'), 'tested');
+  assert.equal(moduleStatuses.get('3e-m2'), 'tested');
+  assert.equal(moduleStatuses.get('3e-m3'), 'tested');
+  assert.equal(moduleStatuses.get('3e-m4'), 'tested');
   assert.equal(moduleStatuses.get('3e-m5'), 'authored');
 
 });

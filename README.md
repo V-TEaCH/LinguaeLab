@@ -84,7 +84,7 @@ Ce dépôt est maintenant un scaffold statique cohérent pour tout le collège, 
 - les modules 6e (`6e-m1` à `6e-m4`) sont **testés** (`contentStatus: tested`) et servent de **release candidate** ;
 - les modules 5e `5e-m1` à `5e-m4` sont **testés** (`contentStatus: tested`) ;
 - les modules 4e (`4e-m1` à `4e-m4`) sont **testés** (`contentStatus: tested`) ;
-- les modules 3e généraux (`3e-m1` à `3e-m4`) sont **authored** (15 leçons complètes chacun) ;
+- les modules 3e généraux (`3e-m1` à `3e-m4`) sont **testés** (`contentStatus: tested`) ;
 - le module 3e DNB (`3e-m5`) est désormais **authored** pour un entraînement guidé ;
 - ce module DNB reste un entraînement progressif (compréhension/langue/réécriture) et **pas** encore une simulation complète d’épreuve ;
 - chaque module expose un `contentStatus` explicite (`scaffold`, `authored`, `tested`, `released`) ;

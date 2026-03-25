@@ -18,9 +18,9 @@ function createLesson(title, objective, spiralReview, focusLabel) {
     exercises: [
       createExercise('singleChoice', `Choisis la forme verbale correcte pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'forme attendue', isCorrect: true },
-          { id: 'b', label: 'forme incorrecte', isCorrect: false },
-          { id: 'c', label: 'forme incohérente', isCorrect: false },
+          { id: 'a', label: `forme verbale cohérente avec ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `forme qui rompt la valeur temporelle de ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: 'forme incompatible avec le contexte énonciatif', isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 repères utiles pour ${focusLabel}.`, {
@@ -38,15 +38,15 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Coche toutes les formulations correctes pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'formulation correcte 1', isCorrect: true },
-          { id: 'b', label: 'formulation correcte 2', isCorrect: true },
-          { id: 'c', label: 'formulation erronée 1', isCorrect: false },
-          { id: 'd', label: 'formulation erronée 2', isCorrect: false },
+          { id: 'a', label: `forme qui respecte la concordance liée à ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `forme qui traduit correctement l’intention de ${focusLabel}`, isCorrect: true },
+          { id: 'c', label: 'forme qui mélange deux systèmes temporels incompatibles', isCorrect: false },
+          { id: 'd', label: 'forme modale contraire à la visée du passage', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Réécris 2 phrases en améliorant ${focusLabel}.`),
       createExercise('textInput', `Justifie ton choix de temps ou mode pour ${focusLabel}.`, {
-        acceptedAnswers: ['temps', 'mode'],
+        acceptedAnswers: ['valeur du temps', 'mode verbal', 'concordance des temps'],
       }),
       createExercise('ordering', `Range les étapes de relecture verbale pour ${focusLabel}.`, {
         expectedOrder: ['relire', 'contrôler', 'corriger'],

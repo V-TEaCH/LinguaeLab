@@ -30,9 +30,9 @@ function createLesson(title, objective, spiralReview, focusLabel, options = {}) 
     exercises: [
       createExercise('singleChoice', `Choisis la reformulation la plus efficace pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'reformulation pertinente', isCorrect: true },
-          { id: 'b', label: 'reformulation confuse', isCorrect: false },
-          { id: 'c', label: 'reformulation inadaptée', isCorrect: false },
+          { id: 'a', label: `reformulation précise et cohérente pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `reformulation floue qui affaiblit ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: `reformulation qui détourne le sens visé par ${focusLabel}`, isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 critères de réussite pour ${focusLabel}.`, {
@@ -50,15 +50,15 @@ function createLesson(title, objective, spiralReview, focusLabel, options = {}) 
       }),
       createExercise('multipleChoice', `Coche toutes les améliorations recevables pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'amélioration recevable 1', isCorrect: true },
-          { id: 'b', label: 'amélioration recevable 2', isCorrect: true },
-          { id: 'c', label: 'amélioration fragile', isCorrect: false },
-          { id: 'd', label: 'amélioration incorrecte', isCorrect: false },
+          { id: 'a', label: `reprise cohérente des idées pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `enchaînement argumentatif lisible dans ${focusLabel}`, isCorrect: true },
+          { id: 'c', label: 'reformulation ambiguë sans progression claire', isCorrect: false },
+          { id: 'd', label: 'réécriture contradictoire avec l’idée initiale', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Réécris 2 phrases pour améliorer ${focusLabel}.`),
       createExercise('textInput', `Justifie ton choix de reformulation pour ${focusLabel}.`, {
-        acceptedAnswers: ['cohérence', 'précision'],
+        acceptedAnswers: ['cohésion textuelle', 'précision lexicale', 'progression logique'],
       }),
       createExercise('ordering', `Range les étapes de relecture finale pour ${focusLabel}.`, {
         expectedOrder: ['relire', 'contrôler', 'finaliser'],
