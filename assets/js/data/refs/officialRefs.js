@@ -6,13 +6,20 @@ export const OFFICIAL_REFS = {
       source: 'BO du 17 avril 2025',
     },
   ],
+
   '5e': [
     {
       id: 'bo-cycle4-2026',
       title: 'Programme de français du cycle 4',
       source: 'BO du 5 mars 2026',
     },
+    {
+      id: 'cycle4_2026_phrase_complexe',
+      title: 'Cycle 4 2026 — phrase complexe (coordination et subordination)',
+      source: 'Extraction thématique du BO du 5 mars 2026',
+    },
   ],
+
   '4e': [
     {
       id: 'bo-cycle4-2026',
@@ -20,6 +27,7 @@ export const OFFICIAL_REFS = {
       source: 'BO du 5 mars 2026',
     },
   ],
+
   '3e': [
     {
       id: 'bo-cycle4-2026',
