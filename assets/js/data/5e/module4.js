@@ -38,8 +38,8 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Coche toutes les versions recevables pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'version recevable 1', isCorrect: true },
-          { id: 'b', label: 'version recevable 2', isCorrect: true },
+          { id: 'a', label: 'version claire et fidèle au sens initial', isCorrect: true },
+          { id: 'b', label: 'version précise avec enchaînement cohérent', isCorrect: true },
           { id: 'c', label: 'version floue', isCorrect: false },
           { id: 'd', label: 'version contradictoire', isCorrect: false },
         ],

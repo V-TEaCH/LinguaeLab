@@ -50,9 +50,9 @@ export function renderDashboardView() {
   return `
     <section class="page">
       <header class="hero">
-        <p class="eyebrow">État des contenus: 6e testée · 5e-m1 à m3 testés · 4e/3e authored</p>
+        <p class="eyebrow">État des contenus: 6e testée · 5e testée · 4e/3e authored</p>
         <h1>LinguaeLab</h1>
-        <p>6e est testée (release candidate) ; 5e-m1 à m3 sont testés, 5e-m4 reste authored ; 4e et 3e sont authored.</p>
+        <p>6e est testée (release candidate) ; 5e est testée (m1 à m4) ; 4e et 3e sont authored.</p>
       </header>
       <section class="stats">
         <div class="stat"><strong>${stats.levelCount}</strong><span>niveaux</span></div>

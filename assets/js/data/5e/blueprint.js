@@ -60,7 +60,7 @@ export const modules5e = [
     moduleNumber: 4,
     title: 'Nuancer et reformuler',
     focus: 'travailler précision lexicale et cohésion',
-    contentStatus: 'authored',
+    contentStatus: 'tested',
     officialRefs: refs5e,
     lessonBlueprints: module4LessonBlueprints5e,
     sourceSpec: 'docs/specs/rulebook.md',
