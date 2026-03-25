@@ -18,9 +18,9 @@ function createLesson(title, objective, spiralReview, focusLabel) {
     exercises: [
       createExercise('singleChoice', `Choisis la forme correcte pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'forme correcte', isCorrect: true },
-          { id: 'b', label: 'forme fautive', isCorrect: false },
-          { id: 'c', label: 'forme incohérente', isCorrect: false },
+          { id: 'a', label: `graphie correcte dans un cas de ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `graphie fautive dans la chaîne d’accord de ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: `forme incompatible avec la règle de ${focusLabel}`, isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 critères d’accord pertinents pour ${focusLabel}.`, {
@@ -38,15 +38,15 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Repère toutes les formes recevables pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'forme recevable 1', isCorrect: true },
-          { id: 'b', label: 'forme recevable 2', isCorrect: true },
-          { id: 'c', label: 'forme fautive 1', isCorrect: false },
-          { id: 'd', label: 'forme fautive 2', isCorrect: false },
+          { id: 'a', label: `accord conforme à la règle de ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `homophone correctement tranché pour ${focusLabel}`, isCorrect: true },
+          { id: 'c', label: 'accord piloté par le mot voisin au lieu du noyau', isCorrect: false },
+          { id: 'd', label: 'homophone choisi sans vérification de la fonction', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Réécris 2 phrases en sécurisant ${focusLabel}.`),
       createExercise('textInput', `Justifie ton choix de correction pour ${focusLabel}.`, {
-        acceptedAnswers: ['accord', 'cohérence'],
+        acceptedAnswers: ['accord grammatical', 'nature et fonction', 'chaîne d’accord'],
       }),
       createExercise('ordering', `Mets en ordre la vigilance de relecture liée à ${focusLabel}.`, {
         expectedOrder: ['lire', 'contrôler', 'corriger'],

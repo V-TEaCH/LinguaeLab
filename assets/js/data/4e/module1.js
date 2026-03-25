@@ -18,9 +18,9 @@ function createLesson(title, objective, spiralReview, focusLabel) {
     exercises: [
       createExercise('singleChoice', `Choisis la structure correcte pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'structure correcte', isCorrect: true },
-          { id: 'b', label: 'structure imprécise', isCorrect: false },
-          { id: 'c', label: 'structure incohérente', isCorrect: false },
+          { id: 'a', label: `structure syntaxique correcte pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `enchaînement ambigu pour ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: `construction fautive pour ${focusLabel}`, isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 repères fiables pour ${focusLabel}.`, {
@@ -38,15 +38,15 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Choisis toutes les formulations recevables pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'formulation recevable 1', isCorrect: true },
-          { id: 'b', label: 'formulation recevable 2', isCorrect: true },
-          { id: 'c', label: 'formulation faible', isCorrect: false },
-          { id: 'd', label: 'formulation erronée', isCorrect: false },
+          { id: 'a', label: `articulation claire entre propositions pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `ponctuation cohérente avec le lien logique de ${focusLabel}`, isCorrect: true },
+          { id: 'c', label: 'juxtaposition sans relation logique explicite', isCorrect: false },
+          { id: 'd', label: 'subordination contredite par le connecteur choisi', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Transforme 2 phrases pour renforcer ${focusLabel}.`),
       createExercise('textInput', `Justifie ton choix d’organisation pour ${focusLabel}.`, {
-        acceptedAnswers: ['cohérence', 'structure'],
+        acceptedAnswers: ['cohérence syntaxique', 'lien logique', 'ponctuation pertinente'],
       }),
       createExercise('ordering', `Mets dans l’ordre la relecture de vigilance pour ${focusLabel}.`, {
         expectedOrder: ['lire', 'vérifier', 'ajuster'],

@@ -18,9 +18,9 @@ function createLesson(title, objective, spiralReview, focusLabel) {
     exercises: [
       createExercise('singleChoice', `Choisis la reformulation la plus efficace pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'reformulation efficace', isCorrect: true },
-          { id: 'b', label: 'reformulation confuse', isCorrect: false },
-          { id: 'c', label: 'reformulation hors-sujet', isCorrect: false },
+          { id: 'a', label: `reformulation précise et cohérente pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `reformulation floue qui affaiblit ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: `reformulation qui détourne le sens de ${focusLabel}`, isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 critères de qualité pour ${focusLabel}.`, {
@@ -38,15 +38,15 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Repère toutes les reformulations recevables pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'version recevable 1', isCorrect: true },
-          { id: 'b', label: 'version recevable 2', isCorrect: true },
-          { id: 'c', label: 'version ambiguë', isCorrect: false },
-          { id: 'd', label: 'version contradictoire', isCorrect: false },
+          { id: 'a', label: `enchaînement argumentatif clair pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `reprise cohérente des idées dans ${focusLabel}`, isCorrect: true },
+          { id: 'c', label: 'enchaînement ambigu sans lien logique explicite', isCorrect: false },
+          { id: 'd', label: 'reformulation contradictoire avec l’idée initiale', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Corrige 2 formulations faibles en améliorant ${focusLabel}.`),
       createExercise('textInput', `Justifie ton choix de reformulation pour ${focusLabel}.`, {
-        acceptedAnswers: ['clarté', 'cohésion'],
+        acceptedAnswers: ['clarté argumentative', 'cohésion textuelle', 'progression logique'],
       }),
       createExercise('ordering', `Mets dans l’ordre la vigilance de relecture pour ${focusLabel}.`, {
         expectedOrder: ['lire', 'ajuster', 'vérifier'],

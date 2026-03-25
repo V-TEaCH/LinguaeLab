@@ -18,9 +18,9 @@ function createLesson(title, objective, spiralReview, focusLabel) {
     exercises: [
       createExercise('singleChoice', `Choisis le temps correct pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'temps attendu', isCorrect: true },
-          { id: 'b', label: 'temps inadapté', isCorrect: false },
-          { id: 'c', label: 'temps incohérent', isCorrect: false },
+          { id: 'a', label: `temps cohérent avec la valeur de ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `temps qui rompt le système temporel de ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: 'temps incompatible avec les repères chronologiques', isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 repères temporels clés pour ${focusLabel}.`, {
@@ -38,15 +38,15 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Choisis toutes les formes verbales recevables pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'forme recevable 1', isCorrect: true },
-          { id: 'b', label: 'forme recevable 2', isCorrect: true },
-          { id: 'c', label: 'forme fautive 1', isCorrect: false },
-          { id: 'd', label: 'forme fautive 2', isCorrect: false },
+          { id: 'a', label: `forme verbale correcte pour la valeur temporelle de ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `forme qui respecte la concordance exigée par ${focusLabel}`, isCorrect: true },
+          { id: 'c', label: 'forme qui crée une rupture de concordance', isCorrect: false },
+          { id: 'd', label: 'forme qui mélange deux systèmes de temps incompatibles', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Transforme 2 phrases en respectant ${focusLabel}.`),
       createExercise('textInput', `Justifie ton choix de temps pour ${focusLabel}.`, {
-        acceptedAnswers: ['temps', 'cohérence'],
+        acceptedAnswers: ['valeur du temps', 'concordance des temps', 'cohérence temporelle'],
       }),
       createExercise('ordering', `Mets dans l’ordre la vigilance de relecture verbale pour ${focusLabel}.`, {
         expectedOrder: ['lire le sujet', 'contrôler le temps', 'corriger'],

@@ -38,7 +38,7 @@ test('router resolves dashboard, level, module and lesson routes', () => {
   assert.match(resolveRoute('#/level/6e'), /tested \(release candidate\)/);
   assert.match(resolveRoute('#/level/5e'), /tested \(release candidate\)/);
   assert.match(resolveRoute('#/level/5e/module/5e-m1'), /tested \(release candidate\)/);
-  assert.match(resolveRoute('#/level/4e'), /authored/);
+  assert.match(resolveRoute('#/level/4e'), /tested \(release candidate\)/);
   assert.match(resolveRoute('#/level/3e'), /authored/);
   assert.match(resolveRoute('#/level/3e/module/3e-m5'), /Révisions DNB/);
   assert.match(resolveRoute('#/level/3e/module/3e-m5'), /authored/);
