@@ -1,4 +1,5 @@
 import { resolveRoute } from './router.js';
+import { bindLessonExercisePassation } from './views/lessonView.js';
 
 function renderApp() {
   const appElement = document.querySelector('#app');
@@ -8,6 +9,7 @@ function renderApp() {
   }
 
   appElement.innerHTML = resolveRoute();
+  bindLessonExercisePassation(appElement);
 }
 
 window.addEventListener('hashchange', renderApp);
