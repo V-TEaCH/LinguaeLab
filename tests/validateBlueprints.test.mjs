@@ -475,6 +475,12 @@ test('3e DNB module 5 remains authored with prioritized useful lessons l1-l5', (
     assert.ok(Array.isArray(lessonBlueprint.officialRefs));
     assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
 
+  module2LessonBlueprints4e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
     lessonBlueprint.exercises.forEach((exercise) => {
       assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
       assert.match(exercise.instruction, /\S/);
