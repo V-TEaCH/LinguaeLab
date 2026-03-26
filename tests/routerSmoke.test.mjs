@@ -30,8 +30,8 @@ test('router resolves dashboard, level, module and lesson routes', () => {
   resetRouteState();
 
   assert.match(resolveRoute('#/'), /LinguaeLab/);
-  assert.match(resolveRoute('#/'), /6e est testée \(release candidate\)/);
-  assert.match(resolveRoute('#/'), /5e est testée \(m1 à m4\)/);
+  assert.match(resolveRoute('#/'), /6e, 5e, 4e et 3e sont testées \(release candidate\)/);
+  assert.match(resolveRoute('#/'), /module DNB est un entraînement guidé, pas une simulation complète/);
   assert.match(resolveRoute('#/level/6e'), /Construire la phrase/);
   assert.match(resolveRoute('#/level/6e'), /Progression locale/);
   assert.match(resolveRoute('#/level/6e'), /non commencées/);
@@ -39,9 +39,10 @@ test('router resolves dashboard, level, module and lesson routes', () => {
   assert.match(resolveRoute('#/level/5e'), /tested \(release candidate\)/);
   assert.match(resolveRoute('#/level/5e/module/5e-m1'), /tested \(release candidate\)/);
   assert.match(resolveRoute('#/level/4e'), /tested \(release candidate\)/);
-  assert.match(resolveRoute('#/level/3e'), /authored/);
+  assert.match(resolveRoute('#/level/3e'), /tested \(release candidate\)/);
   assert.match(resolveRoute('#/level/3e/module/3e-m5'), /Révisions DNB/);
-  assert.match(resolveRoute('#/level/3e/module/3e-m5'), /authored/);
+  assert.match(resolveRoute('#/level/3e/module/3e-m5'), /tested \(release candidate\)/);
+  assert.match(resolveRoute('#/level/3e/module/3e-m5'), /entraînement guidé progressif/);
   assert.match(resolveRoute('#/level/6e/module/6e-m1'), /Statut local/);
   assert.match(resolveRoute('#/level/6e/module/6e-m1'), /Commencer la première leçon/);
   assert.match(

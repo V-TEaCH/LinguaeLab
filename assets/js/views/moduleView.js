@@ -52,6 +52,9 @@ export function renderModuleView(levelId, moduleId) {
   const resumeSnippet = resumeLessonId
     ? `<p><a href="#/level/${levelId}/module/${moduleId}/lesson/${resumeLessonId}">${resumeLabel}</a></p>`
     : '';
+  const dnbScopeSnippet = module.id === '3e-m5'
+    ? '<p><strong>Cadre DNB :</strong> entraînement guidé progressif (compréhension, langue, réécriture), sans simulation complète d’épreuve.</p>'
+    : '';
 
   return `
     <section class="page">
@@ -61,6 +64,7 @@ export function renderModuleView(levelId, moduleId) {
         <h1>${module.title}</h1>
         <p>Statut contenu: ${formatStatus(module.contentStatus)}</p>
         <p>${module.focus}</p>
+        ${dnbScopeSnippet}
         <p>
           <strong>Progression locale :</strong>
           ${moduleProgress.completed} terminées · ${moduleProgress.inProgress} en cours · ${moduleProgress.notStarted} non commencées

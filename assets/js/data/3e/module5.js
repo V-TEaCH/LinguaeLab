@@ -18,9 +18,9 @@ function createLesson(title, objective, spiralReview, focusLabel) {
     exercises: [
       createExercise('singleChoice', `Choisis la réponse la plus pertinente pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'réponse attendue', isCorrect: true },
-          { id: 'b', label: 'réponse partielle', isCorrect: false },
-          { id: 'c', label: 'réponse hors-critère', isCorrect: false },
+          { id: 'a', label: `réponse précise et justifiée pour ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `réponse incomplète pour ${focusLabel}`, isCorrect: false },
+          { id: 'c', label: `réponse hors-critères de ${focusLabel}`, isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', `Sélectionne 2 critères de réussite pour ${focusLabel}.`, {
@@ -38,15 +38,15 @@ function createLesson(title, objective, spiralReview, focusLabel) {
       }),
       createExercise('multipleChoice', `Coche toutes les formulations recevables pour ${focusLabel}.`, {
         options: [
-          { id: 'a', label: 'formulation recevable 1', isCorrect: true },
-          { id: 'b', label: 'formulation recevable 2', isCorrect: true },
-          { id: 'c', label: 'formulation faible', isCorrect: false },
-          { id: 'd', label: 'formulation erronée', isCorrect: false },
+          { id: 'a', label: `justification claire conforme aux critères de ${focusLabel}`, isCorrect: true },
+          { id: 'b', label: `réponse rédigée avec citation ou indice pertinent pour ${focusLabel}`, isCorrect: true },
+          { id: 'c', label: 'réponse vague sans élément de preuve', isCorrect: false },
+          { id: 'd', label: 'réponse contradictoire avec la consigne', isCorrect: false },
         ],
       }),
       createExercise('textInput', `Réécris 2 réponses brèves pour améliorer ${focusLabel}.`),
       createExercise('textInput', `Justifie ton choix avec les critères de ${focusLabel}.`, {
-        acceptedAnswers: ['critère', 'justification'],
+        acceptedAnswers: ['critères de réussite', 'justification précise', 'preuve textuelle'],
       }),
       createExercise('ordering', `Range les étapes de relecture rapide pour ${focusLabel}.`, {
         expectedOrder: ['contrôler', 'ajuster', 'valider'],
