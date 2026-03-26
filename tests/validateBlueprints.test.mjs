@@ -462,10 +462,10 @@ test('3e module 4 is tested with non-placeholder wording and engine-compatible e
   });
 });
 
-test('3e DNB module 5 is tested as guided training with non-placeholder wording', () => {
+test('3e DNB module 5 remains authored with prioritized useful lessons l1-l5', () => {
   const module5 = getModule('3e-m5');
   assert.ok(module5);
-  assert.equal(module5?.contentStatus, 'tested');
+  assert.equal(module5?.contentStatus, 'authored');
   assert.match(module5?.focus ?? '', /format guidé/i);
   assert.equal(module5LessonBlueprints3e.length, 15);
   module5LessonBlueprints3e.forEach((lessonBlueprint) => {
@@ -475,6 +475,12 @@ test('3e DNB module 5 is tested as guided training with non-placeholder wording'
     assert.ok(Array.isArray(lessonBlueprint.officialRefs));
     assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
 
+  module2LessonBlueprints4e.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
+    assert.ok(lessonBlueprint.spiralReview.length >= 1);
+    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
+    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
     lessonBlueprint.exercises.forEach((exercise) => {
       assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
       assert.match(exercise.instruction, /\S/);
@@ -488,6 +494,34 @@ test('3e DNB module 5 is tested as guided training with non-placeholder wording'
 
   const finalLesson = module5LessonBlueprints3e[module5LessonBlueprints3e.length - 1];
   assert.match(finalLesson.objective, /non simulation complète/i);
+});
+
+test('3e DNB lessons 1 to 5 provide concrete short-term guided training payloads', () => {
+  const prioritizedLessons = module5LessonBlueprints3e.slice(0, 5);
+  assert.equal(prioritizedLessons.length, 5);
+
+  prioritizedLessons.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+
+    lessonBlueprint.exercises.forEach((exercise, index) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      assert.equal(/^Complète un exercice de type /.test(exercise.instruction), false);
+
+      if (index <= 8 && Array.isArray(exercise.options)) {
+        exercise.options.forEach((option) => {
+          assert.equal(
+            /réponse attendue$|formulation recevable [12]$/i.test(String(option.label ?? '')),
+            false
+          );
+        });
+      }
+    });
+
+    assert.match(lessonBlueprint.exercises[9].instruction, /^Réécriture/i);
+    assert.match(lessonBlueprint.exercises[10].instruction, /^Transfert/i);
+    assert.match(lessonBlueprint.exercises[11].instruction, /^Spirale/i);
+  });
 });
 
 
@@ -580,6 +614,6 @@ test('module contentStatus values reflect current scaffold reality', () => {
   assert.equal(moduleStatuses.get('3e-m2'), 'tested');
   assert.equal(moduleStatuses.get('3e-m3'), 'tested');
   assert.equal(moduleStatuses.get('3e-m4'), 'tested');
-  assert.equal(moduleStatuses.get('3e-m5'), 'tested');
+  assert.equal(moduleStatuses.get('3e-m5'), 'authored');
 
 });

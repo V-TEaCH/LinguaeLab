@@ -50,9 +50,9 @@ export function renderDashboardView() {
   return `
     <section class="page">
       <header class="hero">
-        <p class="eyebrow">État des contenus: 6e testée · 5e testée · 4e testée · 3e testée</p>
+        <p class="eyebrow">État des contenus: 6e testée · 5e testée · 4e testée · 3e générale testée · DNB authored</p>
         <h1>LinguaeLab</h1>
-        <p>6e, 5e, 4e et 3e sont testées (release candidate) ; le module DNB est un entraînement guidé, pas une simulation complète.</p>
+        <p>6e, 5e, 4e et 3e générale sont testées (release candidate) ; le module DNB (3e-m5) reste authored avec les leçons 1 à 5 priorisées en entraînement guidé (pas simulation complète).</p>
       </header>
       <section class="stats">
         <div class="stat"><strong>${stats.levelCount}</strong><span>niveaux</span></div>

@@ -75,7 +75,7 @@ export const modules3e = [
     moduleNumber: 5,
     title: 'Révisions DNB',
     focus: 'entraîner les automatismes utiles à l’épreuve en format guidé',
-    contentStatus: 'tested',
+    contentStatus: 'authored',
     officialRefs: refs3e,
     lessonBlueprints: module5LessonBlueprints3e,
     sourceSpec: 'docs/specs/rulebook.md',

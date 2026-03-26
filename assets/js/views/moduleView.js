@@ -53,7 +53,7 @@ export function renderModuleView(levelId, moduleId) {
     ? `<p><a href="#/level/${levelId}/module/${moduleId}/lesson/${resumeLessonId}">${resumeLabel}</a></p>`
     : '';
   const dnbScopeSnippet = module.id === '3e-m5'
-    ? '<p><strong>Cadre DNB :</strong> entraînement guidé progressif (compréhension, langue, réécriture), sans simulation complète d’épreuve.</p>'
+    ? '<p><strong>Cadre DNB :</strong> entraînement guidé progressif (compréhension, langue, réécriture), sans simulation complète d’épreuve ; priorité actuelle sur les leçons 1 à 5.</p>'
     : '';
 
   return `
