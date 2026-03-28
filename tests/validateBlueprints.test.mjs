@@ -462,10 +462,10 @@ test('3e module 4 is tested with non-placeholder wording and engine-compatible e
   });
 });
 
-test('3e DNB module 5 remains authored with prioritized useful lessons l1-l5', () => {
+test('3e DNB module 5 is tested as guided training (not full simulation)', () => {
   const module5 = getModule('3e-m5');
   assert.ok(module5);
-  assert.equal(module5?.contentStatus, 'authored');
+  assert.equal(module5?.contentStatus, 'tested');
   assert.match(module5?.focus ?? '', /format guidé/i);
   assert.equal(module5LessonBlueprints3e.length, 15);
   module5LessonBlueprints3e.forEach((lessonBlueprint) => {
@@ -541,6 +541,36 @@ test('3e DNB lessons 6 to 9 are populated for dictée raisonnée, correction and
     assert.match(lessonBlueprint.exercises[10].instruction, /^Transfert/i);
     assert.match(lessonBlueprint.exercises[11].instruction, /^Spirale/i);
   });
+});
+
+test('3e DNB lessons 10 to 15 are populated, with l15 as guided mini-blanc', () => {
+  const finalLessons = module5LessonBlueprints3e.slice(9, 15);
+  assert.equal(finalLessons.length, 6);
+
+  finalLessons.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+
+    lessonBlueprint.exercises.forEach((exercise, index) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      assert.equal(/^Complète un exercice de type /.test(exercise.instruction), false);
+
+      if (index <= 8 && Array.isArray(exercise.options)) {
+        exercise.options.forEach((option) => {
+          assert.equal(/réponse attendue$|formulation recevable [12]$/i.test(String(option.label ?? '')), false);
+        });
+      }
+    });
+
+    assert.match(lessonBlueprint.exercises[9].instruction, /^Réécriture/i);
+    assert.match(lessonBlueprint.exercises[10].instruction, /^Transfert/i);
+    assert.match(lessonBlueprint.exercises[11].instruction, /^Spirale/i);
+  });
+
+  const finalLesson = finalLessons[finalLessons.length - 1];
+  assert.match(finalLesson.title, /Bilan module 5/i);
+  assert.match(finalLesson.objective, /non simulation complète/i);
+  assert.match(finalLesson.exercises[0].instruction, /Mini-blanc guidé/i);
 });
 
 
@@ -633,6 +663,6 @@ test('module contentStatus values reflect current scaffold reality', () => {
   assert.equal(moduleStatuses.get('3e-m2'), 'tested');
   assert.equal(moduleStatuses.get('3e-m3'), 'tested');
   assert.equal(moduleStatuses.get('3e-m4'), 'tested');
-  assert.equal(moduleStatuses.get('3e-m5'), 'authored');
+  assert.equal(moduleStatuses.get('3e-m5'), 'tested');
 
 });

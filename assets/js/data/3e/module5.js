@@ -569,36 +569,291 @@ const LESSON_DEFINITIONS = [
     objective: 'Appliquer plusieurs contraintes de langue dans un même item.',
     spiralReview: ['syntaxe', 'orthographe grammaticale'],
     focusLabel: 'la réécriture mixte',
+    exercises: [
+      createExercise('singleChoice', 'Quelle réécriture respecte toutes les contraintes ?', {
+        prompt: 'Consigne : « Passe au pluriel et remplace le présent par l’imparfait. »',
+        options: [
+          { id: 'a', label: 'Les élèves observaient la scène avec attention.', isCorrect: true },
+          { id: 'b', label: 'Les élèves observe la scène avec attention.', isCorrect: false },
+          { id: 'c', label: 'L’élève observaient la scène avec attention.', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Quels contrôles sont indispensables en réécriture mixte ?', {
+        options: [
+          { id: 'a', label: 'Vérifier chaque contrainte de consigne', isCorrect: true },
+          { id: 'b', label: 'Contrôler accords et temps verbaux', isCorrect: true },
+          { id: 'c', label: 'Réécrire librement le sens', isCorrect: false },
+          { id: 'd', label: 'Ignorer la ponctuation', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Réécris selon la consigne.', {
+        prompt: 'Phrase : « Le témoin raconte son hésitation. » Consigne : « Mets au pluriel et au passé composé. »',
+      }),
+      createExercise('textInput', 'Corrige cette réécriture incomplète.', {
+        prompt: 'Réponse fautive : « Les témoins racontent leurs hésitation. »',
+      }),
+      createExercise('ordering', 'Mets dans l’ordre la méthode de réécriture mixte.', {
+        expectedOrder: ['lister les contraintes', 'réécrire sans changer le sens central', 'relire contrainte par contrainte'],
+      }),
+      createExercise('multipleChoice', 'Quelles réponses sont recevables ?', {
+        options: [
+          { id: 'a', label: 'La phrase respecte les contraintes grammaticales demandées.', isCorrect: true },
+          { id: 'b', label: 'Le sens initial reste compréhensible.', isCorrect: true },
+          { id: 'c', label: 'Une contrainte est oubliée, mais ce n’est pas grave.', isCorrect: false },
+          { id: 'd', label: 'La phrase est réécrite au hasard.', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Réécris une phrase en combinant 2 contraintes (temps + personne).'),
+      createExercise('textInput', 'Justifie une correction en 1 phrase courte.', {
+        acceptedAnswers: ['contrainte respectée', 'accord corrigé', 'temps harmonisé'],
+      }),
+      createExercise('ordering', 'Range les points de vigilance finaux.', {
+        expectedOrder: ['sens conservé', 'contraintes respectées', 'langue correcte'],
+      }),
+      createExercise('textInput', 'Réécriture : corrige un item mixte de niveau DNB en 3 lignes max.'),
+      createExercise('textInput', 'Transfert : applique la même méthode à une phrase argumentative.'),
+      createExercise('textInput', 'Spirale : relie réécriture mixte, accords et cohésion dans un mini-exemple.'),
+    ],
   },
   {
     title: 'S’entraîner sur mini-série 1 (français)',
     objective: 'Enchaîner plusieurs items variés dans un format entraînement.',
     spiralReview: ['gestion du temps', 'méthode'],
     focusLabel: 'la mini-série 1',
+    exercises: [
+      createExercise('singleChoice', 'Item 1 — compréhension : choisis la réponse la plus précise.', {
+        options: [
+          { id: 'a', label: 'Le personnage hésite, ce que montre son recul.', isCorrect: true },
+          { id: 'b', label: 'Le personnage est juste bizarre.', isCorrect: false },
+          { id: 'c', label: 'Aucune information n’est donnée.', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Item 2 — repérage : coche les indices de tension.', {
+        options: [
+          { id: 'a', label: 'verbes d’action rapides', isCorrect: true },
+          { id: 'b', label: 'lexique de l’inquiétude', isCorrect: true },
+          { id: 'c', label: 'ponctuation absente', isCorrect: false },
+          { id: 'd', label: 'sujet changé de thème', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Item 3 — réponse courte : rédige 1 phrase claire avec un indice.'),
+      createExercise('textInput', 'Item 4 — langue : corrige l’accord fautif.', {
+        prompt: '« Les témoins hésite encore. »',
+        acceptedAnswers: ['les témoins hésitent encore'],
+      }),
+      createExercise('ordering', 'Item 5 — méthode : ordonne les actions de résolution.', {
+        expectedOrder: ['lire la consigne', 'repérer les indices', 'rédiger puis relire'],
+      }),
+      createExercise('multipleChoice', 'Item 6 — citation : quelles justifications sont correctes ?', {
+        options: [
+          { id: 'a', label: 'La tension apparaît avec « mains tremblantes ».', isCorrect: true },
+          { id: 'b', label: 'Le recul du personnage confirme son hésitation.', isCorrect: true },
+          { id: 'c', label: 'Il est inquiet car je le pense.', isCorrect: false },
+          { id: 'd', label: 'La citation peut être inventée.', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Item 7 — dictée raisonnée : corrige les homophones de la phrase proposée.'),
+      createExercise('textInput', 'Item 8 — justification : explique un choix grammatical en 1 phrase.', {
+        acceptedAnswers: ['nature grammaticale', 'fonction', 'accord'],
+      }),
+      createExercise('ordering', 'Item 9 — vigilance : classe les contrôles finaux.', {
+        expectedOrder: ['sens', 'orthographe grammaticale', 'justification'],
+      }),
+      createExercise('textInput', 'Réécriture : améliore une réponse faible en gardant le format mini-série.'),
+      createExercise('textInput', 'Transfert : crée un item similaire et réponds-y brièvement.'),
+      createExercise('textInput', 'Spirale : relie au moins deux compétences de la mini-série en un exemple.'),
+    ],
   },
   {
     title: 'S’entraîner sur mini-série 2 (français)',
     objective: 'Stabiliser les automatismes sur une deuxième série variée.',
     spiralReview: ['vigilance', 'correction'],
     focusLabel: 'la mini-série 2',
+    exercises: [
+      createExercise('singleChoice', 'Item 1 — compréhension : choisis l’interprétation la plus solide.', {
+        options: [
+          { id: 'a', label: 'Le narrateur cherche à se rassurer malgré la peur.', isCorrect: true },
+          { id: 'b', label: 'Le narrateur n’exprime rien.', isCorrect: false },
+          { id: 'c', label: 'Le texte ne permet aucune hypothèse.', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Item 2 — langue : coche les corrections justes.', {
+        options: [
+          { id: 'a', label: 'Ce sont des indices précis.', isCorrect: true },
+          { id: 'b', label: 'Ils ont réécrit leur réponse.', isCorrect: true },
+          { id: 'c', label: 'Il son revenu tard.', isCorrect: false },
+          { id: 'd', label: 'Ses une réponse claire.', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Item 3 — réponse développée : 2 phrases argumentées avec un appui textuel.'),
+      createExercise('textInput', 'Item 4 — correction : rectifie cette phrase.', {
+        prompt: '« Le personnage hésite puis ils se décide. »',
+      }),
+      createExercise('ordering', 'Item 5 — stratégie : ordonne la chaîne de traitement.', {
+        expectedOrder: ['comprendre la question', 'prélever un indice', 'rédiger et justifier'],
+      }),
+      createExercise('multipleChoice', 'Item 6 — cohésion : quelles versions sont cohésives ?', {
+        options: [
+          { id: 'a', label: 'D’abord inquiet, il se ressaisit ensuite.', isCorrect: true },
+          { id: 'b', label: 'Le personnage hésite. Puis il tranche.', isCorrect: true },
+          { id: 'c', label: 'Le personnage. Donc. Peut-être.', isCorrect: false },
+          { id: 'd', label: 'Le personnage agit car donc mais.', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Item 7 — dictée raisonnée : corrige les accords et homophones du segment donné.'),
+      createExercise('textInput', 'Item 8 — justification courte : explique un accord du participe passé.', {
+        acceptedAnswers: ['accord du participe', 'auxiliaire', 'cod'],
+      }),
+      createExercise('ordering', 'Item 9 — auto-contrôle : range les vérifications de rendu.', {
+        expectedOrder: ['cohérence de réponse', 'correction grammaticale', 'respect de consigne'],
+      }),
+      createExercise('textInput', 'Réécriture : améliore un paragraphe bref en corrigeant langue + cohésion.'),
+      createExercise('textInput', 'Transfert : applique la méthode mini-série à une question de réécriture mixte.'),
+      createExercise('textInput', 'Spirale : relie mini-série 1 et mini-série 2 sur un même extrait.'),
+    ],
   },
   {
     title: 'Diagnostiquer ses erreurs récurrentes',
     objective: 'Identifier ses erreurs fréquentes et choisir une action corrective.',
     spiralReview: ['auto-évaluation', 'relecture'],
     focusLabel: 'le diagnostic d’erreurs',
+    exercises: [
+      createExercise('singleChoice', 'Quel diagnostic est le plus utile ?', {
+        options: [
+          { id: 'a', label: 'Je confonds souvent homophones et accords ; je dois vérifier la nature des mots.', isCorrect: true },
+          { id: 'b', label: 'Je suis mauvais partout.', isCorrect: false },
+          { id: 'c', label: 'Je n’ai aucune erreur.', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Quelles catégories d’erreurs faut-il suivre en priorité ?', {
+        options: [
+          { id: 'a', label: 'consigne mal lue', isCorrect: true },
+          { id: 'b', label: 'orthographe grammaticale', isCorrect: true },
+          { id: 'c', label: 'couleur du stylo', isCorrect: false },
+          { id: 'd', label: 'taille d’écriture', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Écris un diagnostic personnel en 1 phrase concrète.'),
+      createExercise('textInput', 'Corrige ce diagnostic trop vague.', {
+        prompt: '« Je dois juste faire mieux. »',
+      }),
+      createExercise('ordering', 'Ordonne la méthode de diagnostic efficace.', {
+        expectedOrder: ['repérer les erreurs récurrentes', 'classer par type', 'choisir une action corrective'],
+      }),
+      createExercise('multipleChoice', 'Quelles actions correctives sont pertinentes ?', {
+        options: [
+          { id: 'a', label: 'Créer une check-list de relecture ciblée', isCorrect: true },
+          { id: 'b', label: 'Refaire un exercice du même type', isCorrect: true },
+          { id: 'c', label: 'Ignorer les erreurs fréquentes', isCorrect: false },
+          { id: 'd', label: 'Changer de sujet sans correction', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Rédige une action corrective réalisable en 5 minutes.'),
+      createExercise('textInput', 'Justifie ton plan de correction en une phrase.', {
+        acceptedAnswers: ['priorité', 'erreur fréquente', 'action ciblée'],
+      }),
+      createExercise('ordering', 'Range les étapes de bilan après correction.', {
+        expectedOrder: ['vérifier si l’erreur diminue', 'ajuster la méthode', 'réinvestir en contexte nouveau'],
+      }),
+      createExercise('textInput', 'Réécriture : améliore une réponse en corrigeant ton erreur la plus fréquente.'),
+      createExercise('textInput', 'Transfert : applique ton plan de correction à un item nouveau.'),
+      createExercise('textInput', 'Spirale : relie diagnostic personnel et stratégie de mini-série.'),
+    ],
   },
   {
     title: 'Consolider une stratégie personnelle de révision',
     objective: 'Construire une routine réaliste de préparation finale.',
     spiralReview: ['priorisation', 'réemploi'],
     focusLabel: 'la stratégie personnelle',
+    exercises: [
+      createExercise('singleChoice', 'Choisis la stratégie de révision la plus réaliste.', {
+        options: [
+          { id: 'a', label: '15 min : consigne + langue ; 15 min : réponse guidée ; 10 min : relecture.', isCorrect: true },
+          { id: 'b', label: 'Tout réviser sans plan en une seule séance.', isCorrect: false },
+          { id: 'c', label: 'Ne travailler qu’un seul type d’exercice.', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Quels blocs doivent entrer dans une routine DNB guidée ?', {
+        options: [
+          { id: 'a', label: 'lecture de consigne', isCorrect: true },
+          { id: 'b', label: 'vigilance grammaticale', isCorrect: true },
+          { id: 'c', label: 'répétition sans objectif', isCorrect: false },
+          { id: 'd', label: 'abandon de la relecture', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Propose ta routine de révision sur 3 étapes.'),
+      createExercise('textInput', 'Corrige cette routine inefficace.', {
+        prompt: '« Je relis vite et je rends sans vérifier. »',
+      }),
+      createExercise('ordering', 'Mets dans l’ordre une séance type de 30 minutes.', {
+        expectedOrder: ['échauffement consigne', 'exercice ciblé langue/réécriture', 'bilan et relecture'],
+      }),
+      createExercise('multipleChoice', 'Quelles habitudes améliorent la régularité ?', {
+        options: [
+          { id: 'a', label: 'Planifier des séances courtes et régulières', isCorrect: true },
+          { id: 'b', label: 'Noter les erreurs récurrentes', isCorrect: true },
+          { id: 'c', label: 'Changer de méthode à chaque minute', isCorrect: false },
+          { id: 'd', label: 'Ne jamais faire de bilan', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Rédige un mini-plan de révision pour 3 jours.'),
+      createExercise('textInput', 'Justifie la priorité que tu as choisie.', {
+        acceptedAnswers: ['priorité', 'besoin principal', 'erreur fréquente'],
+      }),
+      createExercise('ordering', 'Range les vérifications de fin de séance.', {
+        expectedOrder: ['objectif atteint', 'erreurs notées', 'prochain objectif défini'],
+      }),
+      createExercise('textInput', 'Réécriture : améliore ton plan pour le rendre plus concret et mesurable.'),
+      createExercise('textInput', 'Transfert : adapte ton plan à une séance plus courte (20 min).'),
+      createExercise('textInput', 'Spirale : relie ta stratégie aux compétences travaillées dans l1 à l14.'),
+    ],
   },
   {
     title: 'Bilan module 5 : entraînement DNB guidé',
     objective: 'Mobiliser les stratégies vues sur un entraînement global guidé (non simulation complète).',
     spiralReview: ['compréhension', 'langue', 'réécriture'],
     focusLabel: 'le bilan DNB guidé',
+    exercises: [
+      createExercise('singleChoice', 'Mini-blanc guidé — Q1 compréhension : choisis l’idée centrale la plus précise.', {
+        prompt: 'Extrait bref proposé dans le sujet guidé.',
+        options: [
+          { id: 'a', label: 'Le passage montre une hésitation progressive du narrateur.', isCorrect: true },
+          { id: 'b', label: 'Le passage ne montre aucune émotion.', isCorrect: false },
+          { id: 'c', label: 'Le passage traite uniquement de décor.', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Mini-blanc guidé — Q2 repérage : coche les indices pertinents.', {
+        options: [
+          { id: 'a', label: 'un verbe d’hésitation', isCorrect: true },
+          { id: 'b', label: 'un marqueur de tension', isCorrect: true },
+          { id: 'c', label: 'une information hors texte', isCorrect: false },
+          { id: 'd', label: 'une répétition sans valeur', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Mini-blanc guidé — Q3 réponse courte : 1 à 2 phrases avec indice textuel.'),
+      createExercise('textInput', 'Mini-blanc guidé — Q4 langue : corrige les homophones et accords d’une phrase.'),
+      createExercise('ordering', 'Mini-blanc guidé — Q5 méthode : ordonne les étapes de traitement du lot.', {
+        expectedOrder: ['lire la consigne', 'repérer les indices', 'rédiger puis relire'],
+      }),
+      createExercise('multipleChoice', 'Mini-blanc guidé — Q6 sélection de justifications recevables.', {
+        options: [
+          { id: 'a', label: 'justification appuyée sur un élément précis', isCorrect: true },
+          { id: 'b', label: 'réponse concise et pertinente', isCorrect: true },
+          { id: 'c', label: 'opinion sans preuve', isCorrect: false },
+          { id: 'd', label: 'copie intégrale du texte', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Mini-blanc guidé — Q7 correction : améliore une réponse mal formulée.'),
+      createExercise('textInput', 'Mini-blanc guidé — Q8 justification : explique un choix grammatical en 1 phrase.', {
+        acceptedAnswers: ['accord', 'nature', 'fonction'],
+      }),
+      createExercise('ordering', 'Mini-blanc guidé — Q9 relecture : classe les contrôles avant rendu.', {
+        expectedOrder: ['sens et consigne', 'justification et indice', 'orthographe grammaticale'],
+      }),
+      createExercise('textInput', 'Réécriture : mini-blanc guidé — réécris un court paragraphe en corrigeant langue + cohésion.'),
+      createExercise('textInput', 'Transfert : mini-blanc guidé — réponds à une question mixte sur un nouveau mini-extrait.'),
+      createExercise('textInput', 'Spirale : mini-blanc guidé — relie au moins trois compétences du module dans une réponse synthèse.'),
+    ],
   },
 ];
 
