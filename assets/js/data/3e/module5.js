@@ -1,4 +1,13 @@
 const SOURCE_SPEC = 'docs/specs/rulebook.md';
+const BOULE_DE_SUIF_SOURCE = 'Maupassant, Boule de Suif (domaine public)';
+const BOULE_DE_SUIF_EXCERPTS = {
+  rouen: '« Pendant plusieurs jours de suite, des lambeaux d’armée en déroute avaient traversé la ville. »',
+  prussiens: '« Les Prussiens allaient entrer dans Rouen. »',
+  diligence: '« La diligence partit au point du jour. »',
+  heroine: '« On la nommait Boule de Suif. »',
+  froid: '« On grelottait de froid sous la bâche. »',
+  voyageurs: '« Les voyageurs se regardaient avec méfiance. »',
+};
 
 function createExercise(type, instruction, options = {}) {
   return {
@@ -73,12 +82,12 @@ function createLesson(title, objective, spiralReview, focusLabel, options = {}) 
 const LESSON_DEFINITIONS = [
   {
     title: 'Méthode DNB : lire la consigne efficacement',
-    objective: 'Installer une routine de lecture et de repérage des attendus.',
+    objective: 'Installer une routine de lecture et de repérage des attendus à partir d’extraits de Boule de Suif.',
     spiralReview: ['consigne', 'mots-clés'],
     focusLabel: 'la lecture de consigne DNB',
     exercises: [
       createExercise('singleChoice', 'Quel élément doit être repéré en premier dans la consigne ?', {
-        prompt: '« En 3 lignes, explique pourquoi le narrateur hésite et cite un indice du texte. »',
+        prompt: `Extrait ${BOULE_DE_SUIF_SOURCE} : ${BOULE_DE_SUIF_EXCERPTS.rouen}\nConsigne : « En 3 lignes, explique l’effet produit et cite un indice précis. »`,
         options: [
           { id: 'a', label: 'Le verbe d’action attendu (explique)', isCorrect: true },
           { id: 'b', label: 'Le prénom de l’élève', isCorrect: false },
@@ -86,7 +95,7 @@ const LESSON_DEFINITIONS = [
         ],
       }),
       createExercise('multipleChoice', 'Coche les contraintes explicites de cette consigne.', {
-        prompt: '« Justifie ta réponse par deux éléments précis du passage. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.prussiens}\nConsigne : « Justifie ta réponse par deux éléments précis du passage. »`,
         options: [
           { id: 'a', label: 'Il faut justifier', isCorrect: true },
           { id: 'b', label: 'Deux éléments précis sont exigés', isCorrect: true },
@@ -95,14 +104,14 @@ const LESSON_DEFINITIONS = [
         ],
       }),
       createExercise('textInput', 'Écris en 8 mots maximum ce que la consigne te demande de faire.', {
-        prompt: '« Relève un procédé de comparaison et explique son effet. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.heroine}\nConsigne : « Relève un procédé de désignation et explique son effet. »`,
         acceptedAnswers: [
           'relever une comparaison puis expliquer son effet',
           'identifier la comparaison et expliquer son effet',
         ],
       }),
       createExercise('textInput', 'Corrige cette reformulation de consigne trop floue.', {
-        prompt: '« Faut parler du texte un peu. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.diligence}\nReformulation faible : « Faut parler du texte un peu. »`,
         acceptedAnswers: [
           'il faut répondre précisément à la question posée',
           'il faut relever un élément précis du texte et le justifier',
@@ -110,9 +119,10 @@ const LESSON_DEFINITIONS = [
       }),
       createExercise('ordering', 'Mets dans l’ordre la méthode de traitement de consigne.', {
         expectedOrder: ['lire le verbe de consigne', 'repérer les contraintes', 'préparer une réponse ciblée'],
+        prompt: `Extrait support : ${BOULE_DE_SUIF_EXCERPTS.voyageurs}`,
       }),
       createExercise('multipleChoice', 'Quelles reformulations respectent la consigne ?', {
-        prompt: 'Consigne : « Justifie ta réponse par un indice précis du texte. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.froid}\nConsigne : « Justifie ta réponse par un indice précis du texte. »`,
         options: [
           { id: 'a', label: 'Je donne ma réponse puis je cite un indice précis.', isCorrect: true },
           { id: 'b', label: 'Je donne ma réponse et je la justifie par un élément du passage.', isCorrect: true },
@@ -140,12 +150,12 @@ const LESSON_DEFINITIONS = [
   },
   {
     title: 'Méthode DNB : analyser un court extrait',
-    objective: 'Identifier rapidement informations explicites et implicites utiles.',
+    objective: 'Identifier rapidement informations explicites et implicites utiles dans Boule de Suif.',
     spiralReview: ['repérage', 'inférences'],
     focusLabel: 'l’analyse d’extrait court',
     exercises: [
       createExercise('singleChoice', 'Quel indice explicite montre la peur du personnage ?', {
-        prompt: 'Extrait : « Il recula d’un pas, les mains tremblantes. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.prussiens}`,
         options: [
           { id: 'a', label: '« les mains tremblantes »', isCorrect: true },
           { id: 'b', label: '« d’un pas »', isCorrect: false },
@@ -153,7 +163,7 @@ const LESSON_DEFINITIONS = [
         ],
       }),
       createExercise('multipleChoice', 'Coche les informations explicites de l’extrait.', {
-        prompt: 'Extrait : « Elle referma la porte et murmura qu’elle reviendrait. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.rouen}`,
         options: [
           { id: 'a', label: 'Elle ferme la porte', isCorrect: true },
           { id: 'b', label: 'Elle parle à voix basse', isCorrect: true },
@@ -162,25 +172,26 @@ const LESSON_DEFINITIONS = [
         ],
       }),
       createExercise('textInput', 'Formule en une phrase une inférence plausible à partir de l’extrait.', {
-        prompt: 'Extrait : « Il évita son regard et rangea vite la lettre. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.voyageurs}`,
         acceptedAnswers: [
-          'il cache quelque chose',
-          'il semble gêné',
+          'les personnages se méfient les uns des autres',
+          'le climat est tendu entre les voyageurs',
         ],
       }),
       createExercise('textInput', 'Corrige cette interprétation trop générale.', {
-        prompt: 'Interprétation faible : « Le personnage est bizarre. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.rouen}\nInterprétation faible : « Le passage est juste étrange. »`,
       }),
       createExercise('ordering', 'Mets dans l’ordre la méthode d’analyse d’un extrait.', {
         expectedOrder: ['repérer ce qui est écrit', 'proposer une interprétation', 'justifier par un indice'],
+        prompt: `Extrait support : ${BOULE_DE_SUIF_EXCERPTS.heroine}`,
       }),
       createExercise('multipleChoice', 'Quelles réponses mobilisent un indice précis ?', {
-        prompt: 'Question : « Que révèle l’extrait sur le narrateur ? »',
+        prompt: `Question sur l’extrait : ${BOULE_DE_SUIF_EXCERPTS.diligence}`,
         options: [
-          { id: 'a', label: 'Le narrateur est inquiet, comme le montre « mains tremblantes ».', isCorrect: true },
-          { id: 'b', label: 'Il est sûrement inquiet car il recule et tremble.', isCorrect: true },
-          { id: 'c', label: 'Il est bizarre, c’est évident.', isCorrect: false },
-          { id: 'd', label: 'Je pense qu’il est inquiet sans preuve.', isCorrect: false },
+          { id: 'a', label: 'Le récit s’inscrit dans le mouvement d’un départ collectif, montré par la diligence.', isCorrect: true },
+          { id: 'b', label: 'Le texte place d’emblée l’action dans une situation de fuite organisée.', isCorrect: true },
+          { id: 'c', label: 'Le passage ne dit rien de concret.', isCorrect: false },
+          { id: 'd', label: 'Je donne un avis sans appui textuel.', isCorrect: false },
         ],
       }),
       createExercise('textInput', 'Réponds en 2 phrases : 1 idée + 1 indice textuel.', {
@@ -201,16 +212,16 @@ const LESSON_DEFINITIONS = [
   },
   {
     title: 'Répondre à une question de compréhension',
-    objective: 'Formuler une réponse brève, précise et justifiée.',
+    objective: 'Formuler une réponse brève, précise et justifiée à partir de Boule de Suif.',
     spiralReview: ['phrase complète', 'justification'],
     focusLabel: 'la réponse courte justifiée',
     exercises: [
       createExercise('singleChoice', 'Quelle réponse est la plus adaptée à une question de compréhension ?', {
-        prompt: 'Question : « Pourquoi le personnage s’arrête-t-il ? »',
+        prompt: `Question sur l’extrait : ${BOULE_DE_SUIF_EXCERPTS.rouen}\n« Quel contexte historique est mis en avant ? »`,
         options: [
-          { id: 'a', label: 'Il s’arrête car il entend un bruit derrière lui.', isCorrect: true },
-          { id: 'b', label: 'Parce que.', isCorrect: false },
-          { id: 'c', label: 'Je ne sais pas trop.', isCorrect: false },
+          { id: 'a', label: 'Le texte insiste sur la déroute militaire et la désorganisation de la ville.', isCorrect: true },
+          { id: 'b', label: 'C’est seulement une promenade tranquille.', isCorrect: false },
+          { id: 'c', label: 'Je ne peux pas savoir.', isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', 'Quelles qualités doit avoir une réponse courte ?', {
@@ -222,21 +233,21 @@ const LESSON_DEFINITIONS = [
         ],
       }),
       createExercise('textInput', 'Rédige une réponse d’une phrase complète à la question.', {
-        prompt: 'Question : « Que ressent le narrateur ? »',
+        prompt: `Question : « Que suggère l’énoncé suivant ? » — ${BOULE_DE_SUIF_EXCERPTS.prussiens}`,
       }),
       createExercise('textInput', 'Corrige cette réponse insuffisante.', {
-        prompt: 'Réponse insuffisante : « Il est mal. »',
+        prompt: `Réponse insuffisante à l’extrait ${BOULE_DE_SUIF_EXCERPTS.prussiens} : « C’est stressant. »`,
       }),
       createExercise('ordering', 'Ordonne les étapes pour construire une réponse courte.', {
         expectedOrder: ['identifier l’idée attendue', 'rédiger une phrase claire', 'ajouter un appui précis'],
       }),
       createExercise('multipleChoice', 'Quelles réponses sont recevables ?', {
-        prompt: 'Question : « Comment sait-on que le personnage hésite ? »',
+        prompt: `Question : « Que révèle la désignation suivante ? » — ${BOULE_DE_SUIF_EXCERPTS.heroine}`,
         options: [
-          { id: 'a', label: 'On le sait car il « recule d’un pas ».', isCorrect: true },
-          { id: 'b', label: 'Le texte montre son hésitation avec « recule d’un pas ».', isCorrect: true },
-          { id: 'c', label: 'Je pense qu’il hésite, point.', isCorrect: false },
-          { id: 'd', label: 'Il hésite parce que j’imagine cela.', isCorrect: false },
+          { id: 'a', label: 'Le surnom construit un portrait social immédiatement lisible.', isCorrect: true },
+          { id: 'b', label: 'La désignation oriente le regard du lecteur sur le personnage.', isCorrect: true },
+          { id: 'c', label: 'Le surnom n’a aucun effet d’écriture.', isCorrect: false },
+          { id: 'd', label: 'Je réponds sans lien avec l’extrait.', isCorrect: false },
         ],
       }),
       createExercise('textInput', 'Rédige une réponse en 2 lignes maximum avec un indice textuel.'),
@@ -253,16 +264,16 @@ const LESSON_DEFINITIONS = [
   },
   {
     title: 'Justifier avec une citation courte',
-    objective: 'Intégrer une citation pertinente sans paraphrase excessive.',
+    objective: 'Intégrer une citation pertinente de Boule de Suif sans paraphrase excessive.',
     spiralReview: ['guillemets', 'reformulation'],
     focusLabel: 'la justification par citation courte',
     exercises: [
       createExercise('singleChoice', 'Quelle citation est la plus pertinente pour justifier la peur ?', {
-        prompt: 'Extrait : « Ses mains tremblaient, il recula en silence. »',
+        prompt: `Extrait : ${BOULE_DE_SUIF_EXCERPTS.prussiens}`,
         options: [
-          { id: 'a', label: '« mains tremblaient »', isCorrect: true },
-          { id: 'b', label: '« en silence »', isCorrect: false },
-          { id: 'c', label: '« il »', isCorrect: false },
+          { id: 'a', label: '« Les Prussiens allaient entrer dans Rouen »', isCorrect: true },
+          { id: 'b', label: '« dans »', isCorrect: false },
+          { id: 'c', label: '« Les »', isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', 'Que faut-il respecter quand on cite ?', {
@@ -274,8 +285,8 @@ const LESSON_DEFINITIONS = [
         ],
       }),
       createExercise('textInput', 'Propose une citation courte (2 à 5 mots) pour appuyer cette idée.', {
-        prompt: 'Idée : « Le narrateur est inquiet. » / Extrait : « Il recula, les mains tremblantes. »',
-        acceptedAnswers: ['mains tremblantes', 'il recula'],
+        prompt: `Idée : « Le récit insiste sur la guerre. » / Extrait : ${BOULE_DE_SUIF_EXCERPTS.rouen}`,
+        acceptedAnswers: ['armée en déroute', 'des lambeaux d armée', 'traversé la ville'],
       }),
       createExercise('textInput', 'Corrige cette justification mal citée.', {
         prompt: '« Il est inquiet parce que mains tremblantes »',
@@ -285,10 +296,10 @@ const LESSON_DEFINITIONS = [
       }),
       createExercise('multipleChoice', 'Quelles justifications sont recevables ?', {
         options: [
-          { id: 'a', label: 'Le personnage est inquiet, comme le montre « mains tremblantes ».', isCorrect: true },
-          { id: 'b', label: 'La peur apparaît avec « recula en silence ».', isCorrect: true },
-          { id: 'c', label: 'Le personnage est inquiet, c’est évident.', isCorrect: false },
-          { id: 'd', label: 'Il est inquiet car je le ressens.', isCorrect: false },
+          { id: 'a', label: 'La menace est explicite avec « Les Prussiens allaient entrer dans Rouen ».', isCorrect: true },
+          { id: 'b', label: 'L’atmosphère de guerre est renforcée par « des lambeaux d’armée en déroute ».', isCorrect: true },
+          { id: 'c', label: 'Le passage est inquiétant, c’est tout.', isCorrect: false },
+          { id: 'd', label: 'Je justifie sans citer le texte.', isCorrect: false },
         ],
       }),
       createExercise('textInput', 'Rédige une phrase de justification : idée + citation courte.'),
@@ -305,16 +316,16 @@ const LESSON_DEFINITIONS = [
   },
   {
     title: 'Réécrire sans faute une phrase ciblée',
-    objective: 'Corriger syntaxe et accords dans une phrase type examen.',
+    objective: 'Corriger syntaxe et accords sur des phrases extraites de Boule de Suif.',
     spiralReview: ['accords', 'ponctuation'],
     focusLabel: 'la réécriture ciblée DNB',
     exercises: [
       createExercise('singleChoice', 'Choisis la réécriture correcte.', {
-        prompt: 'Phrase : « Les enfant arrive et regarde le ciel. »',
+        prompt: `Phrase issue de l’extrait ${BOULE_DE_SUIF_EXCERPTS.rouen} (version fautive) : « Des lambeaux d’armée en déroute traversait la ville. »`,
         options: [
-          { id: 'a', label: 'Les enfants arrivent et regardent le ciel.', isCorrect: true },
-          { id: 'b', label: 'Les enfant arrivent et regardes le ciel.', isCorrect: false },
-          { id: 'c', label: 'Les enfants arrive et regarde le ciel.', isCorrect: false },
+          { id: 'a', label: 'Des lambeaux d’armée en déroute traversaient la ville.', isCorrect: true },
+          { id: 'b', label: 'Des lambeaux d’armée en déroute traversait la ville.', isCorrect: false },
+          { id: 'c', label: 'Des lambeaux d’armée en déroute traverser la ville.', isCorrect: false },
         ],
       }),
       createExercise('multipleChoice', 'Quelles erreurs dois-tu corriger en priorité ?', {
@@ -326,11 +337,11 @@ const LESSON_DEFINITIONS = [
         ],
       }),
       createExercise('textInput', 'Réécris la phrase en corrigeant uniquement les erreurs nécessaires.', {
-        prompt: '« Elles a retrouvé leur cahier oublier. »',
-        acceptedAnswers: ['elles ont retrouvé leur cahier oublié'],
+        prompt: 'Phrase inspirée de Boule de Suif : « Les voyageurs se regardait avec méfiance. »',
+        acceptedAnswers: ['les voyageurs se regardaient avec méfiance'],
       }),
       createExercise('textInput', 'Corrige cette phrase et garde le sens initial.', {
-        prompt: '« Il faut qu ils viens rapidement »',
+        prompt: 'Phrase inspirée de Boule de Suif : « On grelotait de froid sous la bâche. »',
       }),
       createExercise('ordering', 'Mets dans l’ordre la routine de réécriture DNB.', {
         expectedOrder: ['repérer les erreurs', 'corriger sans changer le sens', 'relire les accords'],
