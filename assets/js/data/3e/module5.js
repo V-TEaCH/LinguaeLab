@@ -360,24 +360,209 @@ const LESSON_DEFINITIONS = [
     objective: 'Sécuriser les temps verbaux selon l’intention de la question.',
     spiralReview: ['temps du récit', 'modes'],
     focusLabel: 'le choix verbal en réponse',
+    exercises: [
+      createExercise('singleChoice', 'Choisis la forme verbale correcte dans cette réponse.', {
+        prompt: 'Question : « Que fait le narrateur au début du passage ? » Réponse à compléter : « Au début, il ___ vers la porte. »',
+        options: [
+          { id: 'a', label: 'se dirige', isCorrect: true },
+          { id: 'b', label: 'se dirigeait hier demain', isCorrect: false },
+          { id: 'c', label: 'se dirigeaient', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Quels repères aident à choisir le bon temps ?', {
+        options: [
+          { id: 'a', label: 'Le moment de l’action dans le texte', isCorrect: true },
+          { id: 'b', label: 'La cohérence avec les autres verbes de la réponse', isCorrect: true },
+          { id: 'c', label: 'Le verbe le plus long', isCorrect: false },
+          { id: 'd', label: 'Le hasard', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Corrige cette réponse en choisissant un temps cohérent.', {
+        prompt: 'Réponse fautive : « Le narrateur regarde la scène puis il courait vers la sortie. »',
+      }),
+      createExercise('textInput', 'Réécris cette réponse pour harmoniser les temps.', {
+        prompt: '« Il hésita et ensuite il ouvre la porte. »',
+        acceptedAnswers: ['il hésita puis ouvrit la porte', 'il hésite puis ouvre la porte'],
+      }),
+      createExercise('ordering', 'Mets dans l’ordre la méthode de vérification des temps.', {
+        expectedOrder: ['repérer le moment de l’action', 'choisir le temps adapté', 'relire la cohérence globale'],
+      }),
+      createExercise('multipleChoice', 'Quelles réponses sont grammaticalement recevables ?', {
+        options: [
+          { id: 'a', label: 'Le personnage hésite puis franchit le seuil.', isCorrect: true },
+          { id: 'b', label: 'Le personnage hésita puis franchit le seuil.', isCorrect: true },
+          { id: 'c', label: 'Le personnage hésite puis franchissait le seuil sans raison.', isCorrect: false },
+          { id: 'd', label: 'Le personnage hésita puis franchissa le seuil.', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Corrige deux erreurs de temps dans cette mini-réponse.', {
+        prompt: '« Le héros entendit un bruit et se cache derrière la table avant qu’il sort. »',
+      }),
+      createExercise('textInput', 'Justifie brièvement un choix de temps.', {
+        acceptedAnswers: ['cohérence temporelle', 'même plan temporel', 'valeur du temps'],
+      }),
+      createExercise('ordering', 'Range les contrôles de vigilance verbale.', {
+        expectedOrder: ['vérifier chaque verbe', 'contrôler les accords', 'valider la cohérence de la phrase'],
+      }),
+      createExercise('textInput', 'Réécriture : améliore une réponse en corrigeant uniquement les temps verbaux.'),
+      createExercise('textInput', 'Transfert : applique la même méthode à une réponse argumentative courte.'),
+      createExercise('textInput', 'Spirale : relie choix des temps et réponse justifiée avec indice textuel.'),
+    ],
   },
   {
     title: 'Repérer et corriger les homophones sensibles',
     objective: 'Fiabiliser les homophones fréquents en contexte DNB.',
     spiralReview: ['homophones grammaticaux', 'chaîne d’accord'],
     focusLabel: 'les homophones sensibles',
+    exercises: [
+      createExercise('singleChoice', 'Choisis l’homophone correct.', {
+        prompt: '« Ils ___ arrivés avant la sonnerie. »',
+        options: [
+          { id: 'a', label: 'sont', isCorrect: true },
+          { id: 'b', label: 'son', isCorrect: false },
+          { id: 'c', label: 'sons', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Coche les critères utiles pour trancher un homophone.', {
+        options: [
+          { id: 'a', label: 'Identifier la nature grammaticale', isCorrect: true },
+          { id: 'b', label: 'Tester la fonction dans la phrase', isCorrect: true },
+          { id: 'c', label: 'Choisir la forme la plus jolie', isCorrect: false },
+          { id: 'd', label: 'Deviner sans vérification', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Corrige cette phrase en résolvant les homophones.', {
+        prompt: '« Se sont des élèves qui on perdu leur cahier. »',
+        acceptedAnswers: ['ce sont des élèves qui ont perdu leur cahier'],
+      }),
+      createExercise('textInput', 'Corrige la chaîne d’homophones dans la phrase.', {
+        prompt: '« Ses amis son partis mes il reviendront. »',
+      }),
+      createExercise('ordering', 'Mets dans l’ordre la procédure de correction d’homophones.', {
+        expectedOrder: ['repérer le mot douteux', 'identifier sa nature', 'valider la graphie'],
+      }),
+      createExercise('multipleChoice', 'Quelles phrases sont correctement orthographiées ?', {
+        options: [
+          { id: 'a', label: 'Ce sont des réponses précises.', isCorrect: true },
+          { id: 'b', label: 'Ils ont relu leur copie.', isCorrect: true },
+          { id: 'c', label: 'Ses un exemple clair.', isCorrect: false },
+          { id: 'd', label: 'Il son prêt.', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Réécris cette mini-dictée raisonnée sans erreur.', {
+        prompt: '« On n a pas vu leur réponses parce qu il son parti. »',
+      }),
+      createExercise('textInput', 'Justifie en une phrase un choix d’homophone.', {
+        acceptedAnswers: ['nature grammaticale', 'fonction du mot', 'remplacement test'],
+      }),
+      createExercise('ordering', 'Range les points de vigilance orthographique.', {
+        expectedOrder: ['homophones verbaux', 'homophones grammaticaux', 'accords finaux'],
+      }),
+      createExercise('textInput', 'Réécriture : corrige trois homophones dans une réponse DNB courte.'),
+      createExercise('textInput', 'Transfert : applique la méthode à une phrase narrative contenant 2 homophones.'),
+      createExercise('textInput', 'Spirale : relie homophones et accords dans une mini-justification.'),
+    ],
   },
   {
     title: 'Organiser une réponse développée courte',
     objective: 'Structurer une réponse en 2 à 3 phrases cohérentes.',
     spiralReview: ['idée principale', 'connecteurs'],
     focusLabel: 'la réponse développée',
+    exercises: [
+      createExercise('singleChoice', 'Choisis la meilleure réponse développée courte.', {
+        prompt: 'Question : « Pourquoi ce passage est-il tendu ? »',
+        options: [
+          { id: 'a', label: 'Le passage est tendu car le narrateur hésite et les verbes d’action accélèrent le rythme.', isCorrect: true },
+          { id: 'b', label: 'C’est tendu. Voilà.', isCorrect: false },
+          { id: 'c', label: 'Je recopie le texte complet.', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Quels éléments doivent apparaître dans une réponse développée courte ?', {
+        options: [
+          { id: 'a', label: 'Une idée claire', isCorrect: true },
+          { id: 'b', label: 'Un appui précis', isCorrect: true },
+          { id: 'c', label: 'Des phrases sans lien', isCorrect: false },
+          { id: 'd', label: 'Une digression hors sujet', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Rédige une réponse en 2 phrases : idée + justification.', {
+        prompt: 'Question : « Comment le narrateur montre-t-il son hésitation ? »',
+      }),
+      createExercise('textInput', 'Corrige cette réponse trop vague.', {
+        prompt: '« Il est bizarre et voilà. »',
+      }),
+      createExercise('ordering', 'Mets dans l’ordre la structure d’une réponse développée courte.', {
+        expectedOrder: ['annoncer l’idée', 'ajouter un indice précis', 'conclure brièvement'],
+      }),
+      createExercise('multipleChoice', 'Quelles réponses respectent le format attendu ?', {
+        options: [
+          { id: 'a', label: 'Le narrateur paraît inquiet. L’expression « mains tremblantes » le montre clairement.', isCorrect: true },
+          { id: 'b', label: 'Le texte crée une tension, car les actions s’enchaînent rapidement.', isCorrect: true },
+          { id: 'c', label: 'Je ne sais pas.', isCorrect: false },
+          { id: 'd', label: 'Le passage est long donc c’est compliqué.', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Rédige une réponse développée courte en intégrant un connecteur logique.'),
+      createExercise('textInput', 'Justifie en une phrase la structure de ta réponse.', {
+        acceptedAnswers: ['idée puis preuve', 'structure en deux temps', 'réponse organisée'],
+      }),
+      createExercise('ordering', 'Range la check-list finale de réponse développée.', {
+        expectedOrder: ['question traitée', 'preuve présente', 'langue correcte'],
+      }),
+      createExercise('textInput', 'Réécriture : améliore une réponse développée mal structurée.'),
+      createExercise('textInput', 'Transfert : rédige une réponse développée courte à une question de langue.'),
+      createExercise('textInput', 'Spirale : relie réponse développée, citation courte et correction grammaticale.'),
+    ],
   },
   {
     title: 'Améliorer la cohésion d’un paragraphe bref',
     objective: 'Renforcer reprises et enchaînements dans un mini-paragraphe.',
     spiralReview: ['substituts', 'connecteurs logiques'],
     focusLabel: 'la cohésion de paragraphe',
+    exercises: [
+      createExercise('singleChoice', 'Choisis la version la plus cohésive du paragraphe.', {
+        options: [
+          { id: 'a', label: 'Le témoin hésite. Ensuite, il justifie son choix. Enfin, il conclut clairement.', isCorrect: true },
+          { id: 'b', label: 'Le témoin hésite. Le témoin parle. Le témoin finit.', isCorrect: false },
+          { id: 'c', label: 'Le témoin hésite donc pourtant ensuite.', isCorrect: false },
+        ],
+      }),
+      createExercise('multipleChoice', 'Quels outils renforcent la cohésion ?', {
+        options: [
+          { id: 'a', label: 'Connecteurs logiques adaptés', isCorrect: true },
+          { id: 'b', label: 'Reprises pronominales contrôlées', isCorrect: true },
+          { id: 'c', label: 'Répétitions mécaniques', isCorrect: false },
+          { id: 'd', label: 'Juxtaposition sans lien', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Améliore ce mini-paragraphe en ajoutant un connecteur pertinent.', {
+        prompt: '« Le personnage hésite. Il avance. Il s’arrête. »',
+      }),
+      createExercise('textInput', 'Corrige les répétitions inutiles dans ce paragraphe.', {
+        prompt: '« Le narrateur voit la scène. Le narrateur décrit la scène. Le narrateur comprend la scène. »',
+      }),
+      createExercise('ordering', 'Mets dans l’ordre la méthode de cohésion de paragraphe.', {
+        expectedOrder: ['identifier les ruptures', 'ajouter des liens', 'relire la progression'],
+      }),
+      createExercise('multipleChoice', 'Quelles réécritures gardent une bonne cohésion ?', {
+        options: [
+          { id: 'a', label: 'Le narrateur hésite, puis il prend une décision.', isCorrect: true },
+          { id: 'b', label: 'D’abord inquiet, il finit par agir.', isCorrect: true },
+          { id: 'c', label: 'Le narrateur. Ensuite. Peut-être.', isCorrect: false },
+          { id: 'd', label: 'Le narrateur agit mais donc car.', isCorrect: false },
+        ],
+      }),
+      createExercise('textInput', 'Réécris ce paragraphe en 3 phrases cohésives et correctes.'),
+      createExercise('textInput', 'Justifie brièvement un choix de connecteur.', {
+        acceptedAnswers: ['relation logique', 'enchaînement clair', 'progression des idées'],
+      }),
+      createExercise('ordering', 'Range les vérifications de cohésion finale.', {
+        expectedOrder: ['éviter répétitions inutiles', 'vérifier les liens logiques', 'contrôler la correction grammaticale'],
+      }),
+      createExercise('textInput', 'Réécriture : améliore la cohésion d’un paragraphe de réponse DNB.'),
+      createExercise('textInput', 'Transfert : applique les mêmes principes à un paragraphe explicatif court.'),
+      createExercise('textInput', 'Spirale : relie cohésion, homophones et réécriture ciblée sur un exemple commun.'),
+    ],
   },
   {
     title: 'Traiter une consigne de réécriture mixte',

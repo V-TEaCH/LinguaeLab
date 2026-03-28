@@ -475,12 +475,6 @@ test('3e DNB module 5 remains authored with prioritized useful lessons l1-l5', (
     assert.ok(Array.isArray(lessonBlueprint.officialRefs));
     assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
 
-  module2LessonBlueprints4e.forEach((lessonBlueprint) => {
-    assert.equal(lessonBlueprint.exercises.length, 12);
-    assert.ok(Array.isArray(lessonBlueprint.spiralReview));
-    assert.ok(lessonBlueprint.spiralReview.length >= 1);
-    assert.ok(Array.isArray(lessonBlueprint.officialRefs));
-    assert.ok(lessonBlueprint.officialRefs.includes('bo-cycle4-2026'));
     lessonBlueprint.exercises.forEach((exercise) => {
       assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
       assert.match(exercise.instruction, /\S/);
@@ -514,6 +508,31 @@ test('3e DNB lessons 1 to 5 provide concrete short-term guided training payloads
             /réponse attendue$|formulation recevable [12]$/i.test(String(option.label ?? '')),
             false
           );
+        });
+      }
+    });
+
+    assert.match(lessonBlueprint.exercises[9].instruction, /^Réécriture/i);
+    assert.match(lessonBlueprint.exercises[10].instruction, /^Transfert/i);
+    assert.match(lessonBlueprint.exercises[11].instruction, /^Spirale/i);
+  });
+});
+
+test('3e DNB lessons 6 to 9 are populated for dictée raisonnée, correction and targeted rewriting', () => {
+  const prioritizedLessons = module5LessonBlueprints3e.slice(5, 9);
+  assert.equal(prioritizedLessons.length, 4);
+
+  prioritizedLessons.forEach((lessonBlueprint) => {
+    assert.equal(lessonBlueprint.exercises.length, 12);
+
+    lessonBlueprint.exercises.forEach((exercise, index) => {
+      assert.ok(ALLOWED_ENGINE_TYPES.has(exercise.type));
+      assert.match(exercise.instruction, /\S/);
+      assert.equal(/^Complète un exercice de type /.test(exercise.instruction), false);
+
+      if (index <= 8 && Array.isArray(exercise.options)) {
+        exercise.options.forEach((option) => {
+          assert.equal(/réponse attendue$|formulation recevable [12]$/i.test(String(option.label ?? '')), false);
         });
       }
     });
